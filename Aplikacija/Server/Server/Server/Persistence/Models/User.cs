@@ -11,6 +11,8 @@ namespace Server.Persistence.Models
     [BsonIgnoreExtraElements]
     public class User
     {
+        [BsonId]
+        public ObjectId Id { get; set; }
         public string Username { get; set; }
         public string PassHash { get; set; }
         public string Email { get; set; }
