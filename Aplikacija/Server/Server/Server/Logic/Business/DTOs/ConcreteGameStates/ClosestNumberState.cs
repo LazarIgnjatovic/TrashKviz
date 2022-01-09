@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic
+namespace Server.Logic.Business.DTOs.ConcreteGameStates
 {
-    public class RoomMaster
+    public class ClosestNumberState:GameState
     {
     }
 }
