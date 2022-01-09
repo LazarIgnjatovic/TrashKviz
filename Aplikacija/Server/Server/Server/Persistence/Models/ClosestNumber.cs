@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Persistence.Models
 {
-    public class ClosestNumber
+    public class ClosestNumber : Question
     {
         public string Text { get; set; }
         public float Answer { get; set; }

@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Server.Persistence.DatabaseSettings;
 
 namespace Server.Persistence.Models
 {
+    [BsonCollection("Users")]
     [BsonIgnoreExtraElements]
-    public class User
+    public class User : IDocument
     {
         [BsonId]
         public ObjectId Id { get; set; }
