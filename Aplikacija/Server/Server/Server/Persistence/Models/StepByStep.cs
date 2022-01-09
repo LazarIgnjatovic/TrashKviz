@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Persistence.Models
 {
-    public class StepByStep
+    public class StepByStep : Question
     {
         public string[] Steps { get; set; }
         public string Answer { get; set; }
