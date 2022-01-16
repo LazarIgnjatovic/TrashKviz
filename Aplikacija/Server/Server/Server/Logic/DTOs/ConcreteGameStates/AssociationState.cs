@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic.Business.DTOs.ConcreteGameStates
+namespace Server.Logic.DTOs.ConcreteGameStates
 {
-    public class ClosestNumberState:GameState
+    public class AssociationState:GameState
     {
+
     }
 }

@@ -1,10 +1,9 @@
-﻿using Server.Logic.Business.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic.Business.DTOs
+namespace Server.Logic.DTOs
 {
     public class Player
     {

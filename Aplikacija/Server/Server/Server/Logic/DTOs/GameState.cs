@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic.Business
+namespace Server.Logic.DTOs
 {
-    public class RoomMaster
+    public class GameState
     {
-        private Room[] activeRooms;
     }
 }

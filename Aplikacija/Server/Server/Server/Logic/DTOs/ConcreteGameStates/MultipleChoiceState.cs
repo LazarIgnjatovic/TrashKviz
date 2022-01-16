@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic.Business.DTOs
+namespace Server.Logic.DTOs.ConcreteGameStates
 {
-    public class Answer
+    public class MultipleChoiceState : GameState
     {
-        private string text;
     }
 }

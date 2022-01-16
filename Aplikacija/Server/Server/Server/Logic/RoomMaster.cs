@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic.Business
+namespace Server.Logic
 {
-    public class MatchMaster
+    public class RoomMaster
     {
-        private Match[] activeMatches;
+        private Room[] activeRooms;
     }
 }
