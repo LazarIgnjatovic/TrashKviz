@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Server.Logic
+namespace Server.Logic.DTOs
 {
-    public class RoomMaster
+    public class RegisterDTO : LoginDTO
     {
-        private Room[] activeRooms;
+        public string Email { get; set; }
     }
 }

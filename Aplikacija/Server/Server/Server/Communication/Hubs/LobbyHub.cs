@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Server.Logic;
+using Server.Logic.Masters.Room;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,15 @@ namespace Server.Communication.Hubs
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LobbyHub:Hub
     {
+        private readonly IRoomMaster _roomMaster;
+        public LobbyHub(IRoomMaster roomMaster)
+        {
+            _roomMaster = roomMaster;
+        }
+
         internal async Task RoomsUpdate(Room[] rooms)
         {
             //server interno poziva ovu funkciju
-            //temp resenje
             await Clients.All.SendAsync("UpdateRooms", rooms);
         }
         public async Task FindRoom()

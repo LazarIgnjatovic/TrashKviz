@@ -6,6 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Server.Communication.Hubs;
+using Server.Logic;
+using Server.Logic.Masters.Match;
+using Server.Logic.Masters.Room;
+using Server.Logic.Services;
 using Server.Persistence.DatabaseSettings;
 using Server.Persistence.Models;
 using Server.Persistence.Repositories;
@@ -29,7 +34,13 @@ namespace Server
         {
             services.Configure<MongoDbSettings>(Configuration.GetSection("TrashQuizDatabase"));
             services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
-            
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+            services.AddSingleton<IMatchMaster, MatchMaster>();
+            services.AddSingleton<IRoomMaster, RoomMaster>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             services.AddCors();
             services.AddSignalR()
                  .AddNewtonsoftJsonProtocol();
@@ -61,6 +72,10 @@ namespace Server
                     repository.InsertOne(user);
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(repository.FilterBy(user => user.Email == "pera@gmail.com")));
                 });
+                endpoints.MapHub<AuthHub>("/auth");
+                endpoints.MapHub<LobbyHub>("/lobby");
+                endpoints.MapHub<MatchHub>("/match");
+                endpoints.MapHub<RoomHub>("/room");
             });
         }
     }
