@@ -15,5 +15,6 @@ namespace Server.Logic.Games
         public void SubmitAnswer(Answer answer)
         {
             throw new NotImplementedException();
-        }    }
+        }
+    }
 }

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Server.Communication.Hubs
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LobbyHub:Hub
     {
         internal async Task RoomsUpdate(Room[] rooms)
@@ -18,11 +17,15 @@ namespace Server.Communication.Hubs
             //temp resenje
             await Clients.All.SendAsync("UpdateRooms", rooms);
         }
-        public async Task FindRoom()
+
+        public async Task GetRooms()
         {
-            //roomID je ujedno i kod za pristup sobi
-            string roomID = "";
-            //todo pronalazenje sobe
+            //servis
+            //await Clients.All.SendAsync("UpdateRooms", rooms);
+        }
+        public async Task FindRoom(string roomID)
+        {
+            
             await Clients.Caller.SendAsync("RoomFound", roomID);
         }
         public async Task Logout()
