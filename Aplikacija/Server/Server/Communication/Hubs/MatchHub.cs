@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Server.Logic;
 using Server.Logic.DTOs;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Server.Communication.Hubs
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    
     public class MatchHub:Hub
     {
         private readonly MatchMaster _matchMaster;

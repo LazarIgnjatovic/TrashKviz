@@ -9,6 +9,8 @@ namespace Server.Logic.Masters.Room
 {
     public class Room
     {
+        private static int maxPlayers=4;
+
         private string roomID;
         private bool isPublic;
         private UserDTO[] users;
@@ -17,5 +19,10 @@ namespace Server.Logic.Masters.Room
         private GameType game3;
 
         public string RoomID { get => roomID; set => roomID = value; }
+
+        internal bool IsFree()
+        {
+            return users.Length < maxPlayers && isPublic;
+        }
     }
 }

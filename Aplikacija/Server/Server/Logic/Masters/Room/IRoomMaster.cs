@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace Server.Logic.Masters.Room
 {
-    public class RoomMaster : IRoomMaster
+    public interface IRoomMaster
     {
-        private Room[] activeRooms;
+        //TODO
+        Room FindRoom(string id);
+        Room[] FreeRooms();
     }
 }

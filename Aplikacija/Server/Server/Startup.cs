@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Server.Logic;
 using Server.Communication.Hubs;
-using Server.Logic;
 using Server.Logic.Masters.Match;
 using Server.Logic.Masters.Room;
 using Server.Logic.Services;
@@ -41,10 +40,10 @@ namespace Server
             services.AddSingleton<IRoomMaster, RoomMaster>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<ILobbyService, LobbyService>();
 
             services.AddCors();
-            services.AddSignalR()
-                 .AddNewtonsoftJsonProtocol();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,8 +67,9 @@ namespace Server
             {
                 endpoints.MapGet("/InitQuestions", async context =>
                 {
+                    /*
                     var repository = new BaseRepository<Question>(new MongoDbSettings() {ConnectionString = Configuration.GetConnectionString("TresKvizDB"), DatabaseName = "TrashQuiz" });
-                    /*var user = new User { Email = "pera@gmail.com", PassHash = "veomasiguranhesiranpassword", Stats = new Stats(), Username = "Pera" };
+                    var user = new User { Email = "pera@gmail.com", PassHash = "veomasiguranhesiranpassword", Stats = new Stats(), Username = "Pera" };
                     repository.InsertOne(user);
                     await context.Response.WriteAsync(JsonConvert.SerializeObject(repository.FilterBy(user => user.Email == "pera@gmail.com")));
                     
@@ -135,12 +135,15 @@ namespace Server
                     step = new StepByStep { Answer = "Milomir Marić", Steps = steps2, Points = 30 };
                     repository.InsertOne(step);
                     */
+                    
                 });
                 endpoints.MapHub<AuthHub>("/auth");
                 endpoints.MapHub<LobbyHub>("/lobby");
                 endpoints.MapHub<MatchHub>("/match");
                 endpoints.MapHub<RoomHub>("/room");
-            });
+                
+        });
+            
         }
     }
 }

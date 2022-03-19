@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Server.Logic;
 using Server.Logic.Masters.Room;
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Server.Communication.Hubs
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RoomHub:Hub
     {
         private readonly IRoomMaster _roomMaster;

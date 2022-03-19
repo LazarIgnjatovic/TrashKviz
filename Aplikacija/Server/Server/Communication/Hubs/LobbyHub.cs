@@ -1,21 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using Server.Logic;
+﻿using Microsoft.AspNetCore.SignalR;
 using Server.Logic.Masters.Room;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Server.Logic.Services;
 using System.Threading.Tasks;
 
 namespace Server.Communication.Hubs
 {
     public class LobbyHub:Hub
     {
-        private readonly IRoomMaster _roomMaster;
-        public LobbyHub(IRoomMaster roomMaster)
+        private ILobbyService _lobbyService;
+        public LobbyHub(ILobbyService lobbyService)
         {
-            _roomMaster = roomMaster;
+            _lobbyService = lobbyService;
         }
 
         internal async Task RoomsUpdate(Room[] rooms)
@@ -26,13 +21,16 @@ namespace Server.Communication.Hubs
 
         public async Task GetRooms()
         {
-            //servis
-            //await Clients.All.SendAsync("UpdateRooms", rooms);
+            Room[] rooms = _lobbyService.GetRooms();
+            await Clients.All.SendAsync("UpdateRooms", rooms);
         }
         public async Task FindRoom(string roomID)
         {
-            
-            await Clients.Caller.SendAsync("RoomFound", roomID);
+            Room room = _lobbyService.FindRoom(roomID);
+            if (room != null)
+                await Clients.Caller.SendAsync("RoomFound", roomID);
+            else
+                await Clients.Caller.SendAsync("RoomNotFound");
         }
         public async Task Logout()
         {

@@ -19,9 +19,9 @@ namespace Server.Communication.Hubs
         public async Task Login(LoginDTO loginDTO)
         {
             UserDTO user=new UserDTO();
-            string token = "";
             //todo
-            await Clients.Caller.SendAsync("LoginSuccess", user, token);
+            //await Clients.Caller.SendAsync("LoginFailed", user);
+            await Clients.Caller.SendAsync("LoginSuccess", user);
         }
         public async Task Register(RegisterDTO registerDTO)
         {
