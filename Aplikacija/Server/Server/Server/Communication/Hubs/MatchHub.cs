@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Server.Logic;
 using Server.Logic.DTOs;
+using Server.Logic.Masters.Match;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,14 @@ namespace Server.Communication.Hubs
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MatchHub:Hub
     {
+        private readonly MatchMaster _matchMaster;
+        public MatchHub(MatchMaster matchMaster)
+        {
+            _matchMaster = matchMaster;
+        }
+
         public async Task JoinMatch(string matchID)
         {
-            //todo slanje celog meca je temp
             Match match = new Match();
             await Groups.AddToGroupAsync(Context.ConnectionId, matchID);
             await Clients.Group(matchID).SendAsync("MatchUpdate", match);
@@ -29,7 +35,6 @@ namespace Server.Communication.Hubs
         public async Task MatchUpdate(Match match)
         {
             //server interno poziva
-            //temp
             await Clients.Group(match.MatchID).SendAsync("MatchUpdate", match);
         }
         public async Task DeclareWinner(UserDTO winner,string matchID)

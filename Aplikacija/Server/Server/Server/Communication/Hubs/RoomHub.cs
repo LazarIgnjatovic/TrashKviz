@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Server.Logic;
+using Server.Logic.Masters.Room;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace Server.Communication.Hubs
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RoomHub:Hub
     {
+        private readonly IRoomMaster _roomMaster;
+        public RoomHub(IRoomMaster roomMaster)
+        {
+            _roomMaster = roomMaster;
+        }
+
         public async Task JoinRoom(string roomID)
         {
             //todo pristup sobi
