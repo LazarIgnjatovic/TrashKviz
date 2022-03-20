@@ -1,4 +1,6 @@
 ﻿using Server.Logic.Masters.Room;
+using Server.Persistence.Models;
+using Server.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,8 @@ namespace Server.Logic.Services
 {
     public class LobbyService : ILobbyService
     {
-        private IRoomMaster _roomMaster;
+        private readonly IRoomMaster _roomMaster;
+        private readonly IBaseRepository<User> _baseRepository;
 
         public LobbyService(IRoomMaster roomMaster)
         {
@@ -24,6 +27,10 @@ namespace Server.Logic.Services
             return _roomMaster.FreeRooms();
         }
 
+        public void AddToQueue(string conncetionId)
+        {
+            
+        }
 
     }
 }

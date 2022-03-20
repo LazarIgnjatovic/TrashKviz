@@ -8,8 +8,10 @@ namespace Server.Logic.Services
 {
     public interface ILobbyService
     {
-        public Room[] GetRooms();
-        public Room FindRoom(string id);
+        Room[] GetRooms();
+        Room FindRoom(string id);
+        void AddToQueue(string connectionId);
+        void RemoveFromQueue(string conncectionId);
 
     }
 }
