@@ -23,31 +23,30 @@ namespace Server.Communication.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginDTO loginDTO)
+        public async Task<ActionResult<ResponseDTO>> Login([FromBody] LoginDTO loginDTO)
         {
             return await _authentiactionService.Login(loginDTO);
         }
 
         [HttpGet]
         [Route("Logout")]
-        public async Task<ActionResult<string>> Logout()
+        public async Task<ActionResult<ResponseDTO>> Logout()
         {
             return await _authentiactionService.Logout();
         }
 
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<string>> Register([FromBody] RegisterDTO registerDTO)
+        public async Task<ActionResult<ResponseDTO>> Register([FromBody] RegisterDTO registerDTO)
         {
             return await _authentiactionService.Register(registerDTO);
         }
 
         [HttpGet]
         [Route("IsLoggedIn")]
-        [Authorize]
-        public IActionResult IsLoggedIn()
+        public ActionResult<bool> IsLoggedIn()
         {
-            return Ok();
+            return _authentiactionService.IsLoggedIn();
         }
     }
 }

@@ -9,9 +9,9 @@ namespace Server.Logic.Services
 {
     public interface IAuthenticationService
     {
-        Task<ActionResult> Login(LoginDTO loginDTO);
-        Task<ActionResult> Logout();
-        Task<ActionResult> Register(RegisterDTO registerDTO);
-
+        Task<ActionResult<ResponseDTO>> Login(LoginDTO loginDTO);
+        Task<ActionResult<ResponseDTO>> Logout();
+        Task<ActionResult<ResponseDTO>> Register(RegisterDTO registerDTO);
+        ActionResult<bool> IsLoggedIn();
     }
 }

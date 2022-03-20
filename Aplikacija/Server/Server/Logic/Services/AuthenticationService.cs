@@ -23,11 +23,16 @@ namespace Server.Logic.Services
             _httpContextAccessor = httpContextAccessor;
             _baseRepository = baseRepository;
         }
-        public async Task<ActionResult> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<string>> Login(LoginDTO loginDTO)
+        {
+            return new OkObjectResult(_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated);
+        }
+
+        public async Task<ActionResult<ResponseDTO>> Login(LoginDTO loginDTO)
         {
             var user = await _baseRepository.FindOneAsync(user => user.Username.Equals(loginDTO.Username));
             if (user == null || !BCrypt.Net.BCrypt.EnhancedVerify(loginDTO.Password, user.PassHash)) 
-                return new UnauthorizedObjectResult("Moguće li je da ne umeš da se uloguješ?!");
+                return new UnauthorizedObjectResult(new ResponseDTO("Moguće li je da ne umeš da se uloguješ?!"));
 
             var claims = new List<Claim>
             {
@@ -45,23 +50,23 @@ namespace Server.Logic.Services
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                                                new ClaimsPrincipal(claimsIdentity));
 
-            return new OkObjectResult(new { message = "Uspešan ulog!" });
+            return new OkObjectResult(new ResponseDTO("Uspešan ulog!"));
         }
 
-        public async Task<ActionResult> Logout()
+        public async Task<ActionResult<ResponseDTO>> Logout()
         {
             if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-                return new UnauthorizedObjectResult("Šefe, obično treba da si ulogovan da bi se izlogovao!");
+                return new UnauthorizedObjectResult(new ResponseDTO("Šefe obično treba da si ulogovan da bi se izlogovao!"));
             await _httpContextAccessor.HttpContext.SignOutAsync();
-            return new OkObjectResult(new { message = "Uspešan izlog!" });
+            return new OkObjectResult(new ResponseDTO("Uspešan izlog!"));
         }
 
-        public async Task<ActionResult> Register(RegisterDTO registerDTO)
+        public async Task<ActionResult<ResponseDTO>> Register(RegisterDTO registerDTO)
         {
             var existingUser = await _baseRepository.AnyAsync(user => user.Username.Equals(registerDTO.Username)
                                                                       || user.Email.Equals(registerDTO.Email));
 
-            if (existingUser) return new BadRequestObjectResult("Postoji nalog sa prosleđenim korisničkim imenom ili e-mail-om. Na tebi je da provališ koje da promeniš, mene ne plaćaju dovoljno za to.");
+            if (!existingUser) return new BadRequestObjectResult(new ResponseDTO("Postoji nalog sa prosleđenim korisničkim imenom ili e-mail-om. Na tebi je da provališ koje da promeniš, mene ne plaćaju dovoljno za to."));
 
             var newUser = new User()
             {
@@ -73,7 +78,7 @@ namespace Server.Logic.Services
 
             await _baseRepository.InsertOneAsync(newUser);
 
-            return new OkObjectResult(new { message= "Alal ti ćufta, uspešna registracija!" });
+            return new OkObjectResult(new ResponseDTO("Alal ti ćufta, uspešna registracija!"));
         }
     }
 }
