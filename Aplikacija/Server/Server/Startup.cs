@@ -156,7 +156,6 @@ namespace Server
 
 
                 //});
-                endpoints.MapHub<AuthHub>("/auth");
                 endpoints.MapHub<LobbyHub>("/lobby");
                 endpoints.MapHub<MatchHub>("/match");
                 endpoints.MapHub<RoomHub>("/room");
