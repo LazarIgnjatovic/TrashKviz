@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Server.Persistence.Repositories
 {
-    interface IBaseRepository<TDocument> where TDocument : IDocument
+    public interface IBaseRepository<TDocument> where TDocument : IDocument
     {
         IQueryable<TDocument> AsQueryable();
 
@@ -21,6 +21,10 @@ namespace Server.Persistence.Repositories
         TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression);
 
         Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression);
+
+        bool Any(Expression<Func<TDocument, bool>> filterExpression);
+
+        Task<bool> AnyAsync(Expression<Func<TDocument, bool>> filterExpression);
 
         TDocument FindById(string id);
 

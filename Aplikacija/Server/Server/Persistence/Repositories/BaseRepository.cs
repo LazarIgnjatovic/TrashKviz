@@ -137,5 +137,15 @@ namespace Server.Persistence.Repositories
         {
             return _collection.DeleteManyAsync(filterExpression);
         }
+
+        public bool Any(Expression<Func<TDocument, bool>> filterExpression)
+        {
+            return _collection.Find(filterExpression).Any();
+        }
+
+        public Task<bool> AnyAsync(Expression<Func<TDocument, bool>> filterExpression)
+        {
+            return _collection.Find(filterExpression).AnyAsync();
+        }
     }
 }
