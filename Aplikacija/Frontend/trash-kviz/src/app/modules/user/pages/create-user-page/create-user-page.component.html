@@ -1,0 +1,18 @@
+<div class="centered-container">
+  <app-register-form
+    title="Registracija"
+    buttonText="Registruj se"
+    routerText="Već imaš nalog?"
+    routerLinkValue="/users/login"
+    usernameAutocomplete="off"
+    usernameName="newUsername"
+    passwordAutocomplete="new-password"
+    passwordName="newPassword"
+    usernameLabel="Korisničko ime"
+    passwordLabel="Lozinka"
+    usernamePlaceholder="Korisničko ime"
+    passwordPlaceholder="Lozinka"
+    (userFormOnSubmitEvent)="onCreateUser($event)"
+  >
+  </app-register-form>
+</div>

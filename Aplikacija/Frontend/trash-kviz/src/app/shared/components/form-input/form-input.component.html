@@ -1,0 +1,37 @@
+<mat-form-field [appearance]="appearance">
+  <mat-label [innerText]="label"></mat-label>
+  <ng-container
+    *ngIf="formInputType !== formInputTypesProvider.formInputTypes.textArea"
+  >
+    <input
+      matInput
+      [maxlength]="maxLength"
+      [placeholder]="placeholder"
+      [formControl]="inputFormControl"
+      [autocomplete]="autocomplete"
+      [type]="formInputType"
+      [name]="name"
+    />
+  </ng-container>
+  <ng-container
+    *ngIf="formInputType === formInputTypesProvider.formInputTypes.textArea"
+  >
+    <textarea
+      matInput
+      cdkTextareaAutosize
+      [cdkAutosizeMinRows]="textAreaRows"
+      [cdkAutosizeMaxRows]="textAreaRows"
+      [maxlength]="maxLength"
+      [placeholder]="placeholder"
+      [formControl]="inputFormControl"
+      [autocomplete]="autocomplete"
+      [name]="name"
+    ></textarea>
+  </ng-container>
+  <mat-hint [innerText]="hint"></mat-hint>
+  <mat-error *ngIf="inputFormControl.invalid && inputFormControl.touched">
+    {{
+      getValidationErrorMessage(inputValidationErrorMessages, inputFormControl)
+    }}
+  </mat-error>
+</mat-form-field>

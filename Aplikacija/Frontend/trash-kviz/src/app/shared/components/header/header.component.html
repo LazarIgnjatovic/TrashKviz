@@ -1,0 +1,13 @@
+<mat-toolbar color="accent">
+  <span>Travel planner</span>
+  <button mat-stroked-button [matMenuTriggerFor]="userMenu">
+    <span>Modify account</span>
+    <mat-icon class="account-icon">account_circle</mat-icon>
+  </button>
+  <mat-menu #userMenu>
+    <button mat-menu-item (click)="onLogout()">
+      <span>Logout</span>
+      <mat-icon>logout</mat-icon>
+    </button>
+  </mat-menu>
+</mat-toolbar>

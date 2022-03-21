@@ -1,0 +1,58 @@
+<app-form
+  [titleTemplate]="titleTemplate"
+  [contentTemplate]="contentTemplate"
+  [actionsTemplate]="actionsTemplate"
+  [formFormGroup]="userForm"
+  (onSubminEvent)="userFormOnSubmitEvent.emit(userForm)"
+></app-form>
+
+<ng-template #titleTemplate>
+  <mat-icon color="primary">{{ icon }}</mat-icon>
+  {{ title }}
+</ng-template>
+
+<ng-template #contentTemplate>
+  <app-form-input
+    [label]="usernameLabel"
+    [placeholder]="usernamePlaceholder"
+    [formInputType]="formInputTypesProvider.formInputTypes.text"
+    inputFormControlName="username"
+    [parentFormGroup]="userForm"
+    [autocomplete]="usernameAutocomplete"
+    [name]="usernameName"
+    [inputValidationErrorMessages]="
+      validationErrorMessagesProvider.usernameErrorMessages
+    "
+  ></app-form-input>
+  <app-form-input
+    [label]="passwordLabel"
+    [placeholder]="passwordPlaceholder"
+    [formInputType]="formInputTypesProvider.formInputTypes.password"
+    inputFormControlName="password"
+    [parentFormGroup]="userForm"
+    [autocomplete]="passwordAutocomplete"
+    [name]="passwordName"
+    [inputValidationErrorMessages]="
+      validationErrorMessagesProvider.passwordErrorMessages
+    "
+  ></app-form-input>
+</ng-template>
+
+<ng-template #actionsTemplate>
+  <app-button
+    [buttonText]="buttonText"
+    [buttonDisabled]="
+      (userForm.invalid && userForm.touched) ||
+      (!userForm.controls['password'].value &&
+        !userForm.controls['username'].value)
+    "
+    buttonType="submit"
+  ></app-button>
+  <a
+    mat-flat-button
+    [routerLink]="routerLinkValue"
+    routerLinkActive="active"
+    *ngIf="routerLinkValue && routerText"
+    >{{ routerText }}</a
+  >
+</ng-template>

@@ -71,7 +71,7 @@ namespace Server
             {
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
-                builder.WithOrigins("http://localhost:4200");
+                builder.WithOrigins("http://localhost:4200", "http://192.168.100.126:4200");
                 builder.AllowCredentials();
             });
             app.UseWebSockets();

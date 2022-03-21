@@ -51,7 +51,7 @@ namespace Server.Logic.Services
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                                                new ClaimsPrincipal(claimsIdentity));
 
-            return new OkObjectResult(new ResponseDTO("Uspešan ulog!"));
+            return new OkObjectResult(new ResponseDTO("Pristup odobren!"));
         }
 
         public async Task<ActionResult<ResponseDTO>> Logout()
@@ -59,7 +59,7 @@ namespace Server.Logic.Services
             if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 return new UnauthorizedObjectResult(new ResponseDTO("Šefe obično treba da si ulogovan da bi se izlogovao!"));
             await _httpContextAccessor.HttpContext.SignOutAsync();
-            return new OkObjectResult(new ResponseDTO("Uspešan izlog!"));
+            return new OkObjectResult(new ResponseDTO("MRŠ!"));
         }
 
         public async Task<ActionResult<ResponseDTO>> Register(RegisterDTO registerDTO)
@@ -67,7 +67,7 @@ namespace Server.Logic.Services
             var existingUser = await _baseRepository.AnyAsync(user => user.Username.Equals(registerDTO.Username)
                                                                       || user.Email.Equals(registerDTO.Email));
 
-            if (!existingUser) return new BadRequestObjectResult(new ResponseDTO("Postoji nalog sa prosleđenim korisničkim imenom ili e-mail-om. Na tebi je da provališ koje da promeniš, mene ne plaćaju dovoljno za to."));
+            if (existingUser) return new BadRequestObjectResult(new ResponseDTO("Postoji nalog sa prosleđenim korisničkim imenom ili e-mail-om. Na tebi je da provališ koje da promeniš, mene ne plaćaju dovoljno za to."));
 
             var newUser = new User()
             {
