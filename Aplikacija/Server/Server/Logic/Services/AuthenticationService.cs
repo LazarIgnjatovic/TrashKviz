@@ -24,11 +24,6 @@ namespace Server.Logic.Services
             _baseRepository = baseRepository;
         }
 
-        public ActionResult<bool> IsLoggedIn()
-        {
-            return new OkObjectResult(_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated);
-        }
-
         public async Task<ActionResult<ResponseDTO>> Login(LoginDTO loginDTO)
         {
             var user = await _baseRepository.FindOneAsync(user => user.Username.Equals(loginDTO.Username));
@@ -80,6 +75,11 @@ namespace Server.Logic.Services
             await _baseRepository.InsertOneAsync(newUser);
 
             return new OkObjectResult(new ResponseDTO("Alal ti ćufta, uspešna registracija!"));
+        }
+
+        public ActionResult<bool> IsLoggedIn()
+        {
+            return new OkObjectResult(_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated);
         }
     }
 }

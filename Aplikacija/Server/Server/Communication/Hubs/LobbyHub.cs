@@ -1,22 +1,31 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Server.Logic.Masters.Room;
 using Server.Logic.Services;
+using System;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Server.Communication.Hubs
-{
+{ 
+    [Authorize]
     public class LobbyHub:Hub
     {
-        private ILobbyService _lobbyService;
-        public LobbyHub(ILobbyService lobbyService)
+        private readonly ILobbyService _lobbyService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public LobbyHub(ILobbyService lobbyService,IHttpContextAccessor httpContextAccessor)
         {
             _lobbyService = lobbyService;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
-        internal async Task RoomsUpdate(Room[] rooms)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
-            //server interno poziva ovu funkciju
-            await Clients.All.SendAsync("UpdateRooms", rooms);
+            _lobbyService.RemoveFromQueue(Context.ConnectionId);
+            return base.OnDisconnectedAsync(exception);
         }
 
         public async Task GetRooms()
@@ -24,7 +33,7 @@ namespace Server.Communication.Hubs
             Room[] rooms = _lobbyService.GetRooms();
             await Clients.All.SendAsync("UpdateRooms", rooms);
         }
-        public async Task FindRoom(string roomID)
+        public async Task JoinRoom(string roomID)
         {
             Room room = _lobbyService.FindRoom(roomID);
             if (room != null)
@@ -32,10 +41,14 @@ namespace Server.Communication.Hubs
             else
                 await Clients.Caller.SendAsync("RoomNotFound");
         }
-        public async Task Logout()
+        public async Task FindRoom()
         {
-            //todo logout
-            await Clients.Caller.SendAsync("LoggedOut");
+            _lobbyService.AddToQueue(Context.ConnectionId);
+        }
+        public async Task CreateRoom()
+        {
+            string roomId =_lobbyService.CreateRoom(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))?.Value);
+            await Clients.Caller.SendAsync("RoomFound", roomId);
         }
     }
 }

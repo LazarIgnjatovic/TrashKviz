@@ -10,5 +10,12 @@ namespace Server.Logic.DTOs
     {
         public string Username { get; set; }
         public Stats Stats { get; set; }
+
+        public UserDTO(){}
+        public UserDTO(User user)
+        {
+            this.Username = user.Username;
+            this.Stats = user.Stats;
+        }
     }
 }

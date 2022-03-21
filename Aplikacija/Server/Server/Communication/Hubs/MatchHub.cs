@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Server.Communication.Hubs
 {
-    
+    [Authorize]
     public class MatchHub:Hub
     {
         private readonly MatchMaster _matchMaster;

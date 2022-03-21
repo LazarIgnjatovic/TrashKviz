@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.Communication.Hubs
 {
+    [Authorize]
     public class RoomHub:Hub
     {
         private readonly IRoomMaster _roomMaster;
