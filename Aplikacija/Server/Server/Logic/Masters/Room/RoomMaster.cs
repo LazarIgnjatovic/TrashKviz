@@ -42,19 +42,36 @@ namespace Server.Logic.Masters.Room
             return rooms;
         }
 
-        void IRoomMaster.AddToQueue(string connectionId)
+        public void AddToQueue(string connectionId)
         {
             queue.Enqueue(connectionId);
         }
 
-        void IRoomMaster.RemoveFromQueue(string connectionId)
+        public void RemoveFromQueue(string connectionId)
         {
             queue = new Queue<string>(queue.Where(x => x != connectionId));
         }
 
-        Room IRoomMaster.CreateRoom()
+        public Room CreateRoom(UserDTO host)
         {
-            throw new NotImplementedException();
+            string code = GenerateCode(4);
+            for(int i=0;i<activeRooms.Length;i++ )
+            {
+                if(activeRooms[i].RoomID==code)
+                {
+                    code = GenerateCode(4);
+                    i = 0;
+                }
+            }
+            Room room = new Room(code,host);
+            return room;
+        }
+        private string GenerateCode(int codeSize)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, codeSize)
+              .Select(s => s[random.Next(chars.Length)]).ToArray());
         }
     }
 }

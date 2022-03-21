@@ -11,7 +11,8 @@ namespace Server.Logic.Services
         Room[] GetRooms();
         Room FindRoom(string id);
         void AddToQueue(string connectionId);
-        void RemoveFromQueue(string conncectionId);
+        void RemoveFromQueue(string connectionId);
+        string CreateRoom(string username);
 
     }
 }

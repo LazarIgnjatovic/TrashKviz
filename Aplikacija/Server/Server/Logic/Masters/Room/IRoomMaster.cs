@@ -12,6 +12,6 @@ namespace Server.Logic.Masters.Room
         Room[] FreeRooms();
         void AddToQueue(string connectionId);
         void RemoveFromQueue(string connectionId);
-        Room CreateRoom();
+        Room CreateRoom(UserDTO host);
     }
 }

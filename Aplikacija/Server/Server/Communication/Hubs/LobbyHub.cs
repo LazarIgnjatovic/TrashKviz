@@ -1,19 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Server.Logic.Masters.Room;
 using Server.Logic.Services;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Server.Communication.Hubs
 { 
     [Authorize]
     public class LobbyHub:Hub
     {
-        private ILobbyService _lobbyService;
-        public LobbyHub(ILobbyService lobbyService)
+        private readonly ILobbyService _lobbyService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public LobbyHub(ILobbyService lobbyService,IHttpContextAccessor httpContextAccessor)
         {
             _lobbyService = lobbyService;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -38,6 +44,11 @@ namespace Server.Communication.Hubs
         public async Task FindRoom()
         {
             _lobbyService.AddToQueue(Context.ConnectionId);
+        }
+        public async Task CreateRoom()
+        {
+            string roomId =_lobbyService.CreateRoom(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))?.Value);
+            await Clients.Caller.SendAsync("RoomFound", roomId);
         }
     }
 }
