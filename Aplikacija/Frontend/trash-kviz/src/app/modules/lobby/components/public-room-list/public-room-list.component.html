@@ -1,0 +1,28 @@
+<app-mat-card
+  [titleTemplate]="titleTemplate"
+  [contentTemplate]="contentTemplate"
+>
+</app-mat-card>
+
+<ng-template #titleTemplate>Aktivne sobe</ng-template>
+
+<ng-template #contentTemplate>
+  <app-classic-list
+    [height]="windowResizeDetectionService.screenHeight$.value * 0.4"
+    [items]="rooms"
+    [listItemTemplate]="listItemTemplate"
+  ></app-classic-list>
+</ng-template>
+
+<ng-template #listItemTemplate let-listItem="listItem">
+  <div class="list-item">
+    <div class="multiline">{{ listItem.roomName }}</div>
+    <div class="button-and-number-of-players">
+      <span>{{ listItem.numberOfPlayersJoined }}/4</span>
+      <app-button
+        buttonText="Pridruži se"
+        buttonWidth="fit-content"
+      ></app-button>
+    </div>
+  </div>
+</ng-template>

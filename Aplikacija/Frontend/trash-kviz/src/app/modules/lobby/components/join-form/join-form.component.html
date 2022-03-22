@@ -1,0 +1,33 @@
+<app-form
+  [titleTemplate]="formTitleTemplate"
+  [contentTemplate]="formContentTemplate"
+  [formFormGroup]="codeForm"
+  (onSubminEvent)="codeSubmitEvent.emit(codeForm)"
+></app-form>
+
+<ng-template #formContentTemplate>
+  <div class="content-container">
+    <app-form-input
+      label="Kod sobe"
+      placeholder="Kod sobe"
+      [formInputType]="formInputTypesProvider.formInputTypes.text"
+      inputFormControlName="code"
+      [parentFormGroup]="codeForm"
+      name="code"
+      [inputValidationErrorMessages]="
+        validationErrorMessagesProvider.codeErrorMessages
+      "
+    ></app-form-input>
+    <app-button
+      buttonText="Pridruži se"
+      buttonWidth="fit-content"
+      [buttonDisabled]="
+        (codeForm.invalid && codeForm.touched) ||
+        codeForm.controls['code'].value.length != 4
+      "
+      buttonType="submit"
+    ></app-button>
+  </div>
+</ng-template>
+
+<ng-template #formTitleTemplate>Pridruži se kodom</ng-template>

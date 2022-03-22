@@ -1,6 +1,7 @@
 mat-toolbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 button {
@@ -18,4 +19,14 @@ button {
   height: 40px;
   line-height: 40px;
   font-size: 40px;
+}
+.img-div {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  height: 50px;
+}
+
+img {
+  max-height: 50px;
 }

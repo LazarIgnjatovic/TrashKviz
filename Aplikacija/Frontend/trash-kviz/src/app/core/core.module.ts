@@ -1,6 +1,10 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { MaterialModule } from './modules/material/material.module';
 import { EnsureModuleLoadedOnceGuard } from './guards/ensure-model-loaded-once/ensure-modul-loaded-once.guard';
 import { AuthGuard } from './guards/auth/auth.guard';
@@ -13,8 +17,9 @@ import { UtilityService } from './services/utility/utility.service';
 import { ValidationErrorMessageProviderService } from './services/validation-error-messages-provider/validation-error-message-provider.service';
 import { SignalrGeneralService } from './services/signalr-general/signalr-general.service';
 import { ErrorHandlerInterceptor } from './interceptors/error-handler/error-handler.interceptor';
+import { WindowResizeDetectorService } from './services/window-resize-detector/window-resize-detector.service';
 
-const modules = [CommonModule, MaterialModule, HttpClientModule];
+const modules = [MaterialModule, HttpClientModule];
 
 const providers = [
   {
@@ -33,6 +38,7 @@ const providers = [
   UtilityService,
   ValidationErrorMessageProviderService,
   SignalrGeneralService,
+  WindowResizeDetectorService,
 ];
 
 @NgModule({

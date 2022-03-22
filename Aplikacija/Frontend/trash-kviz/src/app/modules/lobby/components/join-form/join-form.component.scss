@@ -1,0 +1,16 @@
+@import "form-shared";
+
+.content-container {
+  display: flex;
+  justify-content: space-evenly;
+  app-form-input {
+    margin-left: 10px;
+    margin-right: 5px;
+    width: 50%
+  };
+  app-button{
+      margin-right: 10px;
+      margin-left: 5px;
+      margin-top: 11.5px;
+  }
+}

@@ -1,1 +1,22 @@
 @import "shared";
+@import "form-shared";
+
+.inner-container {
+  width: 50%;
+  min-width: 300px;
+}
+
+app-lobby-button-group{
+  width: 35%;
+}
+
+app-public-room-list {
+  width: 35%;
+  min-width: 300px;
+  margin-bottom: 10px;
+}
+
+app-join-form {
+  width: 15%;
+  min-width: 300px;
+}

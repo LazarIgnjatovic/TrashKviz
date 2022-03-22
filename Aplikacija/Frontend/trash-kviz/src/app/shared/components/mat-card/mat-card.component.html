@@ -1,13 +1,13 @@
 <mat-card>
-  <mat-card-header>
+  <mat-card-header *ngIf="titleTemplate">
     <mat-card-title>
       <ng-container [ngTemplateOutlet]="titleTemplate"></ng-container>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content *ngIf="contentTemplate">
     <ng-container [ngTemplateOutlet]="contentTemplate"></ng-container>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions *ngIf="actionsTemplate">
     <ng-container [ngTemplateOutlet]="actionsTemplate"></ng-container>
   </mat-card-actions>
 </mat-card>
