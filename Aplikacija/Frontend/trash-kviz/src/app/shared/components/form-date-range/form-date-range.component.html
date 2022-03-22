@@ -1,0 +1,37 @@
+<mat-form-field [appearance]="appearance">
+  <mat-label>{{ label }}</mat-label>
+  <mat-date-range-input
+    [formGroup]="parentFormGroup"
+    [rangePicker]="picker"
+    [min]="minDate"
+  >
+    <input
+      matStartDate
+      [formControl]="startDateFormControl"
+      [placeholder]="startDatePlaceholder"
+      [autocomplete]="autocomplete"
+    />
+    <input
+      matEndDate
+      [formControl]="endDateFormControl"
+      [placeholder]="endDatePlaceholder"
+      [autocomplete]="autocomplete"
+    />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker touchUi #picker color="primary" disabled="false">
+    <mat-date-range-picker-actions>
+      <button mat-button matDateRangePickerCancel>Cancel</button>
+      <button mat-raised-button color="primary" matDateRangePickerApply>
+        Apply
+      </button>
+    </mat-date-range-picker-actions></mat-date-range-picker
+  >
+
+  <mat-error *ngIf="startDateFormControl.hasError('matStartDateInvalid')"
+    >Invalid start date</mat-error
+  >
+  <mat-error *ngIf="endDateFormControl.hasError('matEndDateInvalid')"
+    >Invalid end date</mat-error
+  >
+</mat-form-field>

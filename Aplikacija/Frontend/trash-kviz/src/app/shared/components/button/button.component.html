@@ -1,0 +1,11 @@
+<button
+  [disabled]="buttonDisabled"
+  mat-raised-button
+  color="primary"
+  (click)="buttonClicked.emit(null)"
+  [style.width]="buttonWidth"
+  [style.height]="buttonHeight"
+  [type]="buttonType"
+>
+  {{ buttonText }}
+</button>

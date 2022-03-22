@@ -1,0 +1,14 @@
+<div class="centered-container">
+  <app-login-form
+    title="Prijava"
+    buttonText="Prijavi se"
+    routerText="Nemaš nalog?"
+    routerLinkValue="/users/signup"
+    usernameLabel="Korisničko ime"
+    passwordLabel="Lozinka"
+    usernamePlaceholder="Korisničko ime"
+    passwordPlaceholder="Lozinka"
+    (userFormOnSubmitEvent)="onLogin($event)"
+  >
+  </app-login-form>
+</div>

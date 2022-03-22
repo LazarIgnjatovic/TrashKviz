@@ -1,0 +1,14 @@
+<cdk-virtual-scroll-viewport
+  [itemSize]="itemSize"
+  class="viewport"
+  [style.height.px]="height"
+>
+  <mat-list>
+    <mat-list-item *cdkVirtualFor="let item of items | async">
+      <ng-container
+        [ngTemplateOutlet]="listItemTemplate"
+        [ngTemplateOutletContext]="{ listItem: item }"
+      ></ng-container>
+    </mat-list-item>
+  </mat-list>
+</cdk-virtual-scroll-viewport>

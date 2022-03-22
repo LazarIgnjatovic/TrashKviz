@@ -1,0 +1,18 @@
+<cdk-virtual-scroll-viewport
+  [itemSize]="itemSize"
+  class="viewport"
+  [style.height.px]="height"
+>
+  <mat-selection-list [multiple]="multupleSelect" #list>
+    <mat-list-option
+      *cdkVirtualFor="let item of items"
+      [value]="item"
+      (click)="selectionEvent.emit(null)"
+    >
+      <ng-container
+        [ngTemplateOutlet]="listItemTemplate"
+        [ngTemplateOutletContext]="{ listItem: item }"
+      ></ng-container>
+    </mat-list-option>
+  </mat-selection-list>
+</cdk-virtual-scroll-viewport>

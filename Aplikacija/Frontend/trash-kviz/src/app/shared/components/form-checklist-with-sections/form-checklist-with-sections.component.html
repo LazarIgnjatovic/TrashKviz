@@ -1,0 +1,139 @@
+<div>
+  <div class="centered-container">
+    <label> {{ title }} checklist</label>
+  </div>
+  <cdk-virtual-scroll-viewport
+    [itemSize]="itemSize"
+    class="viewport"
+    [style.height.px]="height"
+  >
+    <mat-tree
+      [dataSource]="nestedDataSource"
+      [treeControl]="nestedTreeControl"
+      class="tree"
+    >
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodeToggle
+        matTreeNodePadding
+      >
+        <mat-checkbox
+          *ngIf="showCheckboxes"
+          color="primary"
+          class="checklist-leaf-node"
+          [checked]="node.checked.value"
+          (change)="leafNodeChecked($event.checked, node)"
+          [labelPosition]="labelPosition"
+        >
+          {{ node.text }}</mat-checkbox
+        >
+        <div *ngIf="!showCheckboxes">{{ node.text }}</div>
+        <button type="button" mat-icon-button [matMenuTriggerFor]="leafMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #leafMenu="matMenu">
+          <button
+            type="button"
+            mat-menu-item
+            (click)="removeChecklistNodeHandler(node)"
+          >
+            Remove
+          </button>
+        </mat-menu>
+        <mat-divider></mat-divider>
+      </mat-tree-node>
+
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: isInputNode">
+        <div class="input-node">
+          <button mat-icon-button disabled></button>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ node.text }}</mat-label>
+            <input
+              #nodeText
+              matInput
+              autocomplete="off"
+              [placeholder]="node.text"
+            />
+          </mat-form-field>
+          <button
+            type="button"
+            [disabled]="!nodeText.value"
+            mat-icon-button
+            (click)="insertChecklistNode(node, nodeText.value)"
+          >
+            <mat-icon class="input-buttons">check</mat-icon>
+          </button>
+          <button
+            type="button"
+            mat-icon-button
+            (click)="removeChecklistNodeHandler(node)"
+          >
+            <mat-icon class="input-buttons">close</mat-icon>
+          </button>
+        </div>
+      </mat-nested-tree-node>
+
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+        <div class="mat-tree-node">
+          <div>
+            <button type="button" mat-icon-button matTreeNodeToggle>
+              <mat-icon class="mat-icon-rtl-mirror">
+                {{
+                  nestedTreeControl.isExpanded(node)
+                    ? "expand_more"
+                    : "chevron_right"
+                }}
+              </mat-icon>
+            </button>
+            <span *ngIf="!showCheckboxes">{{ node.text }}</span>
+            <mat-checkbox
+              *ngIf="showCheckboxes"
+              color="primary"
+              [checked]="node.checked.value"
+              [indeterminate]="node.childrenPartiallyChecked.value"
+              (change)="
+                updateAllChildrenAndParentIfExists($event.checked, node)
+              "
+              [labelPosition]="labelPosition"
+            >
+              {{ node.text }}
+            </mat-checkbox>
+          </div>
+          <div>
+            <button
+              type="button"
+              mat-icon-button
+              [matMenuTriggerFor]="parentMenu"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #parentMenu="matMenu">
+              <button
+                mat-menu-item
+                [innerText]="
+                  node.id === 1 ? 'Insert section' : 'Insert section item'
+                "
+                (click)="insertInputChecklistNode(node)"
+              ></button>
+              <button
+                type="button"
+                mat-menu-item
+                *ngIf="node.id !== 1"
+                (click)="removeChecklistNodeHandler(node)"
+              >
+                Remove
+              </button>
+            </mat-menu>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+        <div
+          [class.tree-invisible]="!nestedTreeControl.isExpanded(node)"
+          role="group"
+        >
+          <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+      </mat-nested-tree-node>
+    </mat-tree>
+  </cdk-virtual-scroll-viewport>
+</div>
