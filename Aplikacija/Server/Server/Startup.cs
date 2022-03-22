@@ -56,10 +56,11 @@ namespace Server
                         options.Cookie.HttpOnly = true;
                         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                         options.SlidingExpiration = true;
+                        
                     });
 
             services.AddAuthorization();
-            services.AddSignalR();
+            services.AddSignalR().AddNewtonsoftJsonProtocol();
             services.AddControllers();
         }
 

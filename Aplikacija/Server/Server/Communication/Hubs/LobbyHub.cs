@@ -12,15 +12,18 @@ using System.Collections.Generic;
 
 namespace Server.Communication.Hubs
 { 
-    //[Authorize]
+    [Authorize]
     public class LobbyHub:Hub
     {
         private readonly ILobbyService _lobbyService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public LobbyHub(ILobbyService lobbyService,IHttpContextAccessor httpContextAccessor)
+        private readonly IUserIdProvider _userIdProvider;
+
+        public LobbyHub(ILobbyService lobbyService,IHttpContextAccessor httpContextAccessor, IUserIdProvider userIdProvider)
         {
             _lobbyService = lobbyService;
             _httpContextAccessor = httpContextAccessor;
+            _userIdProvider = userIdProvider;
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -48,7 +51,7 @@ namespace Server.Communication.Hubs
         }
         public async Task CreateRoom()
         {
-            string roomId =_lobbyService.CreateRoom(Context.User.Identity.Name);
+            string roomId =_lobbyService.CreateRoom(Context.UserIdentifier);
             await Clients.Caller.SendAsync("RoomFound", roomId);
         }
     }

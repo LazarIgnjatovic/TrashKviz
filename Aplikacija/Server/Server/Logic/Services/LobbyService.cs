@@ -27,7 +27,7 @@ namespace Server.Logic.Services
 
         public List<RoomDTO> GetRooms()
         {
-            Room[] rooms= _roomMaster.FreeRooms();
+            List<Room> rooms= _roomMaster.FreeRooms();
             List<RoomDTO> roomsList = new List<RoomDTO>();
             foreach(Room r in rooms)
             {

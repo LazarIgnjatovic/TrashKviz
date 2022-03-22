@@ -27,7 +27,7 @@ namespace Server.Logic.Masters.Room
             roomId = id;
             isPublic = true;
             users = new List<RoomUserDTO>();
-            users[0] = new RoomUserDTO(host);
+            users.Add(new RoomUserDTO(host));
             roomName = "Kod " + host.Username;
 
         }

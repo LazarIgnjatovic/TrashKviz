@@ -9,7 +9,7 @@ namespace Server.Logic.Masters.Room
     public interface IRoomMaster
     {
         Room FindRoom(string id);
-        Room[] FreeRooms();
+        List<Room> FreeRooms();
         void AddToQueue(string connectionId);
         void RemoveFromQueue(string connectionId);
         Room CreateRoom(UserDTO host);

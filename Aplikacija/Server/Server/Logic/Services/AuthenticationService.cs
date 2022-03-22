@@ -45,7 +45,6 @@ namespace Server.Logic.Services
             var authProperties = new AuthenticationProperties
             {
                 AllowRefresh = true,
-
             };
 
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

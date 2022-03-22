@@ -20,6 +20,7 @@ namespace Server.Logic.Masters.Room
         {
             _lobbyHubContext = hubContext;
             queue = new Queue<string>();
+            activeRooms = new List<Room>();
         }
 
         public Room FindRoom(string id)
@@ -32,13 +33,13 @@ namespace Server.Logic.Masters.Room
             return null;
         }
 
-        public Room[] FreeRooms()
+        public List<Room> FreeRooms()
         {
-            Room[] rooms= { };
+            List<Room> rooms= new List<Room>();
             foreach(Room room in activeRooms)
             {
                 if (room.IsFree())
-                    rooms.Append(room);
+                    rooms.Add(room);
             }
             return rooms;
         }
@@ -65,8 +66,8 @@ namespace Server.Logic.Masters.Room
                 }
             }
             Room room = new Room(code,host);
-            activeRooms.Append(room);
-            Room[] rooms = FreeRooms();
+            activeRooms.Add(room);
+            List<Room> rooms = FreeRooms();
             List<RoomDTO> roomsList = new List<RoomDTO>();
             foreach (Room r in rooms)
             {
