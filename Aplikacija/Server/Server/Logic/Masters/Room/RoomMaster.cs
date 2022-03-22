@@ -16,9 +16,10 @@ namespace Server.Logic.Masters.Room
         private readonly IHubContext<LobbyHub> _lobbyHubContext;
         private readonly IHubContext<RoomHub> _roomHubContext;
 
-        public RoomMaster(IHubContext<LobbyHub> hubContext)
+        public RoomMaster(IHubContext<LobbyHub> hubContext, IHubContext<RoomHub> roomHubContext)
         {
             _lobbyHubContext = hubContext;
+            _roomHubContext = roomHubContext;
             queue = new Queue<string>();
             activeRooms = new List<Room>();
         }

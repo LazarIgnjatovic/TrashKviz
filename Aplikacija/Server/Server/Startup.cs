@@ -52,11 +52,12 @@ namespace Server
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
+                        options.Cookie.SameSite = SameSiteMode.None;
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                         options.Cookie.Name = "TrashKviz";
                         options.Cookie.HttpOnly = true;
                         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                         options.SlidingExpiration = true;
-                        
                     });
 
             services.AddAuthorization();
@@ -79,6 +80,8 @@ namespace Server
                 builder.AllowCredentials();
             });
             app.UseWebSockets();
+
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
 

@@ -16,14 +16,10 @@ namespace Server.Communication.Hubs
     public class LobbyHub:Hub
     {
         private readonly ILobbyService _lobbyService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUserIdProvider _userIdProvider;
 
-        public LobbyHub(ILobbyService lobbyService,IHttpContextAccessor httpContextAccessor, IUserIdProvider userIdProvider)
+        public LobbyHub(ILobbyService lobbyService)
         {
             _lobbyService = lobbyService;
-            _httpContextAccessor = httpContextAccessor;
-            _userIdProvider = userIdProvider;
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
