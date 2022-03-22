@@ -25,9 +25,15 @@ namespace Server.Logic.Services
             return _roomMaster.FindRoom(id);
         }
 
-        public Room[] GetRooms()
+        public List<RoomDTO> GetRooms()
         {
-            return _roomMaster.FreeRooms();
+            Room[] rooms= _roomMaster.FreeRooms();
+            List<RoomDTO> roomsList = new List<RoomDTO>();
+            foreach(Room r in rooms)
+            {
+                roomsList.Add(new RoomDTO(r));
+            }
+            return roomsList;
         }
 
         public void AddToQueue(string conncetionId)

@@ -9,14 +9,15 @@ namespace Server.Logic.Masters.Room
 {
     public class Room
     {
-        private static int maxPlayers=4;
+        public static int maxPlayers=4;
 
-        private string roomId;
-        private bool isPublic;
-        private UserDTO[] users;
-        private GameType game1;
-        private GameType game2;
-        private GameType game3;
+        public string roomId;
+        public string roomName;
+        public bool isPublic;
+        public List<RoomUserDTO> users;
+        public GameType game1;
+        public GameType game2;
+        public GameType game3;
 
         public string RoomID { get => roomId; set => roomId = value; }
 
@@ -25,11 +26,70 @@ namespace Server.Logic.Masters.Room
         {
             roomId = id;
             isPublic = true;
-            users[0] = host;
+            users = new List<RoomUserDTO>();
+            users[0] = new RoomUserDTO(host);
+            roomName = "Kod " + host.Username;
+
         }
         internal bool IsFree()
         {
-            return users.Length < maxPlayers && isPublic;
+            return users.Count < maxPlayers && isPublic;
+        }
+        internal int FreeSlots()
+        {
+            return maxPlayers - users.Count;
+        }
+        internal Room AddPlayer(UserDTO newPlayer)
+        {
+            if (users.Count < maxPlayers)
+            {
+                users.Append(new RoomUserDTO(newPlayer));
+                return this;
+            }
+            else
+                return null;
+        }
+        internal Room RemovePlayer(string username)
+        {
+            users.Remove(users.Where(x => x.User.Username == username).FirstOrDefault());
+            return this;
+        }
+        internal void MarkReady(string username)
+        {
+            RoomUserDTO user = users.Where(x => x.User.Username == username).FirstOrDefault();
+            if (user != null)
+                user.IsReady = true;
+        }
+        internal void UnmarkReady(string username)
+        {
+            RoomUserDTO user = users.Where(x => x.User.Username == username).FirstOrDefault();
+            if (user != null)
+                user.IsReady = false;
+        }
+        internal List<string> Modify(Room newRoom)
+        {
+            List<string> kicked = new List<string>();
+            foreach(RoomUserDTO currUser in newRoom.users)
+            {
+                if (!users.Exists(x => x.User.Username == currUser.User.Username))
+                {
+                   // kicked.Add(.User.Username)
+                }
+            }
+            this.isPublic = newRoom.isPublic;
+            this.users = newRoom.users;
+            this.roomName = newRoom.roomName;
+            this.game1 = newRoom.game1;
+            this.game2 = newRoom.game2;
+            this.game3 = newRoom.game3;
+            return this;
+        }
+        internal bool HasUser(string username)
+        {
+            foreach(RoomUserDTO u in users)
+                if (u.User.Username == username)
+                    return true;
+            return false;
         }
     }
 }

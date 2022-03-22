@@ -7,7 +7,7 @@ namespace Server.Logic.DTOs
 {
     public class Player
     {
-        private UserDTO user;
-        private int points;
+        private UserDTO User;
+        private int Points;
     }
 }

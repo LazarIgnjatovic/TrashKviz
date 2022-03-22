@@ -1,4 +1,5 @@
-﻿using Server.Logic.Masters.Room;
+﻿using Server.Logic.DTOs;
+using Server.Logic.Masters.Room;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Server.Logic.Services
 {
     public interface ILobbyService
     {
-        Room[] GetRooms();
+        List<RoomDTO> GetRooms();
         Room FindRoom(string id);
         void AddToQueue(string connectionId);
         void RemoveFromQueue(string connectionId);
