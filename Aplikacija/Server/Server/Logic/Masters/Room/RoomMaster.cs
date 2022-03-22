@@ -13,11 +13,12 @@ namespace Server.Logic.Masters.Room
         private List<Room> activeRooms;
         private Queue<string> queue;
 
-        private readonly IHubContext<LobbyHub> _hubContext;
+        private readonly IHubContext<LobbyHub> _lobbyHubContext;
+        private readonly IHubContext<RoomHub> _roomHubContext;
 
         public RoomMaster(IHubContext<LobbyHub> hubContext)
         {
-            _hubContext = hubContext;
+            _lobbyHubContext = hubContext;
             queue = new Queue<string>();
         }
 
@@ -65,7 +66,13 @@ namespace Server.Logic.Masters.Room
             }
             Room room = new Room(code,host);
             activeRooms.Append(room);
-            _hubContext.Clients.All.SendAsync("UpdateRooms", FreeRooms());
+            Room[] rooms = FreeRooms();
+            List<RoomDTO> roomsList = new List<RoomDTO>();
+            foreach (Room r in rooms)
+            {
+                roomsList.Add(new RoomDTO(r));
+            }
+            _lobbyHubContext.Clients.All.SendAsync("UpdateRooms", roomsList);
             PopulateRoom(room);
             return room;
         }
@@ -83,7 +90,7 @@ namespace Server.Logic.Masters.Room
                 if(queue.Count>0)
                 {
                     string connId = queue.Dequeue();
-                    _hubContext.Clients.Client(connId).SendAsync("RoomFound", room.RoomID);
+                    _lobbyHubContext.Clients.Client(connId).SendAsync("RoomFound", room.RoomID);
                 }
             }
         }
@@ -127,9 +134,15 @@ namespace Server.Logic.Masters.Room
             Room r = activeRooms.Where(x => x.RoomID == room.RoomID).FirstOrDefault();
             if (r!=null && username==r.users[0].User.Username)
             {
-                r.Modify(room);
+                List<string> kicked =r.Modify(room);
+                foreach(string user in kicked)
+                {
+                    _roomHubContext.Clients.User(user).SendAsync("Kicked");
+                }
                 if (r.IsFree())
+                {
                     PopulateRoom(r);
+                }
             }
             return r;
         }

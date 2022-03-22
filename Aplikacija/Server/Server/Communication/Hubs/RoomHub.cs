@@ -26,8 +26,11 @@ namespace Server.Communication.Hubs
         {
             string username = Context.User.Identity.Name;
             Room room=_roomService.UserDisconnected(username);
-            Groups.RemoveFromGroupAsync(Context.ConnectionId, room.RoomID);
-            Clients.Group(room.RoomID).SendAsync("RoomUpdate", room);
+            if (room != null)
+            {
+                Groups.RemoveFromGroupAsync(Context.ConnectionId, room.RoomID);
+                Clients.Group(room.RoomID).SendAsync("RoomUpdate", room);
+            }
             return base.OnDisconnectedAsync(exception);
         }
 
@@ -68,5 +71,6 @@ namespace Server.Communication.Hubs
             string matchID="";
             await Clients.Group(roomID).SendAsync("GameStarted", matchID);
         }
+        //_roomHubContext.Clients.User(user).SendAsync("Kicked");
     }
 }

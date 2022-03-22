@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Server.Communication.Hubs
 { 
-    [Authorize]
+    //[Authorize]
     public class LobbyHub:Hub
     {
         private readonly ILobbyService _lobbyService;

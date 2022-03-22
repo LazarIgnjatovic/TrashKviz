@@ -69,11 +69,11 @@ namespace Server.Logic.Masters.Room
         internal List<string> Modify(Room newRoom)
         {
             List<string> kicked = new List<string>();
-            foreach(RoomUserDTO currUser in newRoom.users)
+            foreach(RoomUserDTO currUser in users)
             {
-                if (!users.Exists(x => x.User.Username == currUser.User.Username))
+                if (!newRoom.users.Exists(x => x.User.Username == currUser.User.Username))
                 {
-                   // kicked.Add(.User.Username)
+                    kicked.Add(currUser.User.Username);
                 }
             }
             this.isPublic = newRoom.isPublic;
@@ -82,7 +82,7 @@ namespace Server.Logic.Masters.Room
             this.game1 = newRoom.game1;
             this.game2 = newRoom.game2;
             this.game3 = newRoom.game3;
-            return this;
+            return kicked;
         }
         internal bool HasUser(string username)
         {
