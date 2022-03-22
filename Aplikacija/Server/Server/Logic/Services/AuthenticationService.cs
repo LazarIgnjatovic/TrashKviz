@@ -24,6 +24,11 @@ namespace Server.Logic.Services
             _baseRepository = baseRepository;
         }
 
+        public ActionResult<bool> IsLoggedIn()
+        {
+            return new OkObjectResult(_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated);
+        }
+
         public async Task<ActionResult<ResponseDTO>> Login(LoginDTO loginDTO)
         {
             var user = await _baseRepository.FindOneAsync(user => user.Username.Equals(loginDTO.Username));
@@ -46,7 +51,7 @@ namespace Server.Logic.Services
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                                                new ClaimsPrincipal(claimsIdentity));
 
-            return new OkObjectResult(new ResponseDTO("Pristup odobren!"));
+            return new OkObjectResult(new ResponseDTO("Uspešan ulog!"));
         }
 
         public async Task<ActionResult<ResponseDTO>> Logout()
@@ -54,7 +59,7 @@ namespace Server.Logic.Services
             if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                 return new UnauthorizedObjectResult(new ResponseDTO("Šefe obično treba da si ulogovan da bi se izlogovao!"));
             await _httpContextAccessor.HttpContext.SignOutAsync();
-            return new OkObjectResult(new ResponseDTO("MRŠ!"));
+            return new OkObjectResult(new ResponseDTO("Uspešan izlog!"));
         }
 
         public async Task<ActionResult<ResponseDTO>> Register(RegisterDTO registerDTO)
@@ -75,11 +80,6 @@ namespace Server.Logic.Services
             await _baseRepository.InsertOneAsync(newUser);
 
             return new OkObjectResult(new ResponseDTO("Alal ti ćufta, uspešna registracija!"));
-        }
-
-        public ActionResult<bool> IsLoggedIn()
-        {
-            return new OkObjectResult(_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated);
         }
     }
 }
