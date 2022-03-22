@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Server
 {
@@ -36,12 +37,14 @@ namespace Server
             services.Configure<MongoDbSettings>(Configuration.GetSection("TrashQuizDatabase"));
             services.AddSingleton<IMongoDbSettings>(serviceProvider => serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             services.AddSingleton<IMatchMaster, MatchMaster>();
             services.AddSingleton<IRoomMaster, RoomMaster>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ILobbyService, LobbyService>();
+            services.AddScoped<IRoomService, RoomService>();
 
             services.AddHttpContextAccessor();
 

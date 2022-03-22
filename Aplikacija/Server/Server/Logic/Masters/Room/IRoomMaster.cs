@@ -13,5 +13,12 @@ namespace Server.Logic.Masters.Room
         void AddToQueue(string connectionId);
         void RemoveFromQueue(string connectionId);
         Room CreateRoom(UserDTO host);
+        Room JoinRoom(UserDTO user, string id);
+        Room LeaveRoom(string username, string id);
+        Room MarkReady(string username, string id);
+        Room UnmarkReady(string username, string id);
+        Room ModifyRoom(string username, Room room);
+        Room UserDisconnected(string username);
+        void PopulateRoom(Room room);
     }
 }

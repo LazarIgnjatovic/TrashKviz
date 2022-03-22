@@ -8,10 +8,12 @@ namespace Server.Logic.Services
 {
     public interface IRoomService
     {
-        public Room JoinRoom(string roomId);
-        public void LeaveRoom(string roomId);
-        public void ModifyRoom(Room room);
-        public void MarkReady(string username, string roomId);
-        public bool StartGame(string roomId); 
+        public Room JoinRoom(string username,string roomId);
+        public Room LeaveRoom(string username,string roomId);
+        public Room ModifyRoom(string username,Room room);
+        public Room MarkReady(string username, string roomId);
+        public Room UnmarkReady(string username, string roomId);
+        public Room UserDisconnected(string username);
+        public bool StartGame(string username,string roomId); 
     }
 }

@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Security.Claims;
+using Server.Logic.DTOs;
+using System.Collections.Generic;
 
 namespace Server.Communication.Hubs
 { 
@@ -19,7 +21,6 @@ namespace Server.Communication.Hubs
         {
             _lobbyService = lobbyService;
             _httpContextAccessor = httpContextAccessor;
-
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -30,7 +31,7 @@ namespace Server.Communication.Hubs
 
         public async Task GetRooms()
         {
-            Room[] rooms = _lobbyService.GetRooms();
+            List<RoomDTO> rooms = _lobbyService.GetRooms();
             await Clients.All.SendAsync("UpdateRooms", rooms);
         }
         public async Task JoinRoom(string roomID)
@@ -47,7 +48,7 @@ namespace Server.Communication.Hubs
         }
         public async Task CreateRoom()
         {
-            string roomId =_lobbyService.CreateRoom(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))?.Value);
+            string roomId =_lobbyService.CreateRoom(Context.User.Identity.Name);
             await Clients.Caller.SendAsync("RoomFound", roomId);
         }
     }
