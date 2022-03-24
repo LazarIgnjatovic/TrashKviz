@@ -2,16 +2,23 @@ app-classic-list {
   width: 100%;
 }
 
+app-mat-card {
+  width: 100%;
+}
+
 .list-item {
   width: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.button-and-number-of-players{
+.button-and-number-of-players {
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  width: 45%;
+  justify-content: space-between;
+  align-items: center;
+  flex-basis: 120px;
+  margin-left: 10px;
 }
 .multiline {
   white-space: nowrap;
@@ -19,9 +26,45 @@ app-classic-list {
   overflow-y: hidden;
   margin: 0px;
   padding: 0px;
-  width: 50%;
+  flex-grow: 1;
 }
 
-// app-button {
-  
-// }
+button {
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 30px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0px;
+}
+
+.subtitle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  margin: 0px;
+  padding-left: 15px;
+  flex-grow: 1;
+}
+
+.player-count {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-basis: 140px;
+  margin-left: 10px;
+  text-align: left;
+  padding: 0px;
+}

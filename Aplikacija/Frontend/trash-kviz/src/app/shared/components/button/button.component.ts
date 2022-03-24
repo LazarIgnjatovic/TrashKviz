@@ -11,6 +11,7 @@ export class ButtonComponent implements OnInit {
   @Input() buttonWidth: string = '100px';
   @Input() buttonHeight: string = 'fit-content';
   @Input() buttonType: string = 'button';
+  @Input() buttonColor: string = 'primary';
   @Output() buttonClicked: EventEmitter<any> = new EventEmitter();
   constructor() {}
 

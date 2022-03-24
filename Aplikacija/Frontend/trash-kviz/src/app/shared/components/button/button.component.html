@@ -1,7 +1,7 @@
 <button
   [disabled]="buttonDisabled"
   mat-raised-button
-  color="primary"
+  [color]="buttonColor"
   (click)="buttonClicked.emit(null)"
   [style.width]="buttonWidth"
   [style.height]="buttonHeight"

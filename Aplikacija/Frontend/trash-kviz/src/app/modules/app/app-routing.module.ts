@@ -19,12 +19,18 @@ const routes: Routes = [
     path: 'lobby',
     canLoad: [AuthGuard],
     loadChildren: () =>
-      import("../lobby/lobby.module").then((module) => module.LobbyModule),
-  }
+      import('../lobby/lobby.module').then((module) => module.LobbyModule),
+  },
+  {
+    path: 'room',
+    canLoad: [AuthGuard],
+    loadChildren: () =>
+      import('../room/room.module').then((module) => module.RoomModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

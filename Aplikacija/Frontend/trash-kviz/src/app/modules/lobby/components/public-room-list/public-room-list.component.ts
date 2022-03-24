@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { WindowResizeDetectorService } from 'src/app/core/services/window-resize-detector/window-resize-detector.service';
 import { Room } from '../../models/room.model';
@@ -10,6 +10,7 @@ import { Room } from '../../models/room.model';
 })
 export class PublicRoomListComponent implements OnInit {
   @Input() rooms: Observable<Room[]> = of([]);
+  @Output() roomJoin: EventEmitter<any> = new EventEmitter();
   constructor(
     public windowResizeDetectionService: WindowResizeDetectorService
   ) {}

@@ -1,0 +1,17 @@
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+p {
+  text-align: center;
+  color: white;
+  max-width: 90%;
+  word-wrap: break-word;
+  margin: 0px;
+}
+mat-spinner {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}

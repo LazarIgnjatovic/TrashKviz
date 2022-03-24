@@ -20,7 +20,7 @@ export class AuthService {
     private materialComponentConfigProvider: MaterialComponentsConfigProviderService
   ) {
     this.snackbarSettings = this.materialComponentConfigProvider.snackbarConfig(
-      ['mat-toolbar', 'mat-primary', 'center-snackbar']
+      ['mat-toolbar', 'mat-accent', 'center-snackbar']
     );
   }
 

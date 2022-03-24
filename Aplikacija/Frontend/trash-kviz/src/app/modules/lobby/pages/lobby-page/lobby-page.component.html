@@ -5,7 +5,20 @@
       (onCreateRoom)="onCreateRoom()"
       (onRandomJoin)="onRandomJoin()"
     ></app-lobby-button-group>
-    <app-public-room-list [rooms]="roomObser"></app-public-room-list>
-    <app-join-form></app-join-form>
+    <app-public-room-list
+      [rooms]="getRoomsObservable()"
+      (roomJoin)="onCodeJoin($event)"
+    ></app-public-room-list>
+    <app-join-form
+      (codeSubmitEvent)="onCodeJoin($event.value.code)"
+    ></app-join-form>
   </div>
 </div>
+
+<ng-template #underSpinner>
+  <app-button
+    buttonText="Prekini traženje"
+    buttonWidth="fit-content"
+    (buttonClicked)="onSearchCanceled()"
+  ></app-button>
+</ng-template>

@@ -14,6 +14,9 @@ import { MatCardComponent } from './components/mat-card/mat-card.component';
 import { SelectListComponent } from './components/select-list/select-list.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { FormSelectComponent } from './components/form-select/form-select.component';
+import { FormCheckboxComponent } from './components/form-checkbox/form-checkbox.component';
+import { SpinnerComponent } from '../core/components/spinner/spinner.component';
 
 const components = [
   FormInputComponent,
@@ -27,11 +30,19 @@ const components = [
   FormChecklistWithSectionsComponent,
   DialogComponent,
   HeaderComponent,
+  FormSelectComponent,
+  SpinnerComponent,
 ];
 
 @NgModule({
-  declarations: [components],
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule, ScrollingModule],
+  declarations: [components, FormCheckboxComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    RouterModule,
+    ScrollingModule,
+  ],
   exports: [CommonModule, ReactiveFormsModule, components],
 })
 export class SharedModule {}

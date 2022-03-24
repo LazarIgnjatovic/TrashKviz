@@ -19,4 +19,12 @@ export class ValidationErrorMessageProviderService {
   public readonly codeErrorMessages: Record<string, string> = {
     pattern: 'Kod je kombinacija od 4 slova i/ili cifara',
   };
+
+  public readonly gameSelectErrorMessages: Record<string, string> = {
+    required: 'Igra mora biti izabrana',
+  };
+
+  public readonly roomNameErrorMessages: Record<string, string> = {
+    required: 'Naziv sobe je neophodan',
+  };
 }

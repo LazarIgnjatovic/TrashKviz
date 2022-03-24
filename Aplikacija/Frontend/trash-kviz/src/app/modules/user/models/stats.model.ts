@@ -1,5 +1,4 @@
-export interface Stats
-{
-    gamesplayer: number,
-    winrate: number
+export interface Stats {
+  gamesPlayed: number;
+  winrate: number;
 }

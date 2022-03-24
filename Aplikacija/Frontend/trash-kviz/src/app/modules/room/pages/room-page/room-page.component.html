@@ -1,0 +1,16 @@
+<app-header></app-header>
+<div class="container">
+  <div class="user-list-container">
+    <app-room-user-list
+      [users]="getRoomState().value.users"
+      [isAdmin]="isAdmin()"
+    ></app-room-user-list>
+  </div>
+  <div class="room-settings-container">
+    <button mat-raised-button color="primary" (click)="onMarkReady()">Spreman?</button>
+    <app-room-settings-form></app-room-settings-form>
+    <button mat-raised-button class="leave" (click)="onLeaveRoom()">
+      Napusti sobu
+    </button>
+  </div>
+</div>

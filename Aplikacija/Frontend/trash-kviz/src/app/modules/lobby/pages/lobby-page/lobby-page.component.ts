@@ -1,48 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { SignalrGeneralService } from 'src/app/core/services/signalr-general/signalr-general.service';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Room } from '../../models/room.model';
+import { LobbyService } from '../../services/lobby.service';
 
 @Component({
   selector: 'app-lobby-page',
   templateUrl: './lobby-page.component.html',
   styleUrls: ['./lobby-page.component.scss'],
 })
-export class LobbyPageComponent implements OnInit {
-  rooms: Room[] = [
-    //   { roomId: 'asf', roomName: 'AAAAAAAAAA', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-    //   { roomId: 'asf', roomName: 'Prva', numberOfPlayersJoined: 3 },
-  ];
-  roomObser: BehaviorSubject<Room[]> = new BehaviorSubject<Room[]>([]);
-  constructor(private signalRService: SignalrGeneralService) {}
+export class LobbyPageComponent implements OnInit, AfterViewInit {
+  @ViewChild('underSpinner') underSpinner!: TemplateRef<any>;
 
-  ngOnInit(): void {
-    this.signalRService.createConnection('/lobby');
-    this.signalRService.startConnection();
-    this.signalRService.addOnServerMethodHandler(
-      { methodName: 'UpdateRooms', args: [] },
-      (a) => this.roomObser.next(a)
-    );
+  constructor(private lobbyService: LobbyService) {}
+  ngAfterViewInit(): void {
+    this.lobbyService.setUnderSpinner(this.underSpinner);
   }
 
-  onCreateRoom() {
-    this.signalRService.sendMessageToServer({
-      methodName: 'CreateRoom',
-      args: [],
-    });
+  ngOnInit(): void {
+    this.lobbyService.initConnection();
+  }
+
+  getRoomsObservable(): BehaviorSubject<Room[]> {
+    return this.lobbyService.getRoomsObservable();
   }
 
   onRandomJoin() {
-    this.signalRService.sendMessageToServer({
-      methodName: 'GetRooms',
-      args: [],
-    });
+    this.lobbyService.findRoom();
+  }
+
+  onCodeJoin(code: string) {
+    this.lobbyService.joinRoom(code.toUpperCase());
+  }
+
+  onCreateRoom() {
+    this.lobbyService.createRoom();
+  }
+
+  onSearchCanceled() {
+    this.lobbyService.cancelSearch();
   }
 }

@@ -1,0 +1,42 @@
+<app-form
+  [titleTemplate]="titleTemplate"
+  [contentTemplate]="contentTemplate"
+  [formFormGroup]="roomSettingsForm"
+  (onSubminEvent)="roomSettingsFormOnSubmit.emit(roomSettingsForm)"
+></app-form>
+
+<ng-template #titleTemplate> Kod: {{ roomId }} </ng-template>
+
+<ng-template #contentTemplate>
+  <div class="settings-container">
+    <div class="select-container">
+      <app-form-select
+        *ngFor="let game of ['Prva', 'Druga', 'Treća']"
+        selectFormControlName="{{ game }}igra"
+        [parentFormGroup]="roomSettingsForm"
+        label=" {{ game }} igra"
+        [selectOptions]="gameOptions"
+        [selectFormValidationErrorMessages]="
+          validationErrorMessageProvider.gameSelectErrorMessages
+        "
+      ></app-form-select>
+    </div>
+    <div class="button-mode-and-name-container">
+      <app-form-input
+        label="Naziv sobe"
+        placeholder="Naziv sobe"
+        [formInputType]="formInputTypesProvider.formInputTypes.text"
+        inputFormControlName="roomname"
+        [parentFormGroup]="roomSettingsForm"
+        name="roomname"
+        [inputValidationErrorMessages]="
+          validationErrorMessageProvider.roomNameErrorMessages
+        "
+      ></app-form-input>
+      <mat-checkbox>Privatna soba</mat-checkbox>
+      <app-button buttonText="Pokreni"></app-button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template> </ng-template>

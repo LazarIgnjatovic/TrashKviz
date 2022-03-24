@@ -11,6 +11,7 @@ import { IServerMethod } from './method-interfaces/server-method.interface';
 @Injectable()
 export class SignalrGeneralService {
   private hubConnection: HubConnection | null = null;
+  public tempId: string = '';
 
   public createConnection(
     path: string,
