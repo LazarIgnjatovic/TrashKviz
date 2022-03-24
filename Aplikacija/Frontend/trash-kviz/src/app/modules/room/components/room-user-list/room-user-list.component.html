@@ -6,6 +6,7 @@
     <app-room-user
       [userRoom]="userRoom"
       [showKick]="showKick(indexOfUser)"
+      (userKicked)="userKicked.emit($event)"
     ></app-room-user>
   </div>
 </div>

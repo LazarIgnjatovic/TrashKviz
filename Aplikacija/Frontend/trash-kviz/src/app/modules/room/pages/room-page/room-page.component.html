@@ -4,11 +4,20 @@
     <app-room-user-list
       [users]="getRoomState().value.users"
       [isAdmin]="isAdmin()"
+      (userKicked)="onUserKicked($event)"
     ></app-room-user-list>
   </div>
   <div class="room-settings-container">
-    <button mat-raised-button color="primary" (click)="onMarkReady()">Spreman?</button>
-    <app-room-settings-form></app-room-settings-form>
+    <button mat-raised-button color="primary" (click)="onMarkReady()">
+      Spreman?
+    </button>
+    <app-room-settings-form
+      [roomState]="getRoomState()"
+      [isAdmin]="isAdmin()"
+      (roomSettingsFormOnSubmit)="onStartGame()"
+      (roomSettingsChanged)="onSettingsChanged($event)"
+      [startEnabled]="getAllReady().value"
+    ></app-room-settings-form>
     <button mat-raised-button class="leave" (click)="onLeaveRoom()">
       Napusti sobu
     </button>

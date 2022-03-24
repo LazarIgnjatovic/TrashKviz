@@ -20,7 +20,11 @@
       <span class="mat-small">Iskustvo: {{ scaleExperience() }}</span>
     </div>
     <div class="icon-container">
-      <button mat-icon-button *ngIf="showKick | async">
+      <button
+        mat-icon-button
+        *ngIf="showKick | async"
+        (click)="userKicked.emit(userRoom.user.username)"
+      >
         <mat-icon class="cancel">cancel</mat-icon>
       </button>
     </div>

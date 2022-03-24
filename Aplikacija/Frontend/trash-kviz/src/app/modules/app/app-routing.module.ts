@@ -27,6 +27,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('../room/room.module').then((module) => module.RoomModule),
   },
+  {
+    path: 'game',
+    //canLoad: [AuthGuard],
+    loadChildren: () =>
+      import('../game/game.module').then((module) => module.GameModule),
+  },
 ];
 
 @NgModule({

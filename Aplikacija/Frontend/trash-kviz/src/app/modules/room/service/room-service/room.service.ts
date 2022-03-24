@@ -10,6 +10,9 @@ export class RoomService {
   private isAdmin: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
   );
+  private allReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
   private roomState: BehaviorSubject<RoomState> =
     new BehaviorSubject<RoomState>({
@@ -64,6 +67,50 @@ export class RoomService {
           .subscribe((_) => this.router.navigate(['/lobby']));
       }
     );
+
+    this.signalRService.addOnServerMethodHandler(
+      {
+        methodName: 'Kicked',
+        args: [],
+      },
+      () => {
+        this.signalRService
+          .endConnection()
+          .subscribe((_) => this.router.navigate(['/lobby']));
+      }
+    );
+
+    this.signalRService.addOnServerMethodHandler(
+      {
+        methodName: 'AllReady',
+        args: [],
+      },
+      () => {
+        this.allReady.next(true);
+      }
+    );
+
+    this.signalRService.addOnServerMethodHandler(
+      {
+        methodName: 'NotAllReady',
+        args: [],
+      },
+      () => {
+        this.allReady.next(false);
+      }
+    );
+
+    this.signalRService.addOnServerMethodHandler(
+      {
+        methodName: 'GameStarted',
+        args: [],
+      },
+      () => {
+        this.signalRService
+          .endConnection()
+          .subscribe((_) => this.router.navigate(['/game']));
+      }
+    );
   }
 
   getIsAdmin() {
@@ -72,6 +119,10 @@ export class RoomService {
 
   getRoomState() {
     return this.roomState;
+  }
+
+  getAllReady() {
+    return this.allReady;
   }
 
   leaveRoom() {
@@ -87,6 +138,28 @@ export class RoomService {
   markReady() {
     this.signalRService.sendMessageToServer({
       methodName: 'MarkReady',
+      args: [this.roomState.value.roomId],
+    });
+  }
+
+  modifyRoom(roomState: RoomState) {
+    this.signalRService.sendMessageToServer({
+      methodName: 'ModifyRoom',
+      args: [roomState],
+    });
+  }
+
+  kickPlayer(username: string) {
+    this.signalRService.sendMessageToServer({
+      methodName: 'Kick',
+      args: [this.roomState.value.roomId, username],
+    });
+  }
+
+  startGame() {
+    console.log('STARTTT');
+    this.signalRService.sendMessageToServer({
+      methodName: 'StartGame',
       args: [this.roomState.value.roomId],
     });
   }

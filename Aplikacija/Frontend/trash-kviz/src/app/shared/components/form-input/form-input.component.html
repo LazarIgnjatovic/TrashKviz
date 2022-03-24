@@ -4,6 +4,7 @@
     *ngIf="formInputType !== formInputTypesProvider.formInputTypes.textArea"
   >
     <input
+      (keydown)="inputChanged.emit(null)"
       matInput
       [maxlength]="maxLength"
       [placeholder]="placeholder"

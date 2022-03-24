@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/modules/user/models/user.model';
+import { EventEmitter } from '@angular/core';
 import { UserRoom } from '../../models/user-room.model';
 
 @Component({
@@ -11,6 +12,7 @@ import { UserRoom } from '../../models/user-room.model';
 export class RoomUserComponent implements OnInit {
   @Input() userRoom!: UserRoom;
   @Input() showKick!: Observable<boolean>;
+  @Output() userKicked: EventEmitter<any> = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}

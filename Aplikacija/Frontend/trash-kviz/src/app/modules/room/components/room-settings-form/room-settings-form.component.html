@@ -2,15 +2,16 @@
   [titleTemplate]="titleTemplate"
   [contentTemplate]="contentTemplate"
   [formFormGroup]="roomSettingsForm"
-  (onSubminEvent)="roomSettingsFormOnSubmit.emit(roomSettingsForm)"
+  (onSubminEvent)="roomSettingsFormOnSubmit.emit(null)"
 ></app-form>
 
-<ng-template #titleTemplate> Kod: {{ roomId }} </ng-template>
+<ng-template #titleTemplate> Kod: {{ roomState.value.roomId }} </ng-template>
 
 <ng-template #contentTemplate>
   <div class="settings-container">
     <div class="select-container">
       <app-form-select
+        (selectionChanged)="roomSettingsChanged.emit(getFormValues())"
         *ngFor="let game of ['Prva', 'Druga', 'Treća']"
         selectFormControlName="{{ game }}igra"
         [parentFormGroup]="roomSettingsForm"
@@ -32,11 +33,24 @@
         [inputValidationErrorMessages]="
           validationErrorMessageProvider.roomNameErrorMessages
         "
+        (inputChanged)="nameChangedSubject.next(getFormValues())"
       ></app-form-input>
-      <mat-checkbox>Privatna soba</mat-checkbox>
-      <app-button buttonText="Pokreni"></app-button>
+      <app-form-checkbox
+        checkboxFormControlName="privateroom"
+        checkboxText="Privatna soba"
+        [parentFormGroup]="roomSettingsForm"
+        (checkboxChanged)="roomSettingsChanged.emit(getFormValues())"
+      ></app-form-checkbox>
+      <app-button
+        [buttonDisabled]="!startEnabled"
+        buttonText="Pokreni"
+        *ngIf="isAdmin | async"
+        [buttonDisabled]="
+          (roomSettingsForm.invalid && roomSettingsForm.touched) ||
+          !roomSettingsForm.controls['roomname'].value
+        "
+        buttonType="submit"
+      ></app-button>
     </div>
   </div>
 </ng-template>
-
-<ng-template> </ng-template>

@@ -1,1 +1,3 @@
-<p>form-checkbox works!</p>
+<mat-checkbox [formControl]="checkboxFormControl" [color]="checkboxColor" (change)="checkboxChanged.emit(null)">{{
+  checkboxText
+}}</mat-checkbox>

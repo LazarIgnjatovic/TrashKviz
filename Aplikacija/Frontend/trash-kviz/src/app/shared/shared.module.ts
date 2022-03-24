@@ -32,10 +32,11 @@ const components = [
   HeaderComponent,
   FormSelectComponent,
   SpinnerComponent,
+  FormCheckboxComponent,
 ];
 
 @NgModule({
-  declarations: [components, FormCheckboxComponent],
+  declarations: [components],
   imports: [
     CommonModule,
     ReactiveFormsModule,

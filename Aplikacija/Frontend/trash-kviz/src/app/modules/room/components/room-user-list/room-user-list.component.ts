@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { User } from 'src/app/modules/user/models/user.model';
+import { EventEmitter } from '@angular/core';
 import { UserRoom } from '../../models/user-room.model';
 
 @Component({
@@ -9,8 +9,9 @@ import { UserRoom } from '../../models/user-room.model';
   styleUrls: ['./room-user-list.component.scss'],
 })
 export class RoomUserListComponent implements OnInit {
-  @Input() users: UserRoom[] = []; //Observable<UserRoom[]> = of([]);
+  @Input() users: UserRoom[] = [];
   @Input() isAdmin!: Observable<boolean>;
+  @Output() userKicked: EventEmitter<any> = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}
