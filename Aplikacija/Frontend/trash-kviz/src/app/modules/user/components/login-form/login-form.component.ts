@@ -49,7 +49,7 @@ export class LoginFormComponent implements OnInit {
     const passwordValidators = [
       Validators.minLength(8),
       Validators.pattern(
-        this.regexProvider.onlyOneCapitalOneLowercaseLetterAndOneNumber
+        this.regexProvider.onlyOneCapitalOneLowercaseLetterAndOneNumberLenght8Plus
       ),
     ];
     if (this.fieldsRequired) passwordValidators.push(Validators.required);

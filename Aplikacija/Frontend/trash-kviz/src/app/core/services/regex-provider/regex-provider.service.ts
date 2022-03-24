@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class RegexProviderService {
-  public readonly onlyOneCapitalOneLowercaseLetterAndOneNumber =
+  public readonly onlyOneCapitalOneLowercaseLetterAndOneNumberLenght8Plus =
     '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$';
+  public readonly onlyCapitalLettersAndNumbersLength4 = '^[A-Za-z0-9]{4}$';
 
   constructor() {}
 }

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverAddress: "http://192.168.100.126:5000"
+  serverAddress: "https://trashkviz.com:5001"
 };
 
 /*

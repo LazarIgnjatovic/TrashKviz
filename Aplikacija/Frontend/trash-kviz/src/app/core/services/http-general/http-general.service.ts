@@ -12,7 +12,10 @@ export class HttpGeneralService {
     this.headers = new HttpHeaders();
   }
 
-  post<ModelType>(apiRoute: string, body: any): Observable<HttpResponse<ModelType>> {
+  post<ModelType>(
+    apiRoute: string,
+    body: any
+  ): Observable<HttpResponse<ModelType>> {
     return this.httpClient
       .post<ModelType>(`${this.url + apiRoute}`, body, {
         headers: this.headers,
@@ -32,13 +35,20 @@ export class HttpGeneralService {
       .pipe(catchError(() => EMPTY));
   }
 
-  put<ModelType>(apiRoute: string, body: any): Observable<HttpResponse<ModelType>> {
+  put<ModelType>(
+    apiRoute: string,
+    body: any
+  ): Observable<HttpResponse<ModelType>> {
     return this.httpClient
-      .put<ModelType>(`${this.url + apiRoute}`, body, {
-        headers: this.headers,
-        withCredentials: true,
-        observe: 'response',
-      })
+      .put<ModelType>(
+        `${this.url + apiRoute}`,
+        body,
+        {
+          headers: this.headers,
+          withCredentials: true,
+          observe: 'response',
+        },
+      )
       .pipe(catchError(() => EMPTY));
   }
 

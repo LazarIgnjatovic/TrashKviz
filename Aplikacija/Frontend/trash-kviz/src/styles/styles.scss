@@ -8,11 +8,31 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: url("../assets/back.png") no-repeat;
-  background-color: rgba(53, 5, 92, 0.513);
-  background-blend-mode: darken;
+  background-image: url("../assets/Back-overlay.png"), url("../assets/back.png"), url("../assets/Solid-back.png");
+  background-repeat: no-repeat  no-repeat no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(53, 5, 90) rgb(184, 24, 24);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(128, 28, 164);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(148, 72, 207);
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }

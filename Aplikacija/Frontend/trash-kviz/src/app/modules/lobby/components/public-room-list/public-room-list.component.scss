@@ -1,0 +1,27 @@
+app-classic-list {
+  width: 100%;
+}
+
+.list-item {
+  width: 100%;
+  display: flex;
+}
+
+.button-and-number-of-players{
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 45%;
+}
+.multiline {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0px;
+  padding: 0px;
+  width: 50%;
+}
+
+// app-button {
+  
+// }

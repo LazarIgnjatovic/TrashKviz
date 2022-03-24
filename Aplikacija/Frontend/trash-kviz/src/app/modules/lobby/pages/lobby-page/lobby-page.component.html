@@ -1,1 +1,11 @@
-<div class="centered-container"><h1>KURC</h1></div>
+<app-header></app-header>
+<div class="centered-container">
+  <div class="centered-container-column">
+    <app-lobby-button-group
+      (onCreateRoom)="onCreateRoom()"
+      (onRandomJoin)="onRandomJoin()"
+    ></app-lobby-button-group>
+    <app-public-room-list [rooms]="roomObser"></app-public-room-list>
+    <app-join-form></app-join-form>
+  </div>
+</div>

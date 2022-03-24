@@ -1,0 +1,11 @@
+.button-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  min-width: 300px;
+  margin-bottom: 10px;
+  app-button {
+    min-width: 140px;
+    width: 40%;
+  }
+}

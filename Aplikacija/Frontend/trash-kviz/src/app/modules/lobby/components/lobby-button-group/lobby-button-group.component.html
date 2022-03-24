@@ -1,0 +1,13 @@
+<div class="button-container">
+  <app-button
+    buttonText="Nasumična soba"
+    buttonWidth="100%"
+    (buttonClicked)="onRandomJoin.emit(null)"
+  ></app-button>
+  <app-button
+    buttonText="Kreiraj sobu"
+    buttonWidth="100%"
+    buttonHeight="100%"
+    (buttonClicked)="onCreateRoom.emit(null)"
+  ></app-button>
+</div>

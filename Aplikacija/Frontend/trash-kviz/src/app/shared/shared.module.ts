@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { MatCardComponent } from './components/mat-card/mat-card.component';
 import { SelectListComponent } from './components/select-list/select-list.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 const components = [
   FormInputComponent,
@@ -30,7 +31,7 @@ const components = [
 
 @NgModule({
   declarations: [components],
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule],
-  exports: [ReactiveFormsModule, components],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, RouterModule, ScrollingModule],
+  exports: [CommonModule, ReactiveFormsModule, components],
 })
 export class SharedModule {}

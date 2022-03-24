@@ -6,9 +6,9 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
   styleUrls: ['./mat-card.component.scss'],
 })
 export class MatCardComponent implements OnInit {
-  @Input() titleTemplate!: TemplateRef<any>;
-  @Input() contentTemplate!: TemplateRef<any>;
-  @Input() actionsTemplate!: TemplateRef<any>;
+  @Input() titleTemplate: TemplateRef<any> | null = null;
+  @Input() contentTemplate: TemplateRef<any> | null = null;
+  @Input() actionsTemplate: TemplateRef<any> | null = null;
 
   constructor() {}
 

@@ -15,4 +15,8 @@ export class ValidationErrorMessageProviderService {
     required: 'Neophodna e-mail adresa',
     email: 'E-mail adresa mora biti u poznatom formatu (john@doe.com)',
   };
+
+  public readonly codeErrorMessages: Record<string, string> = {
+    pattern: 'Kod je kombinacija od 4 slova i/ili cifara',
+  };
 }
