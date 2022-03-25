@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
-import { MaterialComponentsConfigProviderService } from 'src/app/core/services/material-components-config-provider/material-components-config-provider.service';
+import { SignalrGeneralService } from 'src/app/core/services/signalr-general/signalr-general.service';
 
 @Component({
   selector: 'app-header',
@@ -12,16 +12,18 @@ import { MaterialComponentsConfigProviderService } from 'src/app/core/services/m
 export class HeaderComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
-    private materialComponentsConfigProvider: MaterialComponentsConfigProviderService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private signalRService: SignalrGeneralService
   ) {}
 
   ngOnInit(): void {}
 
   onLogout() {
-    this.authService
-      .logout()
-      .subscribe((_) => this.router.navigate(['/users']));
+    this.authService.logout().subscribe((_) => {
+      this.signalRService
+        .endConnection()
+        .subscribe((_) => this.router.navigate(['/users']));
+    });
   }
 }

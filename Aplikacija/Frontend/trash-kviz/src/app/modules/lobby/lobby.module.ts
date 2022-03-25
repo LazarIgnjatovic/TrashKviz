@@ -5,6 +5,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { JoinFormComponent } from './components/join-form/join-form.component';
 import { PublicRoomListComponent } from './components/public-room-list/public-room-list.component';
 import { LobbyButtonGroupComponent } from './components/lobby-button-group/lobby-button-group.component';
+import { LobbyService } from './services/lobby.service';
+import { MaterialModule } from 'src/app/core/modules/material/material.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +15,7 @@ import { LobbyButtonGroupComponent } from './components/lobby-button-group/lobby
     PublicRoomListComponent,
     LobbyButtonGroupComponent,
   ],
-  imports: [SharedModule, LobbyRoutingModule],
+  imports: [SharedModule, LobbyRoutingModule, MaterialModule],
+  providers: [LobbyService],
 })
 export class LobbyModule {}

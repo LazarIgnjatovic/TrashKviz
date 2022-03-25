@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FormInputTypesProviderService } from '../../services/form-input-types-provider/form-input-types-provider.service';
 import FormFieldComponent from '../form-field/form-field.component';
 
@@ -24,7 +25,7 @@ export class FormInputComponent extends FormFieldComponent implements OnInit {
   @Input() inputValidationErrorMessages: Record<string, string> = {};
   @Input() textAreaRows: number = 15;
   @Input() name: string = '';
-
+  @Output() inputChanged: EventEmitter<any> = new EventEmitter();
   inputFormControl!: FormControl;
   constructor(public formInputTypesProvider: FormInputTypesProviderService) {
     super();

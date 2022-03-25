@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="mat-card-container">
+    <app-mat-card [contentTemplate]="contentTemplate"></app-mat-card>
+  </div>
+  <div class="check-container">
+    <mat-icon color="accent" class="check" *ngIf="userRoom.isReady"
+      >check_circle</mat-icon
+    >
+  </div>
+</div>
+
+<ng-template #contentTemplate>
+  <div class="user-container">
+    <div class="icon-container">
+      <mat-icon color="accent" class="user">account_circle</mat-icon>
+    </div>
+    <div class="username-and-stats">
+      <h2>{{ userRoom.user.username }}</h2>
+      <span class="mat-small">Učinak: {{ scaleWinrate() }}%</span>
+      <span class="mat-small">Iskustvo: {{ scaleExperience() }}</span>
+    </div>
+    <div class="icon-container">
+      <button
+        mat-icon-button
+        *ngIf="showKick | async"
+        (click)="userKicked.emit(userRoom.user.username)"
+      >
+        <mat-icon class="cancel">cancel</mat-icon>
+      </button>
+    </div>
+  </div>
+</ng-template>

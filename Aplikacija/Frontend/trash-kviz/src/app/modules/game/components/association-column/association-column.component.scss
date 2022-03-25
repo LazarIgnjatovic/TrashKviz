@@ -1,0 +1,41 @@
+.unopened-field {
+  border-color: gray;
+  border-width: 2px;
+}
+
+.opened-field {
+  cursor: default;
+}
+
+.column-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+button {
+  flex-grow: 1;
+  width: 75%;
+  line-height: 15px;
+  white-space: normal;
+  word-wrap: break-word;
+  margin: 2px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: -1.25em;
+  text-align: center;
+}
+
+.answer {
+  width: 90%;
+  font-size: 12px;
+}
+
+input {
+  text-align: center;
+  color: rgba(105, 240, 174, 255);
+}

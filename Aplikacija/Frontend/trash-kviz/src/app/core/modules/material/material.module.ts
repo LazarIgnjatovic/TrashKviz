@@ -15,6 +15,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 const materialModules = [
   MatCardModule,
@@ -33,6 +36,9 @@ const materialModules = [
   MatToolbarModule,
   MatSnackBarModule,
   MatDialogModule,
+  MatSelectModule,
+  MatProgressSpinnerModule,
+  OverlayModule,
 ];
 
 @NgModule({

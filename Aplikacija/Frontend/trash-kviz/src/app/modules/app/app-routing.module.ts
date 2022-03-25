@@ -19,12 +19,24 @@ const routes: Routes = [
     path: 'lobby',
     canLoad: [AuthGuard],
     loadChildren: () =>
-      import("../lobby/lobby.module").then((module) => module.LobbyModule),
-  }
+      import('../lobby/lobby.module').then((module) => module.LobbyModule),
+  },
+  {
+    path: 'room',
+    canLoad: [AuthGuard],
+    loadChildren: () =>
+      import('../room/room.module').then((module) => module.RoomModule),
+  },
+  {
+    path: 'game',
+    //canLoad: [AuthGuard],
+    loadChildren: () =>
+      import('../game/game.module').then((module) => module.GameModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

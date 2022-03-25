@@ -8,8 +8,9 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-image: url("../assets/Back-overlay.png"), url("../assets/back.png"), url("../assets/Solid-back.png");
-  background-repeat: no-repeat  no-repeat no-repeat;
+  background-image: url("../assets/Back-overlay.png"), url("../assets/back.png"),
+    url("../assets/Solid-back.png");
+  background-repeat: no-repeat no-repeat no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -17,7 +18,7 @@ body {
 }
 html {
   scrollbar-width: thin;
-  scrollbar-color: rgb(53, 5, 90) rgb(184, 24, 24);
+  scrollbar-color: rgb(128, 28, 164) rgb(148, 72, 207);
 }
 
 ::-webkit-scrollbar {
@@ -35,4 +36,8 @@ html {
 
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+.dark-backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
 }

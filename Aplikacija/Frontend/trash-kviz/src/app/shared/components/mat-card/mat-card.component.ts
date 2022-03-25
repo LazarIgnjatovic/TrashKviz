@@ -9,7 +9,7 @@ export class MatCardComponent implements OnInit {
   @Input() titleTemplate: TemplateRef<any> | null = null;
   @Input() contentTemplate: TemplateRef<any> | null = null;
   @Input() actionsTemplate: TemplateRef<any> | null = null;
-
+  @Input() outline: string = 'none';
   constructor() {}
 
   ngOnInit(): void {}

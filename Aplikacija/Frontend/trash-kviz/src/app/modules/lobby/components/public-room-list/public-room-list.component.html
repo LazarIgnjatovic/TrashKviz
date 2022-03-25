@@ -7,6 +7,10 @@
 <ng-template #titleTemplate>Aktivne sobe</ng-template>
 
 <ng-template #contentTemplate>
+  <div class="subtitle">
+    <div class="name">Naziv:</div>
+    <div class="player-count">Igrači:</div>
+  </div>
   <app-classic-list
     [height]="windowResizeDetectionService.screenHeight$.value * 0.4"
     [items]="rooms"
@@ -19,10 +23,13 @@
     <div class="multiline">{{ listItem.roomName }}</div>
     <div class="button-and-number-of-players">
       <span>{{ listItem.numberOfPlayersJoined }}/4</span>
-      <app-button
-        buttonText="Pridruži se"
-        buttonWidth="fit-content"
-      ></app-button>
+      <button
+        mat-flat-button
+        color="accent"
+        (click)="roomJoin.emit(listItem.roomId)"
+      >
+        Pridruži se
+      </button>
     </div>
   </div>
 </ng-template>

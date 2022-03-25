@@ -18,6 +18,8 @@ import { ValidationErrorMessageProviderService } from './services/validation-err
 import { SignalrGeneralService } from './services/signalr-general/signalr-general.service';
 import { ErrorHandlerInterceptor } from './interceptors/error-handler/error-handler.interceptor';
 import { WindowResizeDetectorService } from './services/window-resize-detector/window-resize-detector.service';
+import { OverlayService } from './services/overlay-service/overlay.service';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 const modules = [MaterialModule, HttpClientModule];
 
@@ -39,6 +41,7 @@ const providers = [
   ValidationErrorMessageProviderService,
   SignalrGeneralService,
   WindowResizeDetectorService,
+  OverlayService,
 ];
 
 @NgModule({
