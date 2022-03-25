@@ -1,0 +1,40 @@
+<div class="column-container">
+  <ng-container
+    [ngTemplateOutlet]="answerTemplate"
+    *ngIf="!answeAtBottom"
+  ></ng-container>
+  <button
+    *ngFor="let i of [0, 1, 2, 3]"
+    [ngClass]="{
+      'unopened-field': !clicked[i],
+      'mat-stroked-button': !clicked[i],
+      'opened-field': clicked[i],
+      'mat-flat-button': clicked[i]
+    }"
+    [disableRipple]="clicked[i]"
+    mat-button
+    color="accent"
+    (click)="registerClick(i)"
+  >
+    {{ !clicked[i] ? columnName + (i + 1).toString() : hints[i] }}
+  </button>
+  <ng-container
+    [ngTemplateOutlet]="answerTemplate"
+    *ngIf="answeAtBottom"
+  ></ng-container>
+</div>
+
+<ng-template #answerTemplate>
+  <div class="answer">
+    <mat-form-field appearance="outline" color="accent">
+      <mat-label>{{ columnName }}</mat-label>
+      <input
+        matInput
+        autocomplete="off"
+        placeholder="Rešenje kolone {{ columnName }}"
+        (focus)="matPadding = false"
+        (blur)="matPadding = true"
+      />
+    </mat-form-field>
+  </div>
+</ng-template>

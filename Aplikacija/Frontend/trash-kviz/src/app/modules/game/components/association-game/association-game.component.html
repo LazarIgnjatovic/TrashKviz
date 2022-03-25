@@ -1,0 +1,28 @@
+<div class="association-container">
+  <div class="column-row">
+    <app-association-column
+      [answeAtBottom]="true"
+      columnName="A"
+    ></app-association-column>
+    <app-association-column
+      [answeAtBottom]="true"
+      columnName="B"
+    ></app-association-column>
+  </div>
+  <div class="final-answer">
+    <mat-form-field appearance="outline" color="accent">
+      <mat-label>Konačno rešenje</mat-label>
+      <input matInput autocomplete="off" placeholder="Konačno rešenje" />
+    </mat-form-field>
+  </div>
+  <div class="column-row">
+    <app-association-column
+      [answeAtBottom]="false"
+      columnName="C"
+    ></app-association-column>
+    <app-association-column
+      [answeAtBottom]="false"
+      columnName="D"
+    ></app-association-column>
+  </div>
+</div>
