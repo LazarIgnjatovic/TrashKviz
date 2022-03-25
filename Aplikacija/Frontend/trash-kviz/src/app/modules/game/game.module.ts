@@ -8,9 +8,23 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MaterialModule } from 'src/app/core/modules/material/material.module';
 import { AssociationGameComponent } from './components/association-game/association-game.component';
 import { MultipleChoiceColumnComponent } from './components/association-column/association-column.component';
+import { GameService } from './services/game-service/game.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [GamePageComponent, GameUserComponent, AssociationGameComponent, MultipleChoiceColumnComponent],
-  imports: [CommonModule, GameRoutingModule, SharedModule, MaterialModule],
+  providers: [GameService],
+  declarations: [
+    GamePageComponent,
+    GameUserComponent,
+    AssociationGameComponent,
+    MultipleChoiceColumnComponent,
+  ],
+  imports: [
+    CommonModule,
+    GameRoutingModule,
+    SharedModule,
+    MaterialModule,
+    FormsModule,
+  ],
 })
 export class GameModule {}

@@ -14,7 +14,8 @@
     [disableRipple]="clicked[i]"
     mat-button
     color="accent"
-    (click)="registerClick(i)"
+    (click)="emitAnswer(i)"
+    [disabled]="(disableFields || disableAll) && dontShowAll"
   >
     {{ !clicked[i] ? columnName + (i + 1).toString() : hints[i] }}
   </button>
@@ -25,16 +26,38 @@
 </div>
 
 <ng-template #answerTemplate>
-  <div class="answer">
-    <mat-form-field appearance="outline" color="accent">
-      <mat-label>{{ columnName }}</mat-label>
-      <input
-        matInput
-        autocomplete="off"
-        placeholder="Rešenje kolone {{ columnName }}"
-        (focus)="matPadding = false"
-        (blur)="matPadding = true"
-      />
-    </mat-form-field>
-  </div>
+  <div
+    class="answer"
+    *ngIf="
+      disableAnswerInput;
+      then answerButtonTemplate;
+      else answerInputTemplate
+    "
+  ></div>
+</ng-template>
+
+<ng-template #answerInputTemplate>
+  <mat-form-field appearance="outline" color="accent">
+    <mat-label>{{ columnName }}</mat-label>
+    <input
+      [disabled]="disableAll"
+      matInput
+      autocomplete="off"
+      placeholder="Rešenje kolone {{ columnName }}"
+      (keydown.enter)="fieldClicked.emit(getColumnAnswer())"
+      [(ngModel)]="columnAnswer"
+    />
+  </mat-form-field>
+</ng-template>
+
+<ng-template #answerButtonTemplate>
+  <button
+    class="answer-button mat-flat-button"
+    [disableRipple]="true"
+    mat-button
+    color="accent"
+    [disabled]="disableAll"
+  >
+    {{ columnAnswer }}
+  </button>
 </ng-template>

@@ -5,7 +5,7 @@
   height: 100%;
 }
 mat-form-field {
-  width: 100%;
+  width: 60%;
   margin-bottom: -1.25em;
   border-width: 2px;
   text-align: center;
@@ -32,4 +32,12 @@ app-association-column {
 .final-answer {
   font-size: 15px;
   width: 60%;
+}
+
+.answer-button {
+  cursor: default;
+  width: 60%;
+  text-align: center;
+  min-height: 60px;
+  margin-bottom: 2px;
 }

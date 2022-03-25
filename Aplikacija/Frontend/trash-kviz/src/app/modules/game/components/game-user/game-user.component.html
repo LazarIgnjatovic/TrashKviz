@@ -1,4 +1,7 @@
-<app-mat-card  [contentTemplate]="contentTemplate"></app-mat-card>
+<app-mat-card
+  [outline]="outline"
+  [contentTemplate]="contentTemplate"
+></app-mat-card>
 
 <ng-template #contentTemplate>
   <div class="user-container">
@@ -6,8 +9,8 @@
       <mat-icon color="accent" class="user">account_circle</mat-icon>
     </div>
     <div class="username-and-stats">
-      <h3>UltraBoban</h3>
-      <span class="mat-body">Poeni: 69</span>
+      <h3>{{ player.user.username }}</h3>
+      <span class="mat-body">Poeni: {{ player.points }}</span>
     </div>
   </div>
 </ng-template>

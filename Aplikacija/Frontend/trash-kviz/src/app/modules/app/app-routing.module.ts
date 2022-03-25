@@ -29,7 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'game',
-    //canLoad: [AuthGuard],
+    canLoad: [AuthGuard],
     loadChildren: () =>
       import('../game/game.module').then((module) => module.GameModule),
   },

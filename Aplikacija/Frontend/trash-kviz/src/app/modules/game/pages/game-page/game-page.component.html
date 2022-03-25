@@ -6,14 +6,35 @@
 </div>
 <div class="game-container">
   <div class="player-container">
-    <app-game-user></app-game-user>
-    <app-game-user></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(0)"
+      *ngIf="getGameStateBehavior().value.players.length > 0"
+      [player]="getGameStateBehavior().value.players[0]"
+    ></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(1)"
+      *ngIf="getGameStateBehavior().value.players.length > 1"
+      [player]="getGameStateBehavior().value.players[1]"
+    ></app-game-user>
   </div>
-  <div class="game-panel">
-    <app-association-game></app-association-game>
+  <div class="game-panel" [ngSwitch]="getGameStateBehavior().value.type">
+    <app-association-game
+      [gameState]="getGameState(0)"
+      *ngSwitchCase="0"
+      (fieldClicked)="onSubmitAnswer($event)"
+      [onTurn]="getOnTurn()"
+    ></app-association-game>
   </div>
   <div class="player-container">
-    <app-game-user></app-game-user>
-    <app-game-user></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(2)"
+      *ngIf="getGameStateBehavior().value.players.length > 2"
+      [player]="getGameStateBehavior().value.players[2]"
+    ></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(3)"
+      *ngIf="getGameStateBehavior().value.players.length > 3"
+      [player]="getGameStateBehavior().value.players[3]"
+    ></app-game-user>
   </div>
 </div>
