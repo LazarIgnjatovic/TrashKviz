@@ -15,9 +15,11 @@ namespace Server.Communication.Hubs
     public class RoomHub:Hub
     {
         private readonly IRoomService _roomService;
-        public RoomHub(IRoomService roomService)
+        private readonly IMatchService _matchService;
+        public RoomHub(IRoomService roomService,IMatchService matchService)
         {
             _roomService = roomService;
+            _matchService = matchService;
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -32,17 +34,20 @@ namespace Server.Communication.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task JoinRoom(string roomID)
+        public override Task OnConnectedAsync()
         {
-            string username = Context.UserIdentifier;
-            Room room = _roomService.JoinRoom(username, roomID);
-            if (room==null)
-                await Clients.Caller.SendAsync("RoomFull");
-            else
+            Room r = _roomService.ConnectedUser(Context.UserIdentifier);
+            if (r != null)
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, roomID);
-                await Clients.Group(roomID).SendAsync("RoomUpdate", room);
+                if(r.users.Where(x=>x.User.Username==Context.UserIdentifier).FirstOrDefault().isAdmin)
+                    Clients.Caller.SendAsync("PromoteToAdmin");
+                Groups.AddToGroupAsync(Context.ConnectionId, r.roomId);
+                Clients.Group(r.roomId).SendAsync("RoomUpdate", r);
+                _roomService.CheckReady(r);
             }
+            else
+                Clients.Caller.SendAsync("RoomFull");
+            return base.OnConnectedAsync();
         }
         public async Task LeaveRoom(string roomID)
         {
@@ -65,10 +70,16 @@ namespace Server.Communication.Hubs
         }
         public async Task StartGame(string roomID)
         {
-            //todo start game
-            string matchID="";
-            await Clients.Group(roomID).SendAsync("GameStarted", matchID);
+            bool started=_roomService.StartGame(Context.UserIdentifier,roomID);
+            if(started)
+                await Clients.Group(roomID).SendAsync("GameStarted");
+        }
+        public async Task Kick(string roomID, string username)
+        {
+            _roomService.Kick(roomID, username, Context.UserIdentifier);
         }
         //_roomHubContext.Clients.User(user).SendAsync("Kicked");
+        //_roomHubContext.Clients.User(admin).SendAsync("AllReady");
+        //_roomHubContext.Clients.User(admin).SendAsync("NotAllReady");
     }
 }

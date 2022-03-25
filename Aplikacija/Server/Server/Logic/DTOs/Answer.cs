@@ -7,6 +7,6 @@ namespace Server.Logic.DTOs
 {
     public class Answer
     {
-        private string text;
+        public string Text { get; set; }
     }
 }

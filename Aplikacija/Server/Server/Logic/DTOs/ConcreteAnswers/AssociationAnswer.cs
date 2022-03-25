@@ -7,6 +7,9 @@ namespace Server.Logic.DTOs.ConcreteAnswers
 {
     public class AssociationAnswer: Answer
     {
-        private int column;
+        public int Column;
+        public int Field;
+        public bool IsColumnAnswer;
+        public bool IsFinalAnswer;
     }
 }

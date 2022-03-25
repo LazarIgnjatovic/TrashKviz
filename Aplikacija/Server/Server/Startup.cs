@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SignalR;
+using MongoDB.Driver.Linq;
 
 namespace Server
 {
@@ -45,6 +46,7 @@ namespace Server
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ILobbyService, LobbyService>();
             services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IMatchService, MatchService>();
 
             services.AddHttpContextAccessor();
 
@@ -76,7 +78,7 @@ namespace Server
             {
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
-                builder.WithOrigins("http://localhost:4200", "http://192.168.100.126:4200");
+                builder.WithOrigins("http://localhost:4200", "http://192.168.100.144:4200", "http://treskviz.com:4200");
                 builder.AllowCredentials();
             });
             app.UseWebSockets();
@@ -93,12 +95,16 @@ namespace Server
             {
                 //endpoints.MapGet("/InitQuestions", async context =>
                 //{
+                //    var repository = new BaseRepository<Question>(new MongoDbSettings() { ConnectionString = Configuration.GetSection("TrashQuizDatabase")["ConnectionString"], DatabaseName = "TrashQuiz" });
+                //    //  var asoc = repository.FindOneOfType<Association>(x => x.Answer == "Popara");
+                //    var aa = repository.Sample<ClosestNumber>(2);
+                //});
 
-                //    var repository = new BaseRepository<Question>(new MongoDbSettings() { ConnectionString = Configuration.GetSection("TrashQuizDatabase")["ConnectionString"], DatabaseName = "TrashQuizDatabase" });
+
+                //    var repository = new BaseRepository<Question>(new MongoDbSettings() { ConnectionString = Configuration.GetSection("TrashQuizDatabase")["ConnectionString"], DatabaseName = "TrashQuiz" });
                 //    var user = new User { Email = "pera@gmail.com", PassHash = "veomasiguranhesiranpassword", Stats = new Stats(), Username = "Pera" };
                 //   // repository.InsertOne(user);
                 //   // await context.Response.WriteAsync(JsonConvert.SerializeObject(repository.FilterBy(user => user.Email == "pera@gmail.com")));
-
                 //    var closestNum = new ClosestNumber { Text = "Koji je tačan broj muževa (bivših i sadašnjih) Nataše Bekvalac? ", Answer = 3, Points = 10 };
                 //    repository.InsertOne(closestNum);
                 //    closestNum = new ClosestNumber { Text = "U koliko rijaliti programa je učestvovao Miki Džuričić iz Kupinova? ", Answer = 11, Points = 10 };

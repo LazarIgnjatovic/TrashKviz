@@ -9,6 +9,7 @@ namespace Server.Persistence.Repositories
 {
     public interface IBaseRepository<TDocument> where TDocument : IDocument
     {
+        Type FindOneOfType<Type>(Expression<Func<Type, bool>> filterExpression) where Type : TDocument;
         IQueryable<TDocument> AsQueryable();
 
         IEnumerable<TDocument> FilterBy(
@@ -20,12 +21,14 @@ namespace Server.Persistence.Repositories
 
         TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression);
 
+        List<Type> Sample<Type>(int size) where Type:TDocument;
+
         Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression);
 
         bool Any(Expression<Func<TDocument, bool>> filterExpression);
 
         Task<bool> AnyAsync(Expression<Func<TDocument, bool>> filterExpression);
-
+        
         TDocument FindById(string id);
 
         Task<TDocument> FindByIdAsync(string id);

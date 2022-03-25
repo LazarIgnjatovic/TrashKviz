@@ -9,11 +9,13 @@ namespace Server.Logic.DTOs
     {
         public UserDTO User;
         public bool IsReady;
+        public bool isAdmin;
 
         public RoomUserDTO(UserDTO u)
         {
             User = u;
             IsReady = false;
+            isAdmin = false;
         }
     }
 }

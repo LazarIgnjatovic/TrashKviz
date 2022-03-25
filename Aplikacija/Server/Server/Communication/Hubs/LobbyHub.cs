@@ -24,8 +24,14 @@ namespace Server.Communication.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            _lobbyService.RemoveFromQueue(Context.ConnectionId);
+            _lobbyService.RemoveFromQueue(Context.UserIdentifier);
             return base.OnDisconnectedAsync(exception);
+        }
+        public override Task OnConnectedAsync()
+        {
+            if (_lobbyService.CheckReconnect(Context.UserIdentifier))
+                Clients.Caller.SendAsync("Reconnect");
+            return base.OnConnectedAsync();
         }
 
         public async Task GetRooms()
@@ -35,20 +41,25 @@ namespace Server.Communication.Hubs
         }
         public async Task JoinRoom(string roomID)
         {
-            Room room = _lobbyService.FindRoom(roomID);
+            Room room = _lobbyService.FindRoom(roomID,Context.UserIdentifier);
             if (room != null)
-                await Clients.Caller.SendAsync("RoomFound", roomID);
+                await Clients.Caller.SendAsync("RoomFound");
             else
                 await Clients.Caller.SendAsync("RoomNotFound");
         }
         public async Task FindRoom()
         {
-            _lobbyService.AddToQueue(Context.ConnectionId);
+            _lobbyService.AddToQueue(Context.UserIdentifier);
+        }
+        public async Task CancelSearch()//
+        {
+            _lobbyService.RemoveFromQueue(Context.UserIdentifier);
         }
         public async Task CreateRoom()
         {
             string roomId =_lobbyService.CreateRoom(Context.UserIdentifier);
-            await Clients.Caller.SendAsync("RoomFound", roomId);
+            await Clients.Caller.SendAsync("RoomFound");
         }
+        //await Clients.Caller.SendAsync("RoomFull");
     }
 }
