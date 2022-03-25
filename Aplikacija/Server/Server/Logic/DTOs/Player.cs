@@ -7,7 +7,15 @@ namespace Server.Logic.DTOs
 {
     public class Player
     {
-        private UserDTO User;
-        private int Points;
+        public UserDTO User;
+        public int Points;
+        public bool IsConnected;
+
+        public Player(RoomUserDTO user)
+        {
+            User = user.User;
+            Points = 0;
+            IsConnected = false;
+        }
     }
 }

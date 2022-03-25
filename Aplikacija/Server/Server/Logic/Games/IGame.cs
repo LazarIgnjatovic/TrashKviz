@@ -8,7 +8,7 @@ namespace Server.Logic.Games
 {
     public interface IGame
     {
-        public void SubmitAnswer(Answer answer);
-        //todo dodati ostale potrebne funkcije
+        void SubmitAnswer(Answer answer,string username);
+        GameState GetState();
     }
 }

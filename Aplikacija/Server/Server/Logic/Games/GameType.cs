@@ -10,6 +10,7 @@ namespace Server.Logic.Games
         Association,
         ClosestNumber,
         MultipleChoice,
-        StepByStep
+        StepByStep,
+        Info
     }
 }

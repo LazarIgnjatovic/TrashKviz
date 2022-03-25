@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Server.Persistence.DatabaseSettings;
 using Server.Persistence.Models;
 using System;
@@ -33,6 +34,7 @@ namespace Server.Persistence.Repositories
             return _collection.AsQueryable();
         }
 
+
         public virtual IEnumerable<TDocument> FilterBy(
             Expression<Func<TDocument, bool>> filterExpression)
         {
@@ -49,6 +51,11 @@ namespace Server.Persistence.Repositories
         public virtual TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression)
         {
             return _collection.Find(filterExpression).FirstOrDefault();
+        }
+
+        public virtual Type FindOneOfType<Type>(Expression<Func<Type, bool>> filterExpression) where Type : TDocument
+        {
+            return _collection.OfType<Type>().Find(filterExpression).FirstOrDefault();
         }
 
         public virtual Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression)
@@ -146,6 +153,11 @@ namespace Server.Persistence.Repositories
         public Task<bool> AnyAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
             return _collection.Find(filterExpression).AnyAsync();
+        }
+
+        public List<Type> Sample<Type>(int size) where Type : TDocument
+        {
+            return _collection.AsQueryable().OfType<Type>().Sample(size).ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Server.Logic.DTOs;
+using Server.Logic.Masters.Match;
 using Server.Logic.Masters.Room;
 using Server.Persistence.Models;
 using Server.Persistence.Repositories;
@@ -14,15 +15,19 @@ namespace Server.Logic.Services
     {
         private readonly IRoomMaster _roomMaster;
         private readonly IBaseRepository<User> _baseRepository;
+        private readonly IMatchMaster _matchMaster;
 
-        public LobbyService(IRoomMaster roomMaster, IBaseRepository<User> baseRepository)
+        public LobbyService(IRoomMaster roomMaster, IBaseRepository<User> baseRepository,IMatchMaster matchMaster)
         {
             _roomMaster = roomMaster;
             _baseRepository = baseRepository;
+            _matchMaster = matchMaster;
         }
-        public Room FindRoom(string id)
+        public Room FindRoom(string id, string username)
         {
-            return _roomMaster.FindRoom(id);
+            User u = _baseRepository.FindOne(x => x.Username == username);
+            UserDTO user = new UserDTO(u);
+            return _roomMaster.FindRoom(id,user);
         }
 
         public List<RoomDTO> GetRooms()
@@ -38,7 +43,9 @@ namespace Server.Logic.Services
 
         public void AddToQueue(string conncetionId)
         {
-            _roomMaster.AddToQueue(conncetionId);
+            User u = _baseRepository.FindOne(x => x.Username == conncetionId);
+            UserDTO user = new UserDTO(u);
+            _roomMaster.AddToQueue(user);
         }
 
         void ILobbyService.RemoveFromQueue(string connectionId)
@@ -51,6 +58,11 @@ namespace Server.Logic.Services
             User u = _baseRepository.FindOne(x => x.Username == username);
             UserDTO user = new UserDTO(u);
             return _roomMaster.CreateRoom(user).RoomID;
+        }
+
+        public bool CheckReconnect(string userIdentifier)
+        {
+            return _matchMaster.CheckReconnect(userIdentifier);
         }
     }
 }

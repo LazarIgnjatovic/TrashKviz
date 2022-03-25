@@ -10,10 +10,10 @@ namespace Server.Logic.Services
     public interface ILobbyService
     {
         List<RoomDTO> GetRooms();
-        Room FindRoom(string id);
+        Room FindRoom(string id, string username);
         void AddToQueue(string connectionId);
         void RemoveFromQueue(string connectionId);
         string CreateRoom(string username);
-
+        bool CheckReconnect(string userIdentifier);
     }
 }

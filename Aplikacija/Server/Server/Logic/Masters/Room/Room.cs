@@ -1,4 +1,5 @@
-﻿using Server.Logic.DTOs;
+﻿using Newtonsoft.Json;
+using Server.Logic.DTOs;
 using Server.Logic.Games;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Server.Logic.Masters.Room
 {
     public class Room
     {
-        public static int maxPlayers=4;
+        public static int maxPlayers = 4;
 
         public string roomId;
         public string roomName;
@@ -19,6 +20,7 @@ namespace Server.Logic.Masters.Room
         public GameType game2;
         public GameType game3;
 
+        [JsonIgnore]
         public string RoomID { get => roomId; set => roomId = value; }
 
         public Room() { }
@@ -27,7 +29,9 @@ namespace Server.Logic.Masters.Room
             roomId = id;
             isPublic = true;
             users = new List<RoomUserDTO>();
-            users.Add(new RoomUserDTO(host));
+            RoomUserDTO admin = new RoomUserDTO(host);
+            admin.isAdmin = true;
+            users.Add(admin);
             roomName = "Kod " + host.Username;
 
         }
@@ -43,41 +47,43 @@ namespace Server.Logic.Masters.Room
         {
             if (users.Count < maxPlayers)
             {
-                users.Append(new RoomUserDTO(newPlayer));
+                if(!users.Exists(x=>x.User.Username==newPlayer.Username))
+                    users.Add(new RoomUserDTO(newPlayer));
                 return this;
             }
             else
                 return null;
         }
-        internal Room RemovePlayer(string username)
+        internal string RemovePlayer(string username)
         {
-            users.Remove(users.Where(x => x.User.Username == username).FirstOrDefault());
-            return this;
+            RoomUserDTO user = users.Where(x => x.User.Username == username).FirstOrDefault();
+            if(user!=null)
+            {
+                users.Remove(user);
+                if (user.isAdmin)
+                {
+                    if (users.Count > 0)
+                    {
+                        if(users[0]!=null)
+                        {
+                            users[0].isAdmin = true;
+                            return users[0].User.Username;
+                        }   
+                    }
+                }
+            }
+            return null;
         }
         internal void MarkReady(string username)
         {
             RoomUserDTO user = users.Where(x => x.User.Username == username).FirstOrDefault();
             if (user != null)
-                user.IsReady = true;
-        }
-        internal void UnmarkReady(string username)
-        {
-            RoomUserDTO user = users.Where(x => x.User.Username == username).FirstOrDefault();
-            if (user != null)
-                user.IsReady = false;
+                user.IsReady = !user.IsReady;
         }
         internal List<string> Modify(Room newRoom)
         {
             List<string> kicked = new List<string>();
-            foreach(RoomUserDTO currUser in users)
-            {
-                if (!newRoom.users.Exists(x => x.User.Username == currUser.User.Username))
-                {
-                    kicked.Add(currUser.User.Username);
-                }
-            }
             this.isPublic = newRoom.isPublic;
-            this.users = newRoom.users;
             this.roomName = newRoom.roomName;
             this.game1 = newRoom.game1;
             this.game2 = newRoom.game2;
@@ -90,6 +96,11 @@ namespace Server.Logic.Masters.Room
                 if (u.User.Username == username)
                     return true;
             return false;
+        }
+
+        internal void Kick(string username)
+        {
+            users.Remove(users.Where(x => x.User.Username == username).FirstOrDefault());
         }
     }
 }

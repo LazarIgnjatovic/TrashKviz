@@ -8,17 +8,20 @@ namespace Server.Logic.Masters.Room
 {
     public interface IRoomMaster
     {
-        Room FindRoom(string id);
+        Room FindRoom(string id,UserDTO user);
         List<Room> FreeRooms();
-        void AddToQueue(string connectionId);
+        void AddToQueue(UserDTO user);
         void RemoveFromQueue(string connectionId);
         Room CreateRoom(UserDTO host);
-        Room JoinRoom(UserDTO user, string id);
         Room LeaveRoom(string username, string id);
         Room MarkReady(string username, string id);
-        Room UnmarkReady(string username, string id);
         Room ModifyRoom(string username, Room room);
         Room UserDisconnected(string username);
         void PopulateRoom(Room room);
+        Room ConnectedUser(string username);
+        void GameStarted(Room room);
+        string GenerateCode(int codeSize);
+        void Kick(string roomID, string username, string userIdentifier);
+        void CheckReady(Room r);
     }
 }
