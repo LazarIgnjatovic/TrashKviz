@@ -10,33 +10,28 @@ import { BehaviorSubject, from, map, Observable, Subscription } from 'rxjs';
 import { AssociationAnswer } from '../../models/association-answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
+import { ColumnComponent } from '../column/column.component';
 
 @Component({
   selector: 'app-association-column',
   templateUrl: './association-column.component.html',
   styleUrls: ['./association-column.component.scss'],
 })
-export class MultipleChoiceColumnComponent implements OnInit, OnDestroy {
+export class MultipleChoiceColumnComponent
+  extends ColumnComponent
+  implements OnInit, OnDestroy
+{
   @Input() gameState!: Observable<GameState>;
-  @Input() columnName!: string;
-  @Input() answeAtBottom!: boolean;
   @Input() columnNumber!: number;
-  @Output() fieldClicked: EventEmitter<AssociationAnswer> = new EventEmitter();
-  @Input() disableAll: boolean = false;
-  @Input() dontShowAll: boolean = true;
-
-  clicked: boolean[] = [false, false, false, false];
-  hints: string[] = ['', '', '', ''];
-  columnAnswer: string = '';
-  disableAnswerInput: boolean = false;
-  disableFields: boolean = false;
   private gameStateSubscription!: Subscription;
-  constructor() {}
-  ngOnDestroy(): void {
+  constructor() {
+    super();
+  }
+  override ngOnDestroy(): void {
     this.gameStateSubscription.unsubscribe();
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.gameStateSubscription = this.gameState
       .pipe(map((state) => state as AssociationState))
       .subscribe((gameState) => {
@@ -48,8 +43,8 @@ export class MultipleChoiceColumnComponent implements OnInit, OnDestroy {
       });
   }
 
-  emitAnswer(index: number) {
-    if (!this.disableFields) {
+  onFieldClicked(index: number) {
+    if (!this.clicked[index]) {
       this.fieldClicked.emit({
         text: '',
         isColumnAnswer: false,
@@ -68,25 +63,25 @@ export class MultipleChoiceColumnComponent implements OnInit, OnDestroy {
       });
 
     if (columnAnswer !== null) {
-      this.disableAnswerInput = true;
+      this.columnAnswered = true;
       this.columnAnswer = columnAnswer;
     } else if (columnAnswer === null) {
       this.columnAnswer = '';
-      this.disableAnswerInput = false;
+      this.columnAnswered = false;
     }
 
     this.hints = hints;
 
-    this.disableFields = !openAllowed;
+    this.disableClickable = !openAllowed;
   }
 
-  getColumnAnswer(): AssociationAnswer {
-    return {
-      text: this.columnAnswer,
+  onAnswerEntered(answer: string) {
+    this.fieldClicked.emit({
+      text: answer,
       isColumnAnswer: true,
       isFinalAnswer: false,
       column: this.columnNumber,
       field: 0,
-    };
+    });
   }
 }

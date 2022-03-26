@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable, Subscription } from 'rxjs';
 import { AssociationAnswer } from '../../models/association-answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
@@ -50,5 +50,12 @@ export class AssociationGameComponent implements OnInit, OnDestroy {
       column: 0,
       field: 0,
     };
+  }
+
+  getClearAnswer() {
+    return this.onTurn.pipe(
+      filter((onTurn) => !onTurn),
+      map(() => null)
+    );
   }
 }

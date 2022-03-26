@@ -12,9 +12,13 @@ import { InfoState } from '../../models/info-state.model';
 export class GameService {
   private matchId: string = '';
   private gameState: BehaviorSubject<GameState> =
-    new BehaviorSubject<GameState>({ type: -1, players: [] });
+    new BehaviorSubject<GameState>({ type: -1, players: [], timerValue: 0 });
   private onTurn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false
+  );
+  private globalTimer: BehaviorSubject<number> = new BehaviorSubject(0);
+  private timerTick: BehaviorSubject<void> = new BehaviorSubject<void>(
+    undefined
   );
   constructor(
     private signalRService: SignalrGeneralService,
@@ -55,11 +59,23 @@ export class GameService {
 
     this.signalRService.addOnServerMethodHandler(
       {
+        methodName: 'Tick',
+        args: [],
+      },
+      () => {
+        this.timerTick.next();
+        if (this.globalTimer.value > 0) {
+          this.globalTimer.next(this.globalTimer.value - 1);
+        }
+      }
+    );
+
+    this.signalRService.addOnServerMethodHandler(
+      {
         methodName: 'OnTurn',
         args: [],
       },
       () => {
-        console.log('OnTurn');
         this.onTurn.next(true);
       }
     );
@@ -70,7 +86,6 @@ export class GameService {
         args: [],
       },
       () => {
-        console.log('NotOnTurn');
         this.onTurn.next(false);
       }
     );
@@ -82,9 +97,10 @@ export class GameService {
       },
       (gameState: GameState) => {
         if (gameState.type == GameType.info) {
-          console.log(gameState);
-        } else this.gameState.next(gameState);
-        console.log(gameState);
+        } else {
+          this.gameState.next(gameState);
+          this.globalTimer.next(gameState.timerValue);
+        }
       }
     );
   }
@@ -97,8 +113,15 @@ export class GameService {
     return this.onTurn;
   }
 
+  getTimerTick() {
+    return this.timerTick;
+  }
+
+  getGlobalTimer() {
+    return this.globalTimer;
+  }
+
   submitAnswer<AnswerType extends Answer>(answer: AnswerType) {
-    console.log(answer);
     this.signalRService.sendMessageToServer({
       methodName: 'SubmitAnswer',
       args: [this.matchId, answer],

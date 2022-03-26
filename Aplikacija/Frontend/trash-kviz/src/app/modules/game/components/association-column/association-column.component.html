@@ -1,63 +1,16 @@
-<div class="column-container">
-  <ng-container
-    [ngTemplateOutlet]="answerTemplate"
-    *ngIf="!answeAtBottom"
-  ></ng-container>
-  <button
-    *ngFor="let i of [0, 1, 2, 3]"
-    [ngClass]="{
-      'unopened-field': !clicked[i],
-      'mat-stroked-button': !clicked[i],
-      'opened-field': clicked[i],
-      'mat-flat-button': clicked[i]
-    }"
-    [disableRipple]="clicked[i]"
-    mat-button
-    color="accent"
-    (click)="emitAnswer(i)"
-    [disabled]="(disableFields || disableAll) && dontShowAll"
-  >
-    {{ !clicked[i] ? columnName + (i + 1).toString() : hints[i] }}
-  </button>
-  <ng-container
-    [ngTemplateOutlet]="answerTemplate"
-    *ngIf="answeAtBottom"
-  ></ng-container>
-</div>
-
-<ng-template #answerTemplate>
-  <div
-    class="answer"
-    *ngIf="
-      disableAnswerInput;
-      then answerButtonTemplate;
-      else answerInputTemplate
-    "
-  ></div>
-</ng-template>
-
-<ng-template #answerInputTemplate>
-  <mat-form-field appearance="outline" color="accent">
-    <mat-label>{{ columnName }}</mat-label>
-    <input
-      [disabled]="disableAll"
-      matInput
-      autocomplete="off"
-      placeholder="Rešenje kolone {{ columnName }}"
-      (keydown.enter)="fieldClicked.emit(getColumnAnswer())"
-      [(ngModel)]="columnAnswer"
-    />
-  </mat-form-field>
-</ng-template>
-
-<ng-template #answerButtonTemplate>
-  <button
-    class="answer-button mat-flat-button"
-    [disableRipple]="true"
-    mat-button
-    color="accent"
-    [disabled]="disableAll"
-  >
-    {{ columnAnswer }}
-  </button>
-</ng-template>
+<app-column
+  [columnName]="columnName"
+  [answerAtBottom]="answerAtBottom"
+  [disableAll]="disableAll"
+  [disableClickable]="disableClickable"
+  [columnIds]="columnIds"
+  [rippleDisabled]="rippleDisabled"
+  [columnAnswerPlaceholder]="columnAnswerPlaceholder"
+  [clicked]="clicked"
+  [hints]="hints"
+  [columnAnswer]="columnAnswer"
+  [columnAnswered]="columnAnswered"
+  [clearAnswer]="clearAnswer"
+  (fieldClicked)="onFieldClicked($event)"
+  (answerEntered)="onAnswerEntered($event)"
+></app-column>

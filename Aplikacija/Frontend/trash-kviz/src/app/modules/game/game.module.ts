@@ -10,6 +10,8 @@ import { AssociationGameComponent } from './components/association-game/associat
 import { MultipleChoiceColumnComponent } from './components/association-column/association-column.component';
 import { GameService } from './services/game-service/game.service';
 import { FormsModule } from '@angular/forms';
+import { StepByStepGameComponent } from './components/step-by-step-game/step-by-step-game.component';
+import { ColumnComponent } from './components/column/column.component';
 
 @NgModule({
   providers: [GameService],
@@ -18,6 +20,8 @@ import { FormsModule } from '@angular/forms';
     GameUserComponent,
     AssociationGameComponent,
     MultipleChoiceColumnComponent,
+    StepByStepGameComponent,
+    ColumnComponent,
   ],
   imports: [
     CommonModule,

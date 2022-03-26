@@ -157,7 +157,6 @@ export class RoomService {
   }
 
   startGame() {
-    console.log('STARTTT');
     this.signalRService.sendMessageToServer({
       methodName: 'StartGame',
       args: [this.roomState.value.roomId],

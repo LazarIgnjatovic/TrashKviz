@@ -9,8 +9,12 @@ import { MatCardComponent } from '../mat-card/mat-card.component';
 })
 export class FormComponent extends MatCardComponent {
   @Input() formFormGroup!: FormGroup;
+  @Input() preventOnEnterSubmit: boolean = false;
   @Output() onSubminEvent: EventEmitter<any> = new EventEmitter();
-  
 
-
+  onEnter(event: any) {
+    if (this.preventOnEnterSubmit) {
+      event.preventDefault();
+    }
+  }
 }

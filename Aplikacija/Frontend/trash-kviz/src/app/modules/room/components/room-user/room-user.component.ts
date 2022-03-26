@@ -20,7 +20,7 @@ export class RoomUserComponent implements OnInit {
   scaleWinrate() {
     if (this.userRoom.user.stats.winrate > 100) return 100;
     if (this.userRoom.user.stats.winrate < 0) return 0;
-    return this.userRoom.user.stats.winrate;
+    return (this.userRoom.user.stats.winrate * 100).toFixed(2);
   }
 
   scaleExperience() {

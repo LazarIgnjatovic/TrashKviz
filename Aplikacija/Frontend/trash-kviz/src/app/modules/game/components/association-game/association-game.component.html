@@ -1,22 +1,22 @@
 <div class="association-container">
   <div class="column-row">
     <app-association-column
-      [answeAtBottom]="true"
+      [answerAtBottom]="true"
       columnName="A"
       [gameState]="gameState"
       [columnNumber]="0"
       (fieldClicked)="fieldClicked.emit($event)"
       [disableAll]="!onTurn.value"
-      [dontShowAll]="!finalAnswerDisabled"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
     <app-association-column
-      [answeAtBottom]="true"
+      [answerAtBottom]="true"
       columnName="B"
       [gameState]="gameState"
       [columnNumber]="1"
       (fieldClicked)="fieldClicked.emit($event)"
       [disableAll]="!onTurn.value"
-      [dontShowAll]="!finalAnswerDisabled"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
   </div>
   <div
@@ -25,22 +25,22 @@
   ></div>
   <div class="column-row">
     <app-association-column
-      [answeAtBottom]="false"
+      [answerAtBottom]="false"
       columnName="C"
       [gameState]="gameState"
       [columnNumber]="2"
       (fieldClicked)="fieldClicked.emit($event)"
       [disableAll]="!onTurn.value"
-      [dontShowAll]="!finalAnswerDisabled"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
     <app-association-column
-      [answeAtBottom]="false"
+      [answerAtBottom]="false"
       columnName="D"
       [gameState]="gameState"
       [columnNumber]="3"
       (fieldClicked)="fieldClicked.emit($event)"
       [disableAll]="!onTurn.value"
-      [dontShowAll]="!finalAnswerDisabled"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
   </div>
 </div>
