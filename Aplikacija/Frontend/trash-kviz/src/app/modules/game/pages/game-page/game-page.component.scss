@@ -28,7 +28,9 @@
   max-width: 1000px;
 }
 
-app-association-game {
+app-association-game,
+app-step-by-step-game,
+app-info {
   width: 80%;
   max-width: 800px;
   height: 90%;
@@ -53,37 +55,24 @@ app-game-user {
   margin-bottom: 10px;
 }
 
-img {
-  max-height: 50px;
-  max-width: 50%;
-}
+svg {
+  font-family: "CustomMolot";
+  font-size: 25px;
 
-.header {
-  width: 40%;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
   background-color: rgb(128, 28, 164);
   border-radius: 0px 0px 25px 25px;
   min-width: 300px;
-  font-size: x-large;
-}
-
-svg {
-  font-family: "CustomMolot";
-  font-size: 80px;
-  width: 100%;
-  height: 120px;
 }
 
 .text-timer {
   fill: white;
-  stroke: green;
-  stroke-width: 3px;
+  stroke: #4bb43b;
+  stroke-width: 1px;
   stroke-linejoin: round;
+  text-align: center;
 }
 
 .text-timer-shadow {
   text-shadow: 6px 6px 2px black;
+  text-align: center;
 }

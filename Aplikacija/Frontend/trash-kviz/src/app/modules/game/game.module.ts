@@ -12,6 +12,8 @@ import { GameService } from './services/game-service/game.service';
 import { FormsModule } from '@angular/forms';
 import { StepByStepGameComponent } from './components/step-by-step-game/step-by-step-game.component';
 import { ColumnComponent } from './components/column/column.component';
+import { BaseGameComponent } from './components/base-game/base-game.component';
+import { InfoComponent } from './components/info/info.component';
 
 @NgModule({
   providers: [GameService],
@@ -22,6 +24,7 @@ import { ColumnComponent } from './components/column/column.component';
     MultipleChoiceColumnComponent,
     StepByStepGameComponent,
     ColumnComponent,
+    InfoComponent,
   ],
   imports: [
     CommonModule,

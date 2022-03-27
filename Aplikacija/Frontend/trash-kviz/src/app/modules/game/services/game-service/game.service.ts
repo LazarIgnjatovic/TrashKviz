@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, filter, Subject, switchMap } from 'rxjs';
+import { OverlayService } from 'src/app/core/services/overlay-service/overlay.service';
 import { SignalrGeneralService } from 'src/app/core/services/signalr-general/signalr-general.service';
 import { GameType } from '../../enums/game-type.enum';
 import { Answer } from '../../models/answer.model';
@@ -22,7 +23,8 @@ export class GameService {
   );
   constructor(
     private signalRService: SignalrGeneralService,
-    private router: Router
+    private router: Router,
+    private overlay: OverlayService
   ) {}
 
   initConnection() {
@@ -96,11 +98,9 @@ export class GameService {
         args: [],
       },
       (gameState: GameState) => {
-        if (gameState.type == GameType.info) {
-        } else {
-          this.gameState.next(gameState);
-          this.globalTimer.next(gameState.timerValue);
-        }
+        console.log(gameState);
+        this.gameState.next(gameState);
+        this.globalTimer.next(gameState.timerValue);
       }
     );
   }

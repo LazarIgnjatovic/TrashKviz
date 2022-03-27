@@ -7,6 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { BehaviorSubject, from, map, Observable, Subscription } from 'rxjs';
+import { RegexProviderService } from 'src/app/core/services/regex-provider/regex-provider.service';
 import { AssociationAnswer } from '../../models/association-answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
@@ -24,8 +25,8 @@ export class MultipleChoiceColumnComponent
   @Input() gameState!: Observable<GameState>;
   @Input() columnNumber!: number;
   private gameStateSubscription!: Subscription;
-  constructor() {
-    super();
+  constructor(regexProvider: RegexProviderService) {
+    super(regexProvider);
   }
   override ngOnDestroy(): void {
     this.gameStateSubscription.unsubscribe();
@@ -63,8 +64,13 @@ export class MultipleChoiceColumnComponent
       });
 
     if (columnAnswer !== null) {
-      this.columnAnswered = true;
-      this.columnAnswer = columnAnswer;
+      if (columnAnswer.startsWith('#')) {
+        this.columnAnswer = columnAnswer.slice(1);
+        this.columnAnswered = false;
+      } else {
+        this.columnAnswered = true;
+        this.columnAnswer = columnAnswer;
+      }
     } else if (columnAnswer === null) {
       this.columnAnswer = '';
       this.columnAnswered = false;

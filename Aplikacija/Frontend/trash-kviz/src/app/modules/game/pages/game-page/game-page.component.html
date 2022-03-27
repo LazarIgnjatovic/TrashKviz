@@ -1,11 +1,19 @@
 <div class="title">
-  <div class="header" [ngSwitch]="getGameStateBehavior().value.type">
-    <img *ngSwitchCase="0" src="assets/asocijacije.svg" alt="" />
-    <svg viewBox="0 0 450 50">
-      <text class="text-timer-shadow" y="50">{{ getGlobalTimer().value }}</text>
-      <text class="text-timer" y="50">{{ getGlobalTimer().value }}</text>
-    </svg>
-  </div>
+  <svg
+    width="40%"
+    height="60px"
+    viewBox="0 0 40% 60px"
+    [ngSwitch]="getGameStateBehavior().value.type"
+  >
+    <image x="2%" y="10%" *ngSwitchCase="0" href="assets/asocijacije.svg" />
+    <image x="2%" y="10%" *ngSwitchCase="3" href="assets/korakpokorak.svg" />
+    <text x="80%" y="50%" class="text-timer-shadow">
+      {{ getGlobalTimer() | async }}
+    </text>
+    <text x="80%" y="50%" class="text-timer">
+      {{ getGlobalTimer() | async }}
+    </text>
+  </svg>
 </div>
 <div class="game-container">
   <div class="player-container">
@@ -29,13 +37,23 @@
     ></app-game-user>
   </div>
   <div class="game-panel" [ngSwitch]="getGameStateBehavior().value.type">
+    <app-info
+      *ngSwitchCase="4"
+      [gameState]="getGameState(4)"
+      [timerTick]="getOnTimerTick()"
+    >
+    </app-info>
     <app-association-game
-      [gameState]="getGameState(0)"
       *ngSwitchCase="0"
-      (fieldClicked)="onSubmitAnswer($event)"
+      [gameState]="getGameState(0)"
+      (answerSubmitted)="onSubmitAnswer($event)"
       [onTurn]="getOnTurn()"
     ></app-association-game>
-    <app-step-by-step-game *ngSwitchCase="3"></app-step-by-step-game>
+    <app-step-by-step-game
+      *ngSwitchCase="3"
+      [gameState]="getGameState(3)"
+      (answerSubmitted)="onSubmitAnswer($event)"
+    ></app-step-by-step-game>
   </div>
   <div class="player-container">
     <app-game-user

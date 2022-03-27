@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, filter, map, Subscription } from 'rxjs';
+import { BehaviorSubject, filter, from, map, Subscription } from 'rxjs';
 import { GameType } from '../../enums/game-type.enum';
 import { Answer } from '../../models/answer.model';
 import {
   AssociationState,
   isAssociationState,
 } from '../../models/association-state.model';
+import {
+  ClockViewToggle,
+  isClockViewToggle,
+} from '../../models/clock-view-toggle.model';
 import { GameState } from '../../models/game-state.model';
-import { TurnBased } from '../../models/turn-based-model';
+import { InfoState, isInfoState } from '../../models/info-state.model';
+import { isTurnBased, TurnBased } from '../../models/turn-based-model';
 import { GameService } from '../../services/game-service/game.service';
 
 @Component({
@@ -37,23 +42,29 @@ export class GamePageComponent implements OnInit {
 
   getOnPlayerTurn(playerId: number) {
     return this.gameService.getGameState().pipe(
-      filter((gameState) => gameState.type == GameType.association),
-      map((gameState) => (gameState as TurnBased).onTurn == playerId)
+      map((gameState) => {
+        if (isTurnBased(gameState)) return gameState.onTurn == playerId;
+        return false;
+      })
     );
   }
 
   getTurnBasedGame() {
-    return this.gameService
-      .getGameState()
-      .pipe(map((gameState) => gameState.type == GameType.association));
+    return this.gameService.getGameState().pipe(
+      map((gameState) => {
+        if (isTurnBased(gameState)) {
+          return gameState.showTimer;
+        }
+        return false;
+      })
+    );
   }
 
   getTurnTimer(playerId: number) {
     return this.gameService.getGameState().pipe(
       filter(
         (gameState) =>
-          gameState.type == GameType.association &&
-          (gameState as TurnBased).onTurn == playerId
+          isTurnBased(gameState) && (gameState as TurnBased).onTurn == playerId
       ),
       map((gameState) => (gameState as AssociationState).turnTimerValue)
     );
@@ -68,6 +79,15 @@ export class GamePageComponent implements OnInit {
   }
 
   getGlobalTimer() {
-    return this.gameService.getGlobalTimer();
+    return this.getGameStateBehavior().pipe(
+      map((gameState) => {
+        if (
+          !isInfoState(gameState) &&
+          (!isClockViewToggle(gameState) || gameState.isActive)
+        ) {
+          return this.gameService.getGlobalTimer().value.toString();
+        } else return '';
+      })
+    );
   }
 }
