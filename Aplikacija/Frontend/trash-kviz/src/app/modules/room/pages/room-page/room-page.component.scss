@@ -12,9 +12,12 @@
 .user-list-container {
   min-width: 300px;
   width: 40%;
+  margin: auto;
 }
 
+
 .room-settings-container {
+  margin: auto;
   min-width: 300px;
   width: 50%;
   display: flex;
@@ -29,10 +32,6 @@
 .ready-container {
   display: flex;
   align-items: center;
-}
-
-app-mat-card {
-  margin-right: 10px;
 }
 
 button {

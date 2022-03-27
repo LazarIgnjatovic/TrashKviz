@@ -1,28 +1,72 @@
 <div class="association-container">
   <div class="column-row">
     <app-association-column
-      [answeAtBottom]="true"
+      [answerAtBottom]="true"
       columnName="A"
+      [gameState]="gameState"
+      [columnNumber]="0"
+      (fieldClicked)="fieldClicked.emit($event)"
+      [disableAll]="!onTurn.value"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
     <app-association-column
-      [answeAtBottom]="true"
+      [answerAtBottom]="true"
       columnName="B"
+      [gameState]="gameState"
+      [columnNumber]="1"
+      (fieldClicked)="fieldClicked.emit($event)"
+      [disableAll]="!onTurn.value"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
   </div>
-  <div class="final-answer">
-    <mat-form-field appearance="outline" color="accent">
-      <mat-label>Konačno rešenje</mat-label>
-      <input matInput autocomplete="off" placeholder="Konačno rešenje" />
-    </mat-form-field>
-  </div>
+  <div
+    class="final-answer"
+    *ngIf="finalAnswerDisabled; then finalAnswerButton; else finalAnswerInput"
+  ></div>
   <div class="column-row">
     <app-association-column
-      [answeAtBottom]="false"
+      [answerAtBottom]="false"
       columnName="C"
+      [gameState]="gameState"
+      [columnNumber]="2"
+      (fieldClicked)="fieldClicked.emit($event)"
+      [disableAll]="!onTurn.value"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
     <app-association-column
-      [answeAtBottom]="false"
+      [answerAtBottom]="false"
       columnName="D"
+      [gameState]="gameState"
+      [columnNumber]="3"
+      (fieldClicked)="fieldClicked.emit($event)"
+      [disableAll]="!onTurn.value"
+      [clearAnswer]="getClearAnswer()"
     ></app-association-column>
   </div>
 </div>
+
+<ng-template #finalAnswerInput>
+  <mat-form-field appearance="outline" color="accent">
+    <mat-label>Konačno rešenje</mat-label>
+    <input
+      [disabled]="!onTurn.value"
+      [(ngModel)]="finalAnswerValue"
+      matInput
+      autocomplete="off"
+      placeholder="Konačno rešenje"
+      (keydown.enter)="fieldClicked.emit(getFinalAnswer())"
+    />
+  </mat-form-field>
+</ng-template>
+
+<ng-template #finalAnswerButton>
+  <button
+    class="answer-button mat-flat-button"
+    [disableRipple]="true"
+    mat-button
+    color="accent"
+    [disabled]="!onTurn.value"
+  >
+    {{ finalAnswerValue }}
+  </button>
+</ng-template>

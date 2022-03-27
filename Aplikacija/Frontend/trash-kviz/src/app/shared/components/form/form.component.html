@@ -1,4 +1,8 @@
-<form [formGroup]="formFormGroup" (ngSubmit)="onSubminEvent.emit(null)">
+<form
+  [formGroup]="formFormGroup"
+  (ngSubmit)="onSubminEvent.emit(null)"
+  (keydown.enter)="onEnter($event)"
+>
   <app-mat-card
     [titleTemplate]="titleTemplate"
     [contentTemplate]="contentTemplate"

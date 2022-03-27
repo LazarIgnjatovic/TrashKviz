@@ -2,6 +2,7 @@
   [titleTemplate]="titleTemplate"
   [contentTemplate]="contentTemplate"
   [formFormGroup]="roomSettingsForm"
+  [preventOnEnterSubmit]="true"
   (onSubminEvent)="roomSettingsFormOnSubmit.emit(null)"
 ></app-form>
 
@@ -42,12 +43,12 @@
         (checkboxChanged)="roomSettingsChanged.emit(getFormValues())"
       ></app-form-checkbox>
       <app-button
-        [buttonDisabled]="!startEnabled"
         buttonText="Pokreni"
         *ngIf="isAdmin | async"
         [buttonDisabled]="
           (roomSettingsForm.invalid && roomSettingsForm.touched) ||
-          !roomSettingsForm.controls['roomname'].value
+          !roomSettingsForm.controls['roomname'].value ||
+          !startEnabled
         "
         buttonType="submit"
       ></app-button>

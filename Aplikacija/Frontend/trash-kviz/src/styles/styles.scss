@@ -41,3 +41,8 @@ input[type="number"]::-webkit-inner-spin-button {
 .dark-backdrop {
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+@font-face {
+  font-family: CustomMolot;
+  src: url("../assets/Molot.otf") format("opentype");
+}

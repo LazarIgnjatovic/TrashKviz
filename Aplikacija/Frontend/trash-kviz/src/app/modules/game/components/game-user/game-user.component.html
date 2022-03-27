@@ -1,13 +1,27 @@
-<app-mat-card  [contentTemplate]="contentTemplate"></app-mat-card>
+<app-mat-card
+  [outline]="outline"
+  [contentTemplate]="contentTemplate"
+></app-mat-card>
 
 <ng-template #contentTemplate>
   <div class="user-container">
-    <div class="icon-container">
-      <mat-icon color="accent" class="user">account_circle</mat-icon>
+    <div *ngIf="(showTimer | async) && timerLeft && (onTurn | async)">
+      <h2>{{ timerValue }}</h2>
     </div>
-    <div class="username-and-stats">
-      <h3>UltraBoban</h3>
-      <span class="mat-body">Poeni: 69</span>
+    <div class="no-timer-container">
+      <div class="icon-container" *ngIf="!timerLeft">
+        <mat-icon color="accent" class="user">account_circle</mat-icon>
+      </div>
+      <div class="username-and-stats">
+        <h3>{{ player.user.username }}</h3>
+        <span class="mat-body">Poeni: {{ player.points }}</span>
+      </div>
+      <div class="icon-container" *ngIf="timerLeft">
+        <mat-icon color="accent" class="user">account_circle</mat-icon>
+      </div>
+    </div>
+    <div *ngIf="(showTimer | async) && !timerLeft && (onTurn | async)">
+      <h2>{{ timerValue }}</h2>
     </div>
   </div>
 </ng-template>

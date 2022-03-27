@@ -1,19 +1,60 @@
 <div class="title">
-  <div class="header">
-    <img src="assets/LogoHeader.svg" alt="" />
-    <span class="">Ko zna zna</span>
+  <div class="header" [ngSwitch]="getGameStateBehavior().value.type">
+    <img *ngSwitchCase="0" src="assets/asocijacije.svg" alt="" />
+    <svg viewBox="0 0 450 50">
+      <text class="text-timer-shadow" y="50">{{ getGlobalTimer().value }}</text>
+      <text class="text-timer" y="50">{{ getGlobalTimer().value }}</text>
+    </svg>
   </div>
 </div>
 <div class="game-container">
   <div class="player-container">
-    <app-game-user></app-game-user>
-    <app-game-user></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(0)"
+      *ngIf="getGameStateBehavior().value.players.length > 0"
+      [player]="getGameStateBehavior().value.players[0]"
+      [timerLeft]="false"
+      [showTimer]="getTurnBasedGame()"
+      [timerTick]="getOnTimerTick()"
+      [timerSync]="getTurnTimer(0)"
+    ></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(1)"
+      *ngIf="getGameStateBehavior().value.players.length > 1"
+      [player]="getGameStateBehavior().value.players[1]"
+      [timerLeft]="true"
+      [showTimer]="getTurnBasedGame()"
+      [timerTick]="getOnTimerTick()"
+      [timerSync]="getTurnTimer(1)"
+    ></app-game-user>
   </div>
-  <div class="game-panel">
-    <app-association-game></app-association-game>
+  <div class="game-panel" [ngSwitch]="getGameStateBehavior().value.type">
+    <app-association-game
+      [gameState]="getGameState(0)"
+      *ngSwitchCase="0"
+      (fieldClicked)="onSubmitAnswer($event)"
+      [onTurn]="getOnTurn()"
+    ></app-association-game>
+    <app-step-by-step-game *ngSwitchCase="3"></app-step-by-step-game>
   </div>
   <div class="player-container">
-    <app-game-user></app-game-user>
-    <app-game-user></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(2)"
+      *ngIf="getGameStateBehavior().value.players.length > 2"
+      [player]="getGameStateBehavior().value.players[2]"
+      [timerLeft]="false"
+      [showTimer]="getTurnBasedGame()"
+      [timerTick]="getOnTimerTick()"
+      [timerSync]="getTurnTimer(2)"
+    ></app-game-user>
+    <app-game-user
+      [onTurn]="getOnPlayerTurn(3)"
+      *ngIf="getGameStateBehavior().value.players.length > 3"
+      [player]="getGameStateBehavior().value.players[3]"
+      [timerLeft]="true"
+      [showTimer]="getTurnBasedGame()"
+      [timerTick]="getOnTimerTick()"
+      [timerSync]="getTurnTimer(3)"
+    ></app-game-user>
   </div>
 </div>
