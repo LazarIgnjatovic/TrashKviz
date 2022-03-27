@@ -30,7 +30,7 @@ export class GameUserComponent implements OnInit, OnDestroy {
       (onTurn) =>
         (this.outline = onTurn ? '2px solid rgba(105, 240, 174, 255)' : 'none')
     );
-
+      
     this.onTimerTickSubscription = this.timerTick.subscribe(() => {
       if (this.timerValue > 0) this.timerValue--;
     });

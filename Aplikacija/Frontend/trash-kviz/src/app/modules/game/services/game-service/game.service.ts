@@ -98,7 +98,6 @@ export class GameService {
         args: [],
       },
       (gameState: GameState) => {
-        console.log(gameState);
         this.gameState.next(gameState);
         this.globalTimer.next(gameState.timerValue);
       }

@@ -1,0 +1,16 @@
+<div class="container">
+  <div>
+    <app-question-panel [question]="question"></app-question-panel>
+  </div>
+  <div class="answer-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Odgovor</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="answer"
+        (keydown.enter)="answerSubmitted.emit({ text: answer.toString() })"
+      />
+    </mat-form-field>
+  </div>
+</div>

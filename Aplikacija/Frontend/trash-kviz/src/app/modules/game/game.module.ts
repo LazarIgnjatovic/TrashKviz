@@ -14,6 +14,9 @@ import { StepByStepGameComponent } from './components/step-by-step-game/step-by-
 import { ColumnComponent } from './components/column/column.component';
 import { BaseGameComponent } from './components/base-game/base-game.component';
 import { InfoComponent } from './components/info/info.component';
+import { QuestionPanelComponent } from './components/question-panel/question-panel.component';
+import { MultipleChoiceGameComponent } from './components/multiple-choice-game/multiple-choice-game.component';
+import { ClosestNumberGameComponent } from './components/closest-number-game/closest-number-game.component';
 
 @NgModule({
   providers: [GameService],
@@ -25,6 +28,9 @@ import { InfoComponent } from './components/info/info.component';
     StepByStepGameComponent,
     ColumnComponent,
     InfoComponent,
+    QuestionPanelComponent,
+    MultipleChoiceGameComponent,
+    ClosestNumberGameComponent,
   ],
   imports: [
     CommonModule,

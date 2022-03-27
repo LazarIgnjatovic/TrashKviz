@@ -49,6 +49,11 @@ export class GamePageComponent implements OnInit {
     );
   }
 
+  getPlayersAnsweredOutline(playerId: number) 
+  {
+    
+  }
+
   getTurnBasedGame() {
     return this.gameService.getGameState().pipe(
       map((gameState) => {

@@ -37,23 +37,34 @@
     ></app-game-user>
   </div>
   <div class="game-panel" [ngSwitch]="getGameStateBehavior().value.type">
-    <app-info
-      *ngSwitchCase="4"
-      [gameState]="getGameState(4)"
-      [timerTick]="getOnTimerTick()"
-    >
-    </app-info>
     <app-association-game
       *ngSwitchCase="0"
       [gameState]="getGameState(0)"
       (answerSubmitted)="onSubmitAnswer($event)"
       [onTurn]="getOnTurn()"
     ></app-association-game>
+    <app-closest-number-game
+      *ngSwitchCase="1"
+      [gameState]="getGameState(1)"
+      (answerSubmitted)="onSubmitAnswer($event)"
+    >
+    </app-closest-number-game>
+    <app-multiple-choice-game
+      *ngSwitchCase="2"
+      [gameState]="getGameState(2)"
+      (answerSubmitted)="onSubmitAnswer($event)"
+    ></app-multiple-choice-game>
     <app-step-by-step-game
       *ngSwitchCase="3"
       [gameState]="getGameState(3)"
       (answerSubmitted)="onSubmitAnswer($event)"
     ></app-step-by-step-game>
+    <app-info
+      *ngSwitchCase="4"
+      [gameState]="getGameState(4)"
+      [timerTick]="getOnTimerTick()"
+    >
+    </app-info>
   </div>
   <div class="player-container">
     <app-game-user

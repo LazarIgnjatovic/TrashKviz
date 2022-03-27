@@ -1,0 +1,14 @@
+<div class="container">
+  <div>
+    <app-question-panel [question]="question"></app-question-panel>
+  </div>
+  <div class="answer-container">
+    <button
+      mat-raised-button
+      *ngFor="let i of answers"
+      (click)="answerSubmitted.emit({ text: i })"
+    >
+      {{ i }}
+    </button>
+  </div>
+</div>
