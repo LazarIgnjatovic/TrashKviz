@@ -21,7 +21,7 @@ namespace Server.Logic.Games.ConcreteGames
         private int timerValue;
         private Timer timer;
         private Timer nextTimer;
-        private int numOfQuestions;
+        private int numOfQuestions=5;
         private int currQuestion;
         private int playerCount;
         private IBaseRepository<Question> _baseQuestionRepository;
@@ -35,13 +35,15 @@ namespace Server.Logic.Games.ConcreteGames
         {
             _baseQuestionRepository = baseQuestionRepository;
             _match = match;
-            numOfQuestions = 5;
             currQuestion = -1;
             questions = _baseQuestionRepository.Sample<ClosestNumber>(numOfQuestions);
             timer = new Timer(1000);
-            timer.AutoReset = true;
+            timer.AutoReset = false;
             timer.Elapsed += Tick;
-            timer.Enabled = true;
+
+            nextTimer = new Timer(3000);
+            nextTimer.AutoReset = false;
+            nextTimer.Elapsed += Next;
             StartGame();
         }
 
@@ -65,6 +67,7 @@ namespace Server.Logic.Games.ConcreteGames
 
         private void Tick(Object source, ElapsedEventArgs e)
         {
+            _match.Tick();
             timerValue--;
             if (timerValue <= 0)
             {
@@ -76,7 +79,8 @@ namespace Server.Logic.Games.ConcreteGames
         private void ShowAnswer()
         {
             timer.Stop();
-            state.Active = false;
+            nextTimer.Stop();
+            state.IsActive = false;
             state.Question = questions[currQuestion].Text;
             state.Answer = questions[currQuestion].Answer;
             int winner = -1;
@@ -107,23 +111,18 @@ namespace Server.Logic.Games.ConcreteGames
                     }
                 }
             }
-            nextTimer = new Timer(3000);
-            nextTimer.AutoReset = false;
-            nextTimer.Elapsed += Next;
-            nextTimer.Enabled = true;
+            nextTimer.Start();
             _match.SendUpdate(GetState());
         }
         private void Next(Object source, ElapsedEventArgs e)
         {
             nextTimer.Stop();
-            nextTimer.Dispose();
             NextQuestion();
         }
 
         private void NextQuestion()
         {
             timer.Stop();
-            timer.Dispose();
             currQuestion++;
             if(currQuestion==numOfQuestions)
             {
@@ -132,23 +131,17 @@ namespace Server.Logic.Games.ConcreteGames
             }
             ResetAnswers();
             state.Question = questions[currQuestion].Text;
-            state.Active = true;
+            state.IsActive = true;
             timerValue = timePerQuestion;
-            timer = new Timer(1000);
-            timer.AutoReset = true;
-            timer.Elapsed += Tick;
-            timer.Enabled = true;
+            timer.Start();
             _match.SendUpdate(GetState());
         }
 
         private void EndGame()
         {
-            timer.Stop();
-            timer.Dispose();
-            nextTimer.Stop();
-            nextTimer.Dispose();
+            Quit();
             _match.Players = state.Players;
-            _match.StartNextGame();
+            _match.GameEnded();
         }
 
         public GameState GetState()
@@ -159,7 +152,7 @@ namespace Server.Logic.Games.ConcreteGames
 
         public void SubmitAnswer(Answer answer, string username)
         {
-            if (state.Active)
+            if (state.IsActive)
             {
                 bool allAnswered = true;
                 for (int i = 0; i < playerCount; i++)
@@ -169,12 +162,33 @@ namespace Server.Logic.Games.ConcreteGames
                         answers[i] = float.Parse(answer.Text);
                         state.CanAnswer[i] = false;
                     }
-                    if (state.CanAnswer[i] == true)
+                    if (state.CanAnswer[i])
                         allAnswered = false;
                 }
                 if (allAnswered)
                     ShowAnswer();
             }
+        }
+        public void FlagConnected(string username)
+        {
+            Player p = state.Players.Where(x => x.User.Username == username).FirstOrDefault();
+            if (p != null)
+                p.IsConnected = true;
+        }
+
+        public void FlagDisconnected(string username)
+        {
+            Player p = state.Players.Where(x => x.User.Username == username).FirstOrDefault();
+            if (p != null)
+                p.IsConnected = false;
+        }
+
+        public void Quit()
+        {
+            timer.Stop();
+            timer.Dispose();
+            nextTimer.Stop();
+            nextTimer.Dispose();
         }
     }
 }

@@ -47,6 +47,8 @@ namespace Server
             services.AddScoped<ILobbyService, LobbyService>();
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IMatchService, MatchService>();
+            services.AddScoped<IAnswerSerializer, AnswerSerializer>();
+            services.AddScoped<IStandardStringService, StandardStringService>();
 
             services.AddHttpContextAccessor();
 
@@ -151,19 +153,19 @@ namespace Server
                 //    string[] b2 = { "Sima/Živko", "Aranđel", "Serija", "Ristana" };
                 //    string[] c2 = { "Sunce", "Laušević", "Lazetić", "Obradović" };
                 //    string[] d2 = { "kuvano", "glavno", "posno", "narodno" };
-                //    AssociationColumn A2 = new AssociationColumn { Answer = "gospodin", Fields = a };
-                //    AssociationColumn B2 = new AssociationColumn { Answer = "Srećni ljudi", Fields = b };
-                //    AssociationColumn C2 = new AssociationColumn { Answer = "Žarko", Fields = c };
-                //    AssociationColumn D2 = new AssociationColumn { Answer = "jelo", Fields = d };
-                //    AssociationColumn[] cols2 = { A, B, C, D };
-                //    var asoc2 = new Association { Answer = "Popara", Columns = cols, Points = 30 };
+                //    AssociationColumn A2 = new AssociationColumn { Answer = "gospodin", Fields = a2 };
+                //    AssociationColumn B2 = new AssociationColumn { Answer = "Srećni ljudi", Fields = b2 };
+                //    AssociationColumn C2 = new AssociationColumn { Answer = "Žarko", Fields = c2 };
+                //    AssociationColumn D2 = new AssociationColumn { Answer = "jelo", Fields = d2 };
+                //    AssociationColumn[] cols2 = { A2, B2, C2, D2 };
+                //    var asoc2 = new Association { Answer = "Popara", Columns = cols2, Points = 30 };
                 //    repository.InsertOne(asoc2);
 
                 //    string[] steps = { "Sve je pare popio", "Takođe i otkida", "Lira šoumen", "Narod ga pita", "ZAM", "Uvek ide dalje", "Slatki greh", "Grand" };
                 //    var step = new StepByStep { Answer = "Saša Popović", Steps = steps, Points = 30 };
                 //    repository.InsertOne(step);
 
-                //    string[] steps2 = { "Autor Dece komunizma", "Počeo je sa Mimarom", "A kroz dalji rad se provlači Arkan", "Isti mu je pretio ubistvom", "Goli, ali ne pištolj", "Mada je poštoljem mahao na nacionalnoj frekfenciji", "Ćiriličar", "Urednik TV Hepi" };
+                //    string[] steps2 = { "Autor Dece komunizma", "Počeo je sa Mimarom", "A kroz dalji rad se provlači Arkan", "Isti mu je pretio ubistvom", "Goli, ali ne pištolj", "Mada je pištoljem mahao na nacionalnoj frekfenciji", "Ćiriličar", "Urednik TV Hepi" };
                 //    step = new StepByStep { Answer = "Milomir Marić", Steps = steps2, Points = 30 };
                 //    repository.InsertOne(step);
 

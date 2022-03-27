@@ -10,11 +10,9 @@ namespace Server.Logic.DTOs.ConcreteGameStates
     {
         public string[] Steps { get; set; }
         public string FinalAnswer { get; set; }
-        public List<Player> Players { get; set; }
         public bool[] CanAnswer { get; set; }
         public string[] Answers { get; set; }
         public bool IsActive { get; set; }
-        public int TimerValue { get; set; }
         public int Winner { get; set; }
         
         public StepByStepState(List<Player> players, int stepCount)

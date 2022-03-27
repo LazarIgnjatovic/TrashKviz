@@ -1,6 +1,7 @@
 ﻿using Server.Logic.DTOs;
 using Server.Logic.DTOs.ConcreteGameStates;
 using Server.Logic.Masters.Match;
+using Server.Logic.Services;
 using Server.Persistence.Models;
 using Server.Persistence.Repositories;
 using System;
@@ -14,13 +15,14 @@ namespace Server.Logic.Games.ConcreteGames
     public class StepByStepGame : IGame
     {
         private IBaseRepository<Question> _baseQuestionRepository;
+        private IStandardStringService _standardStringService;
         private Match _match;
         private StepByStep stepByStep;
         private StepByStepState state;
         private int step;
         private string[] answers;
         private int playerCount;
-        private int perStep = 15;
+        private int perStep = 20;
         private int betweenSteps = 3;
         private int timerValue;
         private Timer timer;
@@ -28,9 +30,10 @@ namespace Server.Logic.Games.ConcreteGames
         private Timer betweenTimer;
         private Timer endTimer;
 
-        public StepByStepGame(IBaseRepository<Question> baseQuestionRepository, Match match)
+        public StepByStepGame(IBaseRepository<Question> baseQuestionRepository,IStandardStringService standardStringService, Match match)
         {
             _baseQuestionRepository = baseQuestionRepository;
+            _standardStringService = standardStringService;
             _match = match;
             stepByStep = _baseQuestionRepository.Sample<StepByStep>(1)[0];
             StartGame();
@@ -48,10 +51,21 @@ namespace Server.Logic.Games.ConcreteGames
             timer.AutoReset = true;
             timer.Elapsed += Tick;
             timer.Enabled = true;
+
+            betweenTimerValue = betweenSteps * 1000;
+            betweenTimer = new Timer(betweenTimerValue);
+            betweenTimer.AutoReset = false;
+            betweenTimer.Elapsed += Next;
+
+            endTimer = new Timer(3000);
+            endTimer.AutoReset = false;
+            endTimer.Elapsed += GameEnded;
+
             NextStep();
         }
         private void Tick(Object source, ElapsedEventArgs e)
         {
+            _match.Tick();
             timerValue--;
             if (timerValue <= 0)
             {
@@ -66,17 +80,11 @@ namespace Server.Logic.Games.ConcreteGames
             state.Answers = answers;
             state.IsActive = false;
             _match.SendUpdate(state);
-
-            betweenTimerValue = betweenSteps*1000;
-            betweenTimer = new Timer(betweenTimerValue);
-            betweenTimer.AutoReset = false;
-            betweenTimer.Elapsed += Next;
-            betweenTimer.Enabled = true;
+            betweenTimer.Start();
         }
         private void Next(Object source, ElapsedEventArgs e)
         {
             betweenTimer.Stop();
-            betweenTimer.Dispose();
             NextStep();
         }
 
@@ -92,10 +100,8 @@ namespace Server.Logic.Games.ConcreteGames
             state.IsActive = true;
             state.Steps[step] = stepByStep.Steps[step];
             ResetAnswers();
-
-            _match.SendUpdate(GetState());
-
             timerValue = perStep;
+            _match.SendUpdate(GetState());
             timer.Start();
         }
 
@@ -103,7 +109,7 @@ namespace Server.Logic.Games.ConcreteGames
         {
             for(int i=0;i<playerCount;i++)
             {
-                state.Answers[i] = "";
+                state.Answers[i] = null;
                 state.CanAnswer[i] = true;
             }
         }
@@ -111,22 +117,20 @@ namespace Server.Logic.Games.ConcreteGames
         private void EndGame()
         {
             state.IsActive = false;
+            for(int i=0;i<stepByStep.Steps.Length;i++)
+            {
+                state.Steps[i] = stepByStep.Steps[i];
+            }
             state.FinalAnswer = stepByStep.Answer;
             _match.SendUpdate(GetState());
-            endTimer = new Timer(3000);
-            endTimer.AutoReset = false;
-            endTimer.Elapsed += GameEnded;
-            endTimer.Enabled = true;
+
+            endTimer.Start();
         }
         private void GameEnded(Object source, ElapsedEventArgs e)
         {
-            timer.Stop();
-            timer.Dispose();
-            betweenTimer.Stop();
-            betweenTimer.Dispose();
-            endTimer.Stop();
-            endTimer.Dispose();
-            _match.StartNextGame();
+            Quit();
+            _match.Players = state.Players;
+            _match.GameEnded();
         }
 
         public GameState GetState()
@@ -143,7 +147,7 @@ namespace Server.Logic.Games.ConcreteGames
                 {
                     state.CanAnswer[i] = false;
                     state.Answers[i] = answer.Text;
-                    if(answer.Text==stepByStep.Answer)
+                    if(_standardStringService.Standardize(answer.Text)== _standardStringService.Standardize(stepByStep.Answer))
                     {
                         state.Players[i].Points += (stepByStep.Steps.Length-step)*stepByStep.Points/3;
                         state.Winner = i;
@@ -156,6 +160,30 @@ namespace Server.Logic.Games.ConcreteGames
             }
             if (allAnswered)
                 ShowAnswers();
+        }
+
+        public void FlagConnected(string username)
+        {
+            Player p=state.Players.Where(x => x.User.Username == username).FirstOrDefault();
+            if (p != null)
+                p.IsConnected = true;
+        }
+
+        public void FlagDisconnected(string username)
+        {
+            Player p = state.Players.Where(x => x.User.Username == username).FirstOrDefault();
+            if (p != null)
+                p.IsConnected = false;
+        }
+
+        public void Quit()
+        {
+            timer.Stop();
+            timer.Dispose();
+            betweenTimer.Stop();
+            betweenTimer.Dispose();
+            endTimer.Stop();
+            endTimer.Dispose();
         }
     }
 }

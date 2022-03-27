@@ -9,11 +9,10 @@ namespace Server.Logic.DTOs.ConcreteGameStates
     public class InfoState:GameState
     {
         private string infoText;
-        private int timerValue;
         public string InfoText { get => infoText; set => infoText = value; }
-        public int TimerValue { get => timerValue; set => timerValue = value; }
-        public InfoState()
+        public InfoState(List<Player>players)
         {
+            Players = players;
             Type = GameType.Info;
         }
     }
