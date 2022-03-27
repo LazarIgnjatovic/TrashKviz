@@ -10,5 +10,8 @@ namespace Server.Logic.Games
     {
         void SubmitAnswer(Answer answer,string username);
         GameState GetState();
+        void FlagConnected(string username);
+        void FlagDisconnected(string username);
+        void Quit();
     }
 }

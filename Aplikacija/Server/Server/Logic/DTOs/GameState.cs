@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Server.Logic.DTOs
 {
-    public class GameState
+    public abstract class GameState
     {
+        public int TimerValue { get; set; }
+        public List<Player> Players { get; set; }
         public GameType Type { get; set; }
     }
 }

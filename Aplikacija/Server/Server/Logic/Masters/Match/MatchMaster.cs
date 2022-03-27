@@ -8,44 +8,46 @@ namespace Server.Logic.Masters.Match
     public class MatchMaster : IMatchMaster
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private List<Match> activeMatches;
+        private Dictionary<string,Match> activeMatches;
 
         public MatchMaster(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
-            activeMatches = new List<Match>();
+            activeMatches = new Dictionary<string, Match>();
         }
 
         public bool CheckReconnect(string userIdentifier)
         {
-           return activeMatches.Exists(m => m.Players.Exists(p => p.User.Username == userIdentifier));
+           return activeMatches.Values.Any(m => m.Players.Exists(p => p.User.Username == userIdentifier));
+        }
+
+        public void DestroyMe(Match match)
+        {
+            activeMatches.Remove(match.MatchID);
         }
 
         public bool MatchCodeExists(string roomId)
         {
-            return activeMatches.Exists(m => m.MatchID == roomId);
+            return activeMatches.Values.Any(m => m.MatchID == roomId);
         }
 
         public void StartGame(Room.Room r)
         {
-            Match newMatch = new Match(_serviceScopeFactory);
+            Match newMatch = new Match(_serviceScopeFactory,this);
             newMatch.StartMatch(r);
-            activeMatches.Add(newMatch);
+            activeMatches.Add(newMatch.MatchID,newMatch);
         }
         public void SubmitAnswer(Answer answer, string matchId, string username)
         {
-            foreach(Match match in activeMatches)
+            if (activeMatches.ContainsKey(matchId))
             {
-                if(matchId==match.MatchID)
-                {
-                    match.SubmitAnswer(answer, username);
-                }
+                activeMatches[matchId].SubmitAnswer(answer, username);
             }
         }
 
         public string UserConnected(string userIdentifier)
         {
-            Match match = activeMatches.Where(x => x.Players.Exists(p => p.User.Username == userIdentifier)).FirstOrDefault();
+            Match match = activeMatches.Where(x => x.Value.Players.Exists(p => p.User.Username == userIdentifier)).FirstOrDefault().Value;
             if(match!=null)
             {
                 match.FlagConnected(userIdentifier);
@@ -56,7 +58,7 @@ namespace Server.Logic.Masters.Match
 
         public void UserDisconnected(string userIdentifier)
         {
-            Match match = activeMatches.Where(x => x.Players.Exists(p => p.User.Username == userIdentifier)).FirstOrDefault();
+            Match match = activeMatches.Where(x => x.Value.Players.Exists(p => p.User.Username == userIdentifier)).FirstOrDefault().Value;
             if(match!=null)
             {
                 match.FlagDisconnected(userIdentifier);

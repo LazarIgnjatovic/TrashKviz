@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using System.Timers;
 using Server.Logic.DTOs.ConcreteAnswers;
+using Server.Logic.Services;
 
 namespace Server.Logic.Games.ConcreteGames
 {
     public class AssociationGame : IGame
     {
         private readonly IBaseRepository<Question> _baseQuestionRepository;
+        private readonly IStandardStringService _standardStringService;
         private Association association;
         private AssociationState state;
         private Match _match;
@@ -27,10 +29,12 @@ namespace Server.Logic.Games.ConcreteGames
         private int playerCount;
         private int perTurn = 15;
         private int gameLen = 300;
+        private Timer wrongTimer;
 
-        public AssociationGame(IBaseRepository<Question> baseQuestionRepository, Match match)
+        public AssociationGame(IBaseRepository<Question> baseQuestionRepository,IStandardStringService standardStringService, Match match)
         {
             _baseQuestionRepository = baseQuestionRepository;
+            _standardStringService = standardStringService;
             _match = match;
             association = _baseQuestionRepository.Sample<Association>(1)[0];
             StartGame();
@@ -40,6 +44,8 @@ namespace Server.Logic.Games.ConcreteGames
             playerCount = _match.Players.Count();
             state = new AssociationState(_match.Players);
             state.OnTurn = 0;
+            state.OpenAllowed = true;
+            state.ShowTimer = true;
             timerValue = gameLen;
             timer = new Timer(1000);
             timer.AutoReset = true;
@@ -51,43 +57,78 @@ namespace Server.Logic.Games.ConcreteGames
             turnTimer.AutoReset = true;
             turnTimer.Elapsed += TurnTick;
             turnTimer.Enabled = true;
+
+            endTimer = new Timer(5000);
+            endTimer.AutoReset = false;
+            endTimer.Elapsed += EndGame;
+
+            wrongTimer = new Timer(3000);
+            wrongTimer.AutoReset = false;
+            wrongTimer.Elapsed += Next;
+            SendOnTurn();
+
             _match.SendUpdate(GetState());
         }
+
+        private void Next(object sender, ElapsedEventArgs e)
+        {
+            wrongTimer.Stop();
+            NextPlayer();
+        }
+
         private void Tick(Object source, ElapsedEventArgs e)
         {
+            _match.Tick();
             timerValue--;
-            if (timerValue <= 0)
+            if (timerValue == 0)
             {
+                timerValue--;
                 timer.Stop();
                 ShowSolution();
             }
         }
         private void TurnTick(Object source, ElapsedEventArgs e)
         {
+            turnTimer.Stop();
             turnTimerValue--;
-            if (turnTimerValue <= 0)
+            if (turnTimerValue == 0)
             {
-                turnTimer.Stop();
                 NextPlayer();
             }
+            else
+                turnTimer.Start();
         }
 
         private void NextPlayer()
         {
+            turnTimer.Stop();
+            state.ShowTimer = true;
             int currPlayer = state.OnTurn;
             do
             {
                 currPlayer = (currPlayer + 1) % playerCount;
                 state.OnTurn = currPlayer;
             } while (!state.Players[state.OnTurn].IsConnected);
-            state.OpenAllowed = false;
+            state.OpenAllowed = true;
+            ResetAnswers();
+            SendOnTurn();
             turnTimerValue = perTurn;
-            turnTimer.Start();
             _match.SendUpdate(GetState());
+            turnTimer.Start();
+        }
+
+        private void ResetAnswers()
+        {
+            state.FinalAnswer = null;
+            for(int i=0;i<state.ColumnAnswers.Length; i++)
+            {
+                state.ColumnAnswers[i] = null;
+            }
         }
 
         private void ShowSolution()
         {
+            state.ShowTimer = false;
             for(int i=0;i<association.Columns.Length;i++)
             {
                 for(int j=0;j<association.Columns[0].Fields.Length;j++)
@@ -102,41 +143,39 @@ namespace Server.Logic.Games.ConcreteGames
             state.TurnTimerValue = 0;
             _match.SendUpdate(state);
 
-            endTimer = new Timer(5000);
-            endTimer.AutoReset = false;
-            endTimer.Elapsed += EndGame;
-            endTimer.Enabled = true;
+            
+            endTimer.Start();
         }
         private void EndGame(Object source, ElapsedEventArgs e)
         {
-            turnTimer.Stop();
-            turnTimer.Dispose();
-            timer.Stop();
-            timer.Dispose();
-            endTimer.Stop();
-            endTimer.Dispose();
+            Quit();
             _match.Players = state.Players;
-            _match.StartNextGame();
+            _match.GameEnded();
         }
 
         public void SubmitAnswer(Answer _answer,string username)
         {
             AssociationAnswer answer = (AssociationAnswer)_answer;
-            if(username==state.Players[state.OnTurn].User.Username)
+            if (username==state.Players[state.OnTurn].User.Username)
             {
                 if(answer.IsFinalAnswer)
                 {
-                    if (answer.Text == association.Answer)
+                    if (_standardStringService.Standardize(answer.Text) == _standardStringService.Standardize(association.Answer))
                     {
                         AddPoints(association.Points);
                         ShowSolution();
+                        return;
                     }
                     else
-                        NextPlayer();
+                    {
+                        state.FinalAnswer = "#" + answer.Text;
+                        ShowWrongAnswer();
+                        return;
+                    }
                 }
                 else if(answer.IsColumnAnswer)
                 {
-                    if (association.Columns[answer.Column].Answer == answer.Text)
+                    if (_standardStringService.Standardize(association.Columns[answer.Column].Answer) == _standardStringService.Standardize(answer.Text))
                     {
                         AddPoints(association.Points / association.Columns.Length);
                         for (int i = 0; i < association.Columns[answer.Column].Fields.Length;i++)
@@ -145,17 +184,35 @@ namespace Server.Logic.Games.ConcreteGames
                         }
                         state.ColumnAnswers[answer.Column] = association.Columns[answer.Column].Answer;
                         _match.SendUpdate(state);
+                        return;
                     }
                     else
-                        NextPlayer();
+                    {
+                        state.ColumnAnswers[answer.Column] = "#" + answer.Text;
+                        ShowWrongAnswer();
+                        return;
+                    }
                 }
                 else if (state.OpenAllowed)
                 {
                     state.OpenAllowed = false;
                     state.Columns[answer.Column][answer.Field] = association.Columns[answer.Column].Fields[answer.Field];
+                    _match.SendUpdate(GetState());
                 }
             }
         }
+
+        private void ShowWrongAnswer()
+        {
+            turnTimer.Stop();
+            state.OpenAllowed = false;
+            state.ShowTimer = false;
+            List<string> onTurn = new List<string>();
+            _match.OnTurn(onTurn);
+            _match.SendUpdate(GetState());
+            wrongTimer.Start();
+        }
+
         private void AddPoints(int points)
         {
             state.Players[state.OnTurn].Points += points;
@@ -166,6 +223,40 @@ namespace Server.Logic.Games.ConcreteGames
             state.TimerValue = timerValue;
             state.TurnTimerValue = turnTimerValue;
             return state;
+        }
+        public void FlagConnected(string username)
+        {
+            Player p = state.Players.Where(x => x.User.Username == username).FirstOrDefault();
+            if (p != null)
+            {
+                p.IsConnected = true;
+                SendOnTurn();
+            }
+        }
+
+        public void FlagDisconnected(string username)
+        {
+            Player p = state.Players.Where(x => x.User.Username == username).FirstOrDefault();
+            if (p != null)
+                p.IsConnected = false;
+        }
+        private void SendOnTurn()
+        {
+            List<string> onTurn = new List<string>();
+            onTurn.Add(state.Players[state.OnTurn].User.Username);
+            _match.OnTurn(onTurn);
+        }
+
+        public void Quit()
+        {
+            turnTimer.Stop();
+            turnTimer.Dispose();
+            timer.Stop();
+            timer.Dispose();
+            endTimer.Stop();
+            endTimer.Dispose();
+            wrongTimer.Stop();
+            wrongTimer.Dispose();
         }
     }
 }

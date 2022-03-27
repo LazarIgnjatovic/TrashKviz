@@ -42,8 +42,10 @@ namespace Server.Communication.Hubs
                 if(r.users.Where(x=>x.User.Username==Context.UserIdentifier).FirstOrDefault().isAdmin)
                     Clients.Caller.SendAsync("PromoteToAdmin");
                 Groups.AddToGroupAsync(Context.ConnectionId, r.roomId);
+                
                 Clients.Group(r.roomId).SendAsync("RoomUpdate", r);
                 _roomService.CheckReady(r);
+                //Room room = _roomService.ConnectedUser(Context.UserIdentifier);//!!!!
             }
             else
                 Clients.Caller.SendAsync("RoomFull");

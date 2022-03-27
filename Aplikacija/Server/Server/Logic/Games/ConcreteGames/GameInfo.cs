@@ -21,30 +21,30 @@ namespace Server.Logic.Games.ConcreteGames
 
         public GameInfo(Match match)
         {
-            state = new InfoState();
+            state = new InfoState(match.Players);
             this._match = match;
             infoText = "Sledeća igra počinje za:";
-            timerValue = 5;
+            timerValue = 3;
             timer = new Timer(1000);
             timer.AutoReset = true;
             timer.Elapsed += Tick;
             timer.Enabled = true;
-
+            _match.SendUpdate(GetState());
         }
 
         private void Tick(Object source,ElapsedEventArgs e)
         {
+            _match.Tick();
             timerValue--;
             if(timerValue<=0)
             {
-                timer.Stop();
-                timer.Dispose();
+                Quit();
                 _match.StartNextGame();
             }
         }
         public void SubmitAnswer(Answer answer, string username)
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public GameState GetState()
@@ -52,6 +52,22 @@ namespace Server.Logic.Games.ConcreteGames
             state.InfoText = infoText;
             state.TimerValue = timerValue;
             return state;
+        }
+
+        public void FlagConnected(string username)
+        {
+            return;
+        }
+
+        public void FlagDisconnected(string username)
+        {
+            return;
+        }
+
+        public void Quit()
+        {
+            timer.Stop();
+            timer.Dispose();
         }
     }
 }

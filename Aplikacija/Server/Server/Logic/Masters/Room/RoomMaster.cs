@@ -12,7 +12,7 @@ namespace Server.Logic.Masters.Room
 {
     public class RoomMaster : IRoomMaster
     {
-        private List<Room> activeRooms;
+        private Dictionary<string,Room> activeRooms;
         private Queue<UserDTO> queue;
 
         private readonly IHubContext<LobbyHub> _lobbyHubContext;
@@ -23,14 +23,15 @@ namespace Server.Logic.Masters.Room
             _lobbyHubContext = hubContext;
             _roomHubContext = roomHubContext;
             queue = new Queue<UserDTO>();
-            activeRooms = new List<Room>();
+            activeRooms = new Dictionary<string, Room>();
         }
 
         public Room FindRoom(string id, UserDTO user)
         {
-            foreach(Room room in activeRooms)
+            if(activeRooms.ContainsKey(id))
             {
-                if (room.RoomID == id&& room.FreeSlots()>0)
+                Room room = activeRooms[id];
+                if (room.FreeSlots()>0)
                 {
                     if(!room.users.Exists(x=>x.User.Username==user.Username))
                     {
@@ -47,7 +48,7 @@ namespace Server.Logic.Masters.Room
         public List<Room> FreeRooms()
         {
             List<Room> rooms= new List<Room>();
-            foreach(Room room in activeRooms)
+            foreach(Room room in activeRooms.Values)
             {
                 if (room.IsFree())
                     rooms.Add(room);
@@ -74,17 +75,13 @@ namespace Server.Logic.Masters.Room
 
         public Room CreateRoom(UserDTO host)
         {
-            string code = GenerateCode(4);
-            for(int i=0;i<activeRooms.Count;i++ )
+            string code;
+            do
             {
-                if(activeRooms[i].RoomID==code)
-                {
-                    code = GenerateCode(4);
-                    i = 0;
-                }
-            }
+                code = GenerateCode(4);
+            }while(activeRooms.ContainsKey(code));
             Room room = new Room(code,host);
-            activeRooms.Add(room);
+            activeRooms.Add(code,room);
             LobbyUpdate();
             PopulateRoom(room);
             return room;
@@ -112,14 +109,14 @@ namespace Server.Logic.Masters.Room
         }
         public Room LeaveRoom(string username, string id)
         {
-            Room r = activeRooms.Where(x => x.RoomID == id).FirstOrDefault();
+            Room r = activeRooms[id];
             string newAdmin = r.RemovePlayer(username);
             if(newAdmin!=null)
             {
                 _roomHubContext.Clients.User(newAdmin).SendAsync("PromoteToAdmin");
             }
             if (r.users.Count() == 0)
-                activeRooms.Remove(r);
+                activeRooms.Remove(id);
             else if (r.IsFree())
             {
                 PopulateRoom(r);
@@ -130,7 +127,7 @@ namespace Server.Logic.Masters.Room
 
         public Room MarkReady(string username, string id)
         {
-            Room r = activeRooms.Where(x => x.RoomID == id).FirstOrDefault();
+            Room r = activeRooms[id];
             bool wereReady = true;
             foreach (RoomUserDTO user in r.users)
             {
@@ -160,7 +157,7 @@ namespace Server.Logic.Masters.Room
         public Room ModifyRoom(string username, Room room)
         {
             
-            Room r = activeRooms.Where(x => x.RoomID == room.RoomID).FirstOrDefault();
+            Room r = activeRooms[room.roomId];
             if (r!=null && username==r.users[0].User.Username)
             {
                 r.Modify(room);
@@ -176,7 +173,7 @@ namespace Server.Logic.Masters.Room
 
         public Room UserDisconnected(string username)
         {
-            Room r = activeRooms.Where(x => x.HasUser(username)).FirstOrDefault();
+            Room r = activeRooms.Where(x => x.Value.HasUser(username)).FirstOrDefault().Value;
             if(r!=null)
             {
                 string newAdmin = r.RemovePlayer(username);
@@ -185,7 +182,7 @@ namespace Server.Logic.Masters.Room
                     _roomHubContext.Clients.User(newAdmin).SendAsync("PromoteToAdmin");
                 }
                 if (r.users.Count() == 0)
-                    activeRooms.Remove(r);
+                    activeRooms.Remove(r.roomId);
                 else if(r.users.Count<Room.maxPlayers)
                 {
                     PopulateRoom(r);
@@ -198,17 +195,18 @@ namespace Server.Logic.Masters.Room
 
         public Room ConnectedUser(string username)
         {
-            return activeRooms.Where(x => x.users.Exists(user => user.User.Username == username)).FirstOrDefault();
+            return activeRooms.Where(x => x.Value.users.Exists(user => user.User.Username == username)).FirstOrDefault().Value;
         }
 
         public void GameStarted(Room room)
         {
-            activeRooms.Remove(room);
+            activeRooms.Remove(room.roomId);
+            LobbyUpdate();
         }
 
         public void Kick(string roomID, string username, string userIdentifier)
         {
-            Room r = activeRooms.Where(x => x.RoomID == roomID).FirstOrDefault();
+            Room r = activeRooms[roomID];
             if (r != null && userIdentifier == r.users[0].User.Username)
             {
                 r.Kick(username);

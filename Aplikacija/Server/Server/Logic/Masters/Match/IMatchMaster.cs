@@ -16,5 +16,6 @@ namespace Server.Logic.Masters.Match
         void UserDisconnected(string userIdentifier);
         string UserConnected(string userIdentifier);
         bool CheckReconnect(string userIdentifier);
+        void DestroyMe(Match match);
     }
 }
