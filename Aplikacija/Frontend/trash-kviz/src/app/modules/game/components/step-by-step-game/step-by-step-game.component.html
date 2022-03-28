@@ -1,1 +1,16 @@
-<p>step-by-step-game works!</p>
+<app-column
+  columnName=""
+  [answerAtBottom]="true"
+  [rippleDisabled]="true"
+  [columnIds]="[0, 1, 2, 3, 4, 5, 6, 7]"
+  columnAnswerPlaceholder="Rešenje"
+  [clicked]="fieldsOpened"
+  [hints]="steps"
+  [columnAnswer]="finalAnswer"
+  [columnAnswered]="columnAnswered"
+  [clearAnswer]="getClearAnswer()"
+  answerLabel="Rešenje"
+  [disableAnswer]="disableAnswer"
+  (answerEntered)="onAnswerEntered($event)"
+>
+</app-column>

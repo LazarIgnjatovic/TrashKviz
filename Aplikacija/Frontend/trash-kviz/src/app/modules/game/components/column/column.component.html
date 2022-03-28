@@ -34,14 +34,15 @@
 
 <ng-template #answerInputTemplate>
   <mat-form-field appearance="outline" color="accent">
-    <mat-label>{{ columnName }}</mat-label>
+    <mat-label>{{ answerLabel }}</mat-label>
     <input
-      [disabled]="disableAll"
+      [disabled]="disableAll || disableAnswer"
       matInput
       autocomplete="off"
       [placeholder]="columnAnswerPlaceholder"
       (keydown.enter)="answerEntered.emit(columnAnswer)"
       [(ngModel)]="columnAnswer"
+      (keypress)="onKeyPress($event)"
     />
   </mat-form-field>
 </ng-template>

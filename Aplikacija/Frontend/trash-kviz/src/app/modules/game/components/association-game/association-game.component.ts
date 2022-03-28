@@ -10,22 +10,24 @@ import { BehaviorSubject, filter, map, Observable, Subscription } from 'rxjs';
 import { AssociationAnswer } from '../../models/association-answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
+import { BaseGameComponent } from '../base-game/base-game.component';
 
 @Component({
   selector: 'app-association-game',
   templateUrl: './association-game.component.html',
   styleUrls: ['./association-game.component.scss'],
 })
-export class AssociationGameComponent implements OnInit, OnDestroy {
-  @Input() gameState!: Observable<GameState>;
-  @Output() fieldClicked: EventEmitter<AssociationAnswer> = new EventEmitter();
+export class AssociationGameComponent
+  extends BaseGameComponent<AssociationAnswer>
+  implements OnInit
+{
   @Input() onTurn!: BehaviorSubject<boolean>;
-  gameStateSubscription!: Subscription;
+
   finalAnswerValue: string = '';
+  associationAnswered: boolean = false;
   finalAnswerDisabled: boolean = false;
-  constructor() {}
-  ngOnDestroy(): void {
-    this.gameStateSubscription.unsubscribe();
+  constructor() {
+    super();
   }
 
   ngOnInit(): void {
@@ -33,11 +35,16 @@ export class AssociationGameComponent implements OnInit, OnDestroy {
       .pipe(map((state) => state as AssociationState))
       .subscribe((gameState) => {
         if (gameState.finalAnswer !== null) {
-          this.finalAnswerValue = gameState.finalAnswer;
-          this.finalAnswerDisabled = true;
+          if (gameState.finalAnswer.startsWith('#')) {
+            this.finalAnswerValue = gameState.finalAnswer.slice(1);
+            this.associationAnswered = false;
+          } else {
+            this.finalAnswerValue = gameState.finalAnswer;
+            this.associationAnswered = true;
+          }
         } else if (gameState.finalAnswer === null) {
           this.finalAnswerValue = '';
-          this.finalAnswerDisabled = false;
+          this.associationAnswered = false;
         }
       });
   }

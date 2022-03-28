@@ -5,7 +5,7 @@
       columnName="A"
       [gameState]="gameState"
       [columnNumber]="0"
-      (fieldClicked)="fieldClicked.emit($event)"
+      (fieldClicked)="answerSubmitted.emit($event)"
       [disableAll]="!onTurn.value"
       [clearAnswer]="getClearAnswer()"
     ></app-association-column>
@@ -14,14 +14,14 @@
       columnName="B"
       [gameState]="gameState"
       [columnNumber]="1"
-      (fieldClicked)="fieldClicked.emit($event)"
+      (fieldClicked)="answerSubmitted.emit($event)"
       [disableAll]="!onTurn.value"
       [clearAnswer]="getClearAnswer()"
     ></app-association-column>
   </div>
   <div
     class="final-answer"
-    *ngIf="finalAnswerDisabled; then finalAnswerButton; else finalAnswerInput"
+    *ngIf="associationAnswered; then finalAnswerButton; else finalAnswerInput"
   ></div>
   <div class="column-row">
     <app-association-column
@@ -29,7 +29,7 @@
       columnName="C"
       [gameState]="gameState"
       [columnNumber]="2"
-      (fieldClicked)="fieldClicked.emit($event)"
+      (fieldClicked)="answerSubmitted.emit($event)"
       [disableAll]="!onTurn.value"
       [clearAnswer]="getClearAnswer()"
     ></app-association-column>
@@ -38,7 +38,7 @@
       columnName="D"
       [gameState]="gameState"
       [columnNumber]="3"
-      (fieldClicked)="fieldClicked.emit($event)"
+      (fieldClicked)="answerSubmitted.emit($event)"
       [disableAll]="!onTurn.value"
       [clearAnswer]="getClearAnswer()"
     ></app-association-column>
@@ -54,7 +54,7 @@
       matInput
       autocomplete="off"
       placeholder="Konačno rešenje"
-      (keydown.enter)="fieldClicked.emit(getFinalAnswer())"
+      (keydown.enter)="answerSubmitted.emit(getFinalAnswer())"
     />
   </mat-form-field>
 </ng-template>
