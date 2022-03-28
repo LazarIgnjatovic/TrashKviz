@@ -36,12 +36,13 @@ namespace Server.Logic.Games.ConcreteGames
             _baseQuestionRepository = baseQuestionRepository;
             _match = match;
             currQuestion = -1;
+            state = new ClosestNumberState(_match.Players);
             questions = _baseQuestionRepository.Sample<ClosestNumber>(numOfQuestions);
             timer = new Timer(1000);
-            timer.AutoReset = false;
+            timer.AutoReset = true;
             timer.Elapsed += Tick;
 
-            nextTimer = new Timer(3000);
+            nextTimer = new Timer(5000);
             nextTimer.AutoReset = false;
             nextTimer.Elapsed += Next;
             StartGame();
@@ -58,9 +59,11 @@ namespace Server.Logic.Games.ConcreteGames
 
         private void ResetAnswers()
         {
+            state.Answer = null;
             for (int i = 0; i < playerCount; i++)
             {
                 answers[i] = null;
+                state.Answers[i] = null;
                 state.CanAnswer[i] = true;
             }
         }
@@ -86,6 +89,7 @@ namespace Server.Logic.Games.ConcreteGames
             int winner = -1;
             for(int i=0;i<playerCount;i++)
             {
+                state.Answers[i] = answers[i];
                 state.IsWinner[i] = false;
                 if (answers[i] != null)
                 {

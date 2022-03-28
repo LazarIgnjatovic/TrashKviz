@@ -122,12 +122,16 @@ namespace Server.Logic.Games.ConcreteGames
             state.FinalAnswer = null;
             for(int i=0;i<state.ColumnAnswers.Length; i++)
             {
-                state.ColumnAnswers[i] = null;
+                if(state.ColumnAnswers[i]!=null && state.ColumnAnswers[i][0]=='#')
+                    state.ColumnAnswers[i] = null;
             }
         }
 
         private void ShowSolution()
         {
+            timer.Stop();
+            turnTimer.Stop();
+            wrongTimer.Stop();
             state.ShowTimer = false;
             for(int i=0;i<association.Columns.Length;i++)
             {

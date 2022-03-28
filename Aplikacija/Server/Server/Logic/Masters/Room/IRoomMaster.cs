@@ -23,5 +23,6 @@ namespace Server.Logic.Masters.Room
         string GenerateCode(int codeSize);
         void Kick(string roomID, string username, string userIdentifier);
         void CheckReady(Room r);
+        Room GetRoom(string roomId);
     }
 }

@@ -39,7 +39,7 @@ namespace Server.Logic.Games.ConcreteGames
             state = new MultipleChoiceState(_match.Players);
 
             timer = new Timer(1000);
-            timer.AutoReset = false;
+            timer.AutoReset = true;
             timer.Elapsed += Tick;
 
             nextTimer = new Timer(3000);
@@ -50,7 +50,6 @@ namespace Server.Logic.Games.ConcreteGames
 
         private void StartGame()
         {
-            ResetAnswers();
             NextQuestion();
         }
 
@@ -165,9 +164,9 @@ namespace Server.Logic.Games.ConcreteGames
                         state.CanAnswer[i] = false;
                         if(answer.Text==questions[currQuestion].CorrectAnswer)
                         {
-                            if(first!=null)
+                            if(first==null)
                                 first = i;
-                            else if(second!=null)
+                            else if(second==null)
                                 second = i;
                         }
                     }

@@ -164,7 +164,7 @@ namespace Server.Logic.Masters.Room
                 if (r.IsFree())
                 {
                     PopulateRoom(r);
-                    if (r.roomName != room.roomName || r.users.Count != room.users.Count)
+                    if (r.roomName != room.roomName || r.users.Count != room.users.Count ||r.isPublic!=room.isPublic)
                         LobbyUpdate();
                 }
             }
@@ -251,6 +251,13 @@ namespace Server.Logic.Masters.Room
                 roomsList.Add(new RoomDTO(r));
             }
             _lobbyHubContext.Clients.All.SendAsync("UpdateRooms", roomsList);
+        }
+
+        public Room GetRoom(string roomId)
+        {
+            if (activeRooms.ContainsKey(roomId))
+                return activeRooms[roomId];
+            return null;
         }
     }
 }

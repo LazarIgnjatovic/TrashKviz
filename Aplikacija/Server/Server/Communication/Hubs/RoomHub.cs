@@ -45,7 +45,6 @@ namespace Server.Communication.Hubs
                 
                 Clients.Group(r.roomId).SendAsync("RoomUpdate", r);
                 _roomService.CheckReady(r);
-                //Room room = _roomService.ConnectedUser(Context.UserIdentifier);//!!!!
             }
             else
                 Clients.Caller.SendAsync("RoomFull");

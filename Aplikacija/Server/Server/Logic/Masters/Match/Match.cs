@@ -84,8 +84,12 @@ namespace Server.Logic.Masters.Match
         public void StartMatch(Room.Room room)
         {
             matchID = room.roomId;
-            foreach (RoomUserDTO user in room.users)
-                players.Add(new Player(user));
+            for (int i=0;i<room.users.Count;i++)
+            {
+                Player p = new Player(room.users[i]);
+                p.Color = (PlayerColor)i;
+                players.Add(p);
+            }  
             games.Add(room.game1);
             games.Add(room.game2);
             games.Add(room.game3);
@@ -115,12 +119,13 @@ namespace Server.Logic.Masters.Match
         private void ConcludeMatch()
         {
             players = players.OrderBy(x => x.Points).ToList();
+            players.Reverse();
             _matchHubContext.Clients.Group(matchID).SendAsync("MatchEnd", players);
             for (int i=0;i<players.Count;i++)
             {
                 User u = _baseUserRepository.FindOne(x => x.Username == players[i].User.Username);
                 float gamesWon = u.Stats.Winrate * u.Stats.GamesPlayed;
-                if (i==0)
+                if (players[i].Points==players[0].Points)
                     gamesWon += 1;
                 u.Stats.GamesPlayed += 1;
                 u.Stats.Winrate = gamesWon / u.Stats.GamesPlayed;

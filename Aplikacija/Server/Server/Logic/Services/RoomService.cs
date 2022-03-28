@@ -57,7 +57,7 @@ namespace Server.Logic.Services
         {
             User u = _baseUserRepository.FindOne(x => x.Username == username);
             UserDTO user = new UserDTO(u);
-            Room r = _roomMaster.FindRoom(roomId,user);
+            Room r = _roomMaster.GetRoom(roomId);
             if(r.users.Where(x=>x.isAdmin).FirstOrDefault().User.Username==username)
             {
                 bool allReady = true;

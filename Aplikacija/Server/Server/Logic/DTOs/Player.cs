@@ -10,6 +10,7 @@ namespace Server.Logic.DTOs
         public UserDTO User;
         public int Points;
         public bool IsConnected;
+        public PlayerColor Color;
 
         public Player(RoomUserDTO user)
         {
