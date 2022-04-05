@@ -11,6 +11,7 @@ using MongoDB.Driver.Linq;
 using System.Timers;
 using Server.Logic.DTOs.ConcreteAnswers;
 using Server.Logic.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Server.Logic.Games.ConcreteGames
 {
@@ -18,6 +19,7 @@ namespace Server.Logic.Games.ConcreteGames
     {
         private readonly IBaseRepository<Question> _baseQuestionRepository;
         private readonly IStandardStringService _standardStringService;
+        private IServiceScope scope;
         private Association association;
         private AssociationState state;
         private Match _match;
@@ -31,10 +33,11 @@ namespace Server.Logic.Games.ConcreteGames
         private int gameLen = 300;
         private Timer wrongTimer;
 
-        public AssociationGame(IBaseRepository<Question> baseQuestionRepository,IStandardStringService standardStringService, Match match)
+        public AssociationGame(Match match, IServiceScopeFactory serviceScopeFactory)
         {
-            _baseQuestionRepository = baseQuestionRepository;
-            _standardStringService = standardStringService;
+            scope = serviceScopeFactory.CreateScope();
+            _baseQuestionRepository = scope.ServiceProvider.GetService<IBaseRepository<Question>>();
+            _standardStringService = scope.ServiceProvider.GetService<IStandardStringService>();
             _match = match;
             association = _baseQuestionRepository.Sample<Association>(1)[0];
             StartGame();

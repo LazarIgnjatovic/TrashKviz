@@ -25,8 +25,6 @@ namespace Server.Logic.Masters.Match
         private int maxConnected;
         private int currConnected;
         private readonly IHubContext<MatchHub> _matchHubContext;
-        private readonly IStandardStringService _standardStringService;
-        private readonly IBaseRepository<Question> _baseQuestionRepository;
         private readonly IBaseRepository<User> _baseUserRepository;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IMatchMaster _matchMaster;
@@ -43,10 +41,8 @@ namespace Server.Logic.Masters.Match
             _serviceScopeFactory = serviceScopeFactory;
             _matchMaster = matchMaster;
             scope = _serviceScopeFactory.CreateScope();
-            _baseQuestionRepository = scope.ServiceProvider.GetService<IBaseRepository<Question>>();
             _baseUserRepository = scope.ServiceProvider.GetService<IBaseRepository<User>>();
             _matchHubContext = scope.ServiceProvider.GetService<IHubContext<MatchHub>>();
-            _standardStringService = scope.ServiceProvider.GetService<IStandardStringService>();
             players = new List<Player>();
             games = new List<GameType>();
             maxConnected = 0;
@@ -94,13 +90,13 @@ namespace Server.Logic.Masters.Match
             games.Add(room.game2);
             games.Add(room.game3);
             currentGame = -1;
-            gameContext = new GameContext(_baseQuestionRepository,_standardStringService);
+            gameContext = new GameContext(_serviceScopeFactory);
             gameContext.SetMatch(this);
         }
         public void GameEnded()
         {
             if(currentGame<games.Count-1)
-                gameContext.SetGame(GameType.Info);
+                gameContext.SetGame(GameType.GameInfo);
             else
                 ConcludeMatch();
         }

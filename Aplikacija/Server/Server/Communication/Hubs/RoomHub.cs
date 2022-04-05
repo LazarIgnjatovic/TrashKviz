@@ -75,7 +75,7 @@ namespace Server.Communication.Hubs
             if(started)
                 await Clients.Group(roomID).SendAsync("GameStarted");
         }
-        public async Task Kick(string roomID, string username)
+        public void Kick(string roomID, string username)
         {
             _roomService.Kick(roomID, username, Context.UserIdentifier);
         }

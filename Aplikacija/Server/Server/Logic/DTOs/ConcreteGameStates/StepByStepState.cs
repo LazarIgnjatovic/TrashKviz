@@ -17,7 +17,7 @@ namespace Server.Logic.DTOs.ConcreteGameStates
         
         public StepByStepState(List<Player> players, int stepCount)
         {
-            Type = GameType.StepByStep;
+            Type = GameType.StepByStepGame;
             Players = players;
             Steps = new string[stepCount];
             CanAnswer = new bool[players.Count];

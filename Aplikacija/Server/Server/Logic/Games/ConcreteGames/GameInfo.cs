@@ -1,4 +1,5 @@
-﻿using Server.Logic.DTOs;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Server.Logic.DTOs;
 using Server.Logic.DTOs.ConcreteGameStates;
 using Server.Logic.Masters.Match;
 using System;
@@ -19,7 +20,7 @@ namespace Server.Logic.Games.ConcreteGames
         public string InfoText { get => infoText; set => infoText = value; }
         public int TimerValue { get => timerValue; set => timerValue = value; }
 
-        public GameInfo(Match match)
+        public GameInfo(Match match, IServiceScopeFactory serviceScopeFactory)
         {
             state = new InfoState(match.Players);
             this._match = match;

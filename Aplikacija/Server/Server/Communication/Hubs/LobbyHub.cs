@@ -47,11 +47,11 @@ namespace Server.Communication.Hubs
             else
                 await Clients.Caller.SendAsync("RoomNotFound");
         }
-        public async Task FindRoom()
+        public void FindRoom()
         {
             _lobbyService.AddToQueue(Context.UserIdentifier);
         }
-        public async Task CancelSearch()//
+        public void CancelSearch()
         {
             _lobbyService.RemoveFromQueue(Context.UserIdentifier);
         }

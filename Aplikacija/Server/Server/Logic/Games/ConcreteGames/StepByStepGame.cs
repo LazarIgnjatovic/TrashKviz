@@ -1,4 +1,5 @@
-﻿using Server.Logic.DTOs;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Server.Logic.DTOs;
 using Server.Logic.DTOs.ConcreteGameStates;
 using Server.Logic.Masters.Match;
 using Server.Logic.Services;
@@ -16,6 +17,7 @@ namespace Server.Logic.Games.ConcreteGames
     {
         private IBaseRepository<Question> _baseQuestionRepository;
         private IStandardStringService _standardStringService;
+        private IServiceScope scope;
         private Match _match;
         private StepByStep stepByStep;
         private StepByStepState state;
@@ -30,10 +32,11 @@ namespace Server.Logic.Games.ConcreteGames
         private Timer betweenTimer;
         private Timer endTimer;
 
-        public StepByStepGame(IBaseRepository<Question> baseQuestionRepository,IStandardStringService standardStringService, Match match)
+        public StepByStepGame(Match match, IServiceScopeFactory serviceScopeFactory)
         {
-            _baseQuestionRepository = baseQuestionRepository;
-            _standardStringService = standardStringService;
+            scope = serviceScopeFactory.CreateScope();
+            _baseQuestionRepository = scope.ServiceProvider.GetService<IBaseRepository<Question>>();
+            _standardStringService = scope.ServiceProvider.GetService<IStandardStringService>();
             _match = match;
             stepByStep = _baseQuestionRepository.Sample<StepByStep>(1)[0];
             StartGame();

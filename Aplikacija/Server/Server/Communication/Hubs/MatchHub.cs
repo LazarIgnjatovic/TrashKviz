@@ -43,7 +43,7 @@ namespace Server.Communication.Hubs
             return base.OnConnectedAsync();
         }
 
-        public async Task SubmitAnswer(string matchID, JObject answerJson)
+        public void SubmitAnswer(string matchID, JObject answerJson)
         {
             Answer answer = _answerSerializer.Serialize(answerJson);
             _matchService.SubmitAnswer(answer, matchID, Context.UserIdentifier);

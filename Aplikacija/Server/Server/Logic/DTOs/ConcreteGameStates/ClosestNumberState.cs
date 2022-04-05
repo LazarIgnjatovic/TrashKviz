@@ -23,7 +23,7 @@ namespace Server.Logic.DTOs.ConcreteGameStates
 
         public ClosestNumberState(List<Player> players)
         {
-            Type = GameType.ClosestNumber;
+            Type = GameType.ClosestNumberGame;
             Players = players.OrderBy(x => Guid.NewGuid()).ToList();
             canAnswer = new bool[players.Count];
             isWinner = new bool[players.Count];

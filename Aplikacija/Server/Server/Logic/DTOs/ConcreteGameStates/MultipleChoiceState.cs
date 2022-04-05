@@ -19,7 +19,7 @@ namespace Server.Logic.DTOs.ConcreteGameStates
 
         public MultipleChoiceState(List<Player> players)
         {
-            Type = GameType.MultipleChoice;
+            Type = GameType.MultipleChoiceGame;
             Players = players.OrderBy(x => Guid.NewGuid()).ToList();
             Answers = new List<string>();
             PlayerAnswers = new int?[Players.Count];

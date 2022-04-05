@@ -7,10 +7,10 @@ namespace Server.Logic.Games
 {
     public enum GameType
     {
-        Association,
-        ClosestNumber,
-        MultipleChoice,
-        StepByStep,
-        Info
+        AssociationGame,
+        ClosestNumberGame,
+        MultipleChoiceGame,
+        StepByStepGame,
+        GameInfo
     }
 }

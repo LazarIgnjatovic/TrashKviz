@@ -1,4 +1,5 @@
-﻿using Server.Logic.DTOs;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Server.Logic.DTOs;
 using Server.Logic.DTOs.ConcreteGameStates;
 using Server.Logic.Masters.Match;
 using Server.Persistence.Models;
@@ -27,10 +28,12 @@ namespace Server.Logic.Games.ConcreteGames
         private int? second;
         private Match _match;
         private IBaseRepository<Question> _baseQuestionRepository;
+        private IServiceScope scope;
 
-        public MultipleChoiceGame(IBaseRepository<Question> baseQuestionRepository, Match match)
+        public MultipleChoiceGame(Match match, IServiceScopeFactory serviceScopeFactory)
         {
-            _baseQuestionRepository = baseQuestionRepository;
+            scope = serviceScopeFactory.CreateScope();
+            _baseQuestionRepository = scope.ServiceProvider.GetService<IBaseRepository<Question>>();
             _match = match;
             currQuestion = -1;
             questions= _baseQuestionRepository.Sample<MultipleChoice>(numOfQuestions);

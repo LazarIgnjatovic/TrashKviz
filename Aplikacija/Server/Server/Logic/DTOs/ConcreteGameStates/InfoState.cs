@@ -13,7 +13,7 @@ namespace Server.Logic.DTOs.ConcreteGameStates
         public InfoState(List<Player>players)
         {
             Players = players;
-            Type = GameType.Info;
+            Type = GameType.GameInfo;
         }
     }
 }

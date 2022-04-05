@@ -26,7 +26,7 @@ namespace Server.Logic.DTOs.ConcreteGameStates
 
         public AssociationState(List<Player> players)
         {
-            Type = GameType.Association;
+            Type = GameType.AssociationGame;
             Players = players.OrderBy(x => Guid.NewGuid()).ToList();
             columns = new string[4][];
             columnAnswers = new string[4];

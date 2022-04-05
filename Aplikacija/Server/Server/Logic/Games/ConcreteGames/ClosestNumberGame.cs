@@ -1,4 +1,5 @@
-﻿using Server.Logic.DTOs;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Server.Logic.DTOs;
 using Server.Logic.DTOs.ConcreteGameStates;
 using Server.Logic.Masters.Match;
 using Server.Persistence.Models;
@@ -25,15 +26,17 @@ namespace Server.Logic.Games.ConcreteGames
         private int currQuestion;
         private int playerCount;
         private IBaseRepository<Question> _baseQuestionRepository;
+        private IServiceScope scope;
 
         public ClosestNumberGame(Match match)
         {
             _match = match;
         }
 
-        public ClosestNumberGame(IBaseRepository<Question> baseQuestionRepository, Match match)
+        public ClosestNumberGame(Match match, IServiceScopeFactory serviceScopeFactory)
         {
-            _baseQuestionRepository = baseQuestionRepository;
+            scope = serviceScopeFactory.CreateScope();
+            _baseQuestionRepository = scope.ServiceProvider.GetService<IBaseRepository<Question>>();
             _match = match;
             currQuestion = -1;
             state = new ClosestNumberState(_match.Players);
