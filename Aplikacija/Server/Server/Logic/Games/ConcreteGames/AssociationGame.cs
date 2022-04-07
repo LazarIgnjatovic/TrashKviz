@@ -6,7 +6,6 @@ using Server.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using System.Timers;
 using Server.Logic.DTOs.ConcreteAnswers;
@@ -169,7 +168,7 @@ namespace Server.Logic.Games.ConcreteGames
                 {
                     if (_standardStringService.Standardize(answer.Text) == _standardStringService.Standardize(association.Answer))
                     {
-                        AddPoints(association.Points);
+                        AddPoints(association.Points+state.ColumnAnswers.Length* association.Points / association.Columns.Length);
                         ShowSolution();
                         return;
                     }
