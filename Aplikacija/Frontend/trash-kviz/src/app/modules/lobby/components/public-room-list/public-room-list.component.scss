@@ -19,6 +19,7 @@ app-mat-card {
   align-items: center;
   flex-basis: 120px;
   margin-left: 10px;
+  flex-shrink: 0;
 }
 .multiline {
   white-space: nowrap;

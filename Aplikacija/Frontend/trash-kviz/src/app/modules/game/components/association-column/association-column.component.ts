@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, from, map, Observable, Subscription } from 'rxjs';
 import { RegexProviderService } from 'src/app/core/services/regex-provider/regex-provider.service';
+import { WindowResizeDetectorService } from 'src/app/core/services/window-resize-detector/window-resize-detector.service';
 import { AssociationAnswer } from '../../models/association-answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
@@ -25,8 +26,11 @@ export class MultipleChoiceColumnComponent
   @Input() gameState!: Observable<GameState>;
   @Input() columnNumber!: number;
   private gameStateSubscription!: Subscription;
-  constructor(regexProvider: RegexProviderService) {
-    super(regexProvider);
+  constructor(
+    regexProvider: RegexProviderService,
+    resizeDetectService: WindowResizeDetectorService
+  ) {
+    super(regexProvider, resizeDetectService);
   }
   override ngOnDestroy(): void {
     this.gameStateSubscription.unsubscribe();

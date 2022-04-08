@@ -19,7 +19,14 @@
 </ng-template>
 
 <ng-template #listItemTemplate let-listItem="listItem">
-  <div class="list-item">
+  <div
+    class="list-item"
+    [style.max-width.px]="
+      windowResizeDetectionService.screenWidth$.value * 0.35 > 300
+        ? windowResizeDetectionService.screenWidth$.value * 0.35 - 65
+        : 235
+    "
+  >
     <div class="multiline">{{ listItem.roomName }}</div>
     <div class="button-and-number-of-players">
       <span>{{ listItem.numberOfPlayersJoined }}/4</span>

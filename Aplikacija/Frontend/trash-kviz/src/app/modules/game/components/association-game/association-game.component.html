@@ -43,6 +43,12 @@
       [clearAnswer]="getClearAnswer()"
     ></app-association-column>
   </div>
+  <app-button
+    buttonWidth="100%"
+    buttonText="Dalje"
+    [buttonDisabled]="!onTurn.value"
+    (buttonClicked)="answerSubmitted.emit(getNullAnswer())"
+  ></app-button>
 </div>
 
 <ng-template #finalAnswerInput>
@@ -55,6 +61,8 @@
       autocomplete="off"
       placeholder="Konačno rešenje"
       (keydown.enter)="answerSubmitted.emit(getFinalAnswer())"
+      (focus)="resizeDetectService.setKeyboardOpen(true)"
+      (blur)="resizeDetectService.setKeyboardOpen(false)"
     />
   </mat-form-field>
 </ng-template>

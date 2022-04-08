@@ -56,8 +56,8 @@ namespace Server
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
-                        options.Cookie.SameSite = SameSiteMode.None;
-                        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    //    options.Cookie.SameSite = SameSiteMode.None;
+                    //    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                         options.Cookie.Name = "TrashKviz";
                         options.Cookie.HttpOnly = true;
                         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);

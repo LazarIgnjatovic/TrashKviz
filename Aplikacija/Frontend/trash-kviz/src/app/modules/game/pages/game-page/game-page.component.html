@@ -1,89 +1,117 @@
-<div class="title">
+<div class="title" *ngIf="getPlayerLeaderboards().value === null">
   <svg
-    width="40%"
-    height="60px"
-    viewBox="0 0 40% 60px"
+    width="300px"
+    height="70px"
+    viewBox="0 0 300px 70px"
     [ngSwitch]="getGameStateBehavior().value.type"
   >
-    <image x="2%" y="10%" *ngSwitchCase="0" href="assets/asocijacije.svg" />
-    <image x="2%" y="10%" *ngSwitchCase="3" href="assets/korakpokorak.svg" />
-    <text x="80%" y="50%" class="text-timer-shadow">
+    <image x="2px" y="2px" *ngSwitchCase="0" href="assets/asocijacije.svg" />
+    <image x="2px" y="2px" *ngSwitchCase="1" href="assets/tacanbroj.svg" />
+    <image x="2px" y="2px" *ngSwitchCase="2" href="assets/koznazna.svg" />
+    <image x="2px" y="2px" *ngSwitchCase="3" href="assets/korakpokorak.svg" />
+    <text x="50%" y="90%" class="text-timer-shadow">
       {{ getGlobalTimer() | async }}
     </text>
-    <text x="80%" y="50%" class="text-timer">
+    <text x="50%" y="90%" class="text-timer">
       {{ getGlobalTimer() | async }}
     </text>
   </svg>
 </div>
-<div class="game-container">
-  <div class="player-container">
-    <app-game-user
-      [onTurn]="getOnPlayerTurn(0)"
-      *ngIf="getGameStateBehavior().value.players.length > 0"
-      [player]="getGameStateBehavior().value.players[0]"
-      [timerLeft]="false"
-      [showTimer]="getTurnBasedGame()"
-      [timerTick]="getOnTimerTick()"
-      [timerSync]="getTurnTimer(0)"
-    ></app-game-user>
-    <app-game-user
-      [onTurn]="getOnPlayerTurn(1)"
-      *ngIf="getGameStateBehavior().value.players.length > 1"
-      [player]="getGameStateBehavior().value.players[1]"
-      [timerLeft]="true"
-      [showTimer]="getTurnBasedGame()"
-      [timerTick]="getOnTimerTick()"
-      [timerSync]="getTurnTimer(1)"
-    ></app-game-user>
+<div
+  *ngIf="
+    getPlayerLeaderboards().value === null;
+    then gameInProgressTemplate;
+    else gameEndTemplate
+  "
+></div>
+
+<ng-template #gameInProgressTemplate>
+  <div class="game-container">
+    <div class="player-container">
+      <app-game-user
+        [onTurn]="getOnPlayerTurn(0)"
+        [onOutline]="getPlayersOutline(0)"
+        [onDisconnect]="getOnDisconnect(0)"
+        *ngIf="getGameStateBehavior().value.players.length > 0"
+        [player]="getGameStateBehavior().value.players[0]"
+        [timerLeft]="false"
+        [showTimer]="getTurnBasedGame()"
+        [timerTick]="getOnTimerTick()"
+        [timerSync]="getTurnTimer(0)"
+      ></app-game-user>
+      <app-game-user
+        [onTurn]="getOnPlayerTurn(1)"
+        [onOutline]="getPlayersOutline(1)"
+        [onDisconnect]="getOnDisconnect(1)"
+        *ngIf="getGameStateBehavior().value.players.length > 1"
+        [player]="getGameStateBehavior().value.players[1]"
+        [timerLeft]="true"
+        [showTimer]="getTurnBasedGame()"
+        [timerTick]="getOnTimerTick()"
+        [timerSync]="getTurnTimer(1)"
+      ></app-game-user>
+    </div>
+    <div class="game-panel" [ngSwitch]="getGameStateBehavior().value.type">
+      <app-association-game
+        *ngSwitchCase="0"
+        [gameState]="getGameState(0)"
+        (answerSubmitted)="onSubmitAnswer($event)"
+        [onTurn]="getOnTurn()"
+      ></app-association-game>
+      <app-closest-number-game
+        *ngSwitchCase="1"
+        [gameState]="getGameState(1)"
+        (answerSubmitted)="onSubmitAnswer($event)"
+      >
+      </app-closest-number-game>
+      <app-multiple-choice-game
+        *ngSwitchCase="2"
+        [gameState]="getGameState(2)"
+        (answerSubmitted)="onSubmitAnswer($event)"
+      ></app-multiple-choice-game>
+      <app-step-by-step-game
+        *ngSwitchCase="3"
+        [gameState]="getGameState(3)"
+        (answerSubmitted)="onSubmitAnswer($event)"
+      ></app-step-by-step-game>
+      <app-info
+        *ngSwitchCase="4"
+        [gameState]="getGameState(4)"
+        [timerTick]="getOnTimerTick()"
+      >
+      </app-info>
+    </div>
+    <div class="player-container">
+      <app-game-user
+        [onTurn]="getOnPlayerTurn(2)"
+        [onOutline]="getPlayersOutline(2)"
+        [onDisconnect]="getOnDisconnect(2)"
+        *ngIf="getGameStateBehavior().value.players.length > 2"
+        [player]="getGameStateBehavior().value.players[2]"
+        [timerLeft]="false"
+        [showTimer]="getTurnBasedGame()"
+        [timerTick]="getOnTimerTick()"
+        [timerSync]="getTurnTimer(2)"
+      ></app-game-user>
+      <app-game-user
+        [onTurn]="getOnPlayerTurn(3)"
+        [onOutline]="getPlayersOutline(3)"
+        [onDisconnect]="getOnDisconnect(3)"
+        *ngIf="getGameStateBehavior().value.players.length > 3"
+        [player]="getGameStateBehavior().value.players[3]"
+        [timerLeft]="true"
+        [showTimer]="getTurnBasedGame()"
+        [timerTick]="getOnTimerTick()"
+        [timerSync]="getTurnTimer(3)"
+      ></app-game-user>
+    </div>
   </div>
-  <div class="game-panel" [ngSwitch]="getGameStateBehavior().value.type">
-    <app-association-game
-      *ngSwitchCase="0"
-      [gameState]="getGameState(0)"
-      (answerSubmitted)="onSubmitAnswer($event)"
-      [onTurn]="getOnTurn()"
-    ></app-association-game>
-    <app-closest-number-game
-      *ngSwitchCase="1"
-      [gameState]="getGameState(1)"
-      (answerSubmitted)="onSubmitAnswer($event)"
-    >
-    </app-closest-number-game>
-    <app-multiple-choice-game
-      *ngSwitchCase="2"
-      [gameState]="getGameState(2)"
-      (answerSubmitted)="onSubmitAnswer($event)"
-    ></app-multiple-choice-game>
-    <app-step-by-step-game
-      *ngSwitchCase="3"
-      [gameState]="getGameState(3)"
-      (answerSubmitted)="onSubmitAnswer($event)"
-    ></app-step-by-step-game>
-    <app-info
-      *ngSwitchCase="4"
-      [gameState]="getGameState(4)"
-      [timerTick]="getOnTimerTick()"
-    >
-    </app-info>
+</ng-template>
+
+<ng-template #gameEndTemplate>
+  <div class="game-container">
+    <div class="game-panel">
+      <app-game-end [standings]="getPlayerLeaderboards().value!"></app-game-end>
+    </div>
   </div>
-  <div class="player-container">
-    <app-game-user
-      [onTurn]="getOnPlayerTurn(2)"
-      *ngIf="getGameStateBehavior().value.players.length > 2"
-      [player]="getGameStateBehavior().value.players[2]"
-      [timerLeft]="false"
-      [showTimer]="getTurnBasedGame()"
-      [timerTick]="getOnTimerTick()"
-      [timerSync]="getTurnTimer(2)"
-    ></app-game-user>
-    <app-game-user
-      [onTurn]="getOnPlayerTurn(3)"
-      *ngIf="getGameStateBehavior().value.players.length > 3"
-      [player]="getGameStateBehavior().value.players[3]"
-      [timerLeft]="true"
-      [showTimer]="getTurnBasedGame()"
-      [timerTick]="getOnTimerTick()"
-      [timerSync]="getTurnTimer(3)"
-    ></app-game-user>
-  </div>
-</div>
+</ng-template>

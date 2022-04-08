@@ -8,6 +8,7 @@ import { Answer } from '../../models/answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
 import { InfoState } from '../../models/info-state.model';
+import { Player } from '../../models/player.model';
 
 @Injectable()
 export class GameService {
@@ -21,6 +22,8 @@ export class GameService {
   private timerTick: BehaviorSubject<void> = new BehaviorSubject<void>(
     undefined
   );
+  private playerLeaderboard: BehaviorSubject<Player[] | null> =
+    new BehaviorSubject<Player[] | null>(null);
   constructor(
     private signalRService: SignalrGeneralService,
     private router: Router,
@@ -102,6 +105,16 @@ export class GameService {
         this.globalTimer.next(gameState.timerValue);
       }
     );
+
+    this.signalRService.addOnServerMethodHandler(
+      {
+        methodName: 'MatchEnd',
+        args: [],
+      },
+      (players: Player[]) => {
+        this.playerLeaderboard.next(players);
+      }
+    );
   }
 
   getGameState() {
@@ -118,6 +131,10 @@ export class GameService {
 
   getGlobalTimer() {
     return this.globalTimer;
+  }
+
+  getPlayerLeaderboard() {
+    return this.playerLeaderboard;
   }
 
   submitAnswer<AnswerType extends Answer>(answer: AnswerType) {

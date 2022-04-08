@@ -10,14 +10,32 @@
     </div>
     <div class="no-timer-container">
       <div class="icon-container" *ngIf="!timerLeft">
-        <mat-icon color="accent" class="user">account_circle</mat-icon>
+        <mat-icon
+          [ngClass]="{
+            'red-user': player.color == 0,
+            'green-user': player.color == 2,
+            'blue-user': player.color == 1,
+            'yellow-user': player.color == 3
+          }"
+          class="user"
+          >{{ icon }}</mat-icon
+        >
       </div>
       <div class="username-and-stats">
         <h3>{{ player.user.username }}</h3>
         <span class="mat-body">Poeni: {{ player.points }}</span>
       </div>
       <div class="icon-container" *ngIf="timerLeft">
-        <mat-icon color="accent" class="user">account_circle</mat-icon>
+        <mat-icon
+          [ngClass]="{
+            'red-user': player.color == 0,
+            'green-user': player.color == 2,
+            'blue-user': player.color == 1,
+            'yellow-user': player.color == 3
+          }"
+          class="user"
+          >{{ icon }}</mat-icon
+        >
       </div>
     </div>
     <div *ngIf="(showTimer | async) && !timerLeft && (onTurn | async)">

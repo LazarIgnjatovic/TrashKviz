@@ -1,4 +1,4 @@
-<mat-form-field [appearance]="appearance">
+<mat-form-field [appearance]="appearance" #matFormField>
   <mat-label [innerText]="label"></mat-label>
   <ng-container
     *ngIf="formInputType !== formInputTypesProvider.formInputTypes.textArea"
@@ -12,6 +12,8 @@
       [autocomplete]="autocomplete"
       [type]="formInputType"
       [name]="name"
+      (focus)="onFocus(matFormField)"
+      (blur)="onBlur()"
     />
   </ng-container>
   <ng-container

@@ -1,16 +1,24 @@
-<app-column
-  columnName=""
-  [answerAtBottom]="true"
-  [rippleDisabled]="true"
-  [columnIds]="[0, 1, 2, 3, 4, 5, 6, 7]"
-  columnAnswerPlaceholder="Rešenje"
-  [clicked]="fieldsOpened"
-  [hints]="steps"
-  [columnAnswer]="finalAnswer"
-  [columnAnswered]="columnAnswered"
-  [clearAnswer]="getClearAnswer()"
-  answerLabel="Rešenje"
-  [disableAnswer]="disableAnswer"
-  (answerEntered)="onAnswerEntered($event)"
->
-</app-column>
+<div>
+  <app-column
+    columnName=""
+    [answerAtBottom]="true"
+    [rippleDisabled]="true"
+    [columnIds]="[0, 1, 2, 3, 4, 5, 6, 7]"
+    columnAnswerPlaceholder="Rešenje"
+    [clicked]="fieldsOpened"
+    [hints]="steps"
+    [columnAnswer]="finalAnswer"
+    [columnAnswered]="columnAnswered"
+    [clearAnswer]="getClearAnswer()"
+    answerLabel="Rešenje"
+    [disableAnswer]="disableAnswer"
+    (answerEntered)="onAnswerEntered($event)"
+  >
+  </app-column>
+  <app-button
+    buttonWidth="100%"
+    buttonText="Dalje"
+    (buttonClicked)="onAnswerEntered('')"
+    [buttonDisabled]="disableAnswer"
+  ></app-button>
+</div>

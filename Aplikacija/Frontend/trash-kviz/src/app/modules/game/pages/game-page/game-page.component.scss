@@ -12,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   height: 90%;
+  width: 100%;
 }
 
 .game-panel {
@@ -26,13 +27,15 @@
   margin-top: 10px;
   margin-bottom: 10px;
   max-width: 1000px;
+  min-height: 500px;
 }
 
 app-association-game,
 app-step-by-step-game,
 app-info,
 app-multiple-choice-game,
-app-closest-number-game {
+app-closest-number-game,
+app-game-end {
   width: 80%;
   max-width: 800px;
   height: 90%;

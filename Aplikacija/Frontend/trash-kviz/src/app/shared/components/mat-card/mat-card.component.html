@@ -1,4 +1,4 @@
-<mat-card [style.outline]="outline">
+<mat-card [ngStyle]="{'outline': outline}">
   <mat-card-header *ngIf="titleTemplate">
     <mat-card-title>
       <ng-container [ngTemplateOutlet]="titleTemplate"></ng-container>

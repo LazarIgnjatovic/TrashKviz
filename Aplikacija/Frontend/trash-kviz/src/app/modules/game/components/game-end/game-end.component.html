@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="players-and-title-container">
+    <span class="mat-display-2">Rezultat partije:</span>
+    <app-game-user
+      *ngFor="let player of standings; let indexOfPlayer = index"
+      [player]="player"
+      [@slideInOutWithFade]="
+        indexOfPlayer % 2 == 0 ? 'flyFromLeft' : 'flyFromRight'
+      "
+      [timerLeft]="false"
+      [ngClass]="{
+        winner:
+          indexOfPlayer == 0 ||
+          standings[indexOfPlayer].points === standings[0].points
+      }"
+    ></app-game-user>
+  </div>
+  <app-button
+    buttonColor="accent"
+    buttonText="Nazad"
+    buttonWidth="100%"
+    (buttonClicked)="onClick()"
+  ></app-button>
+</div>

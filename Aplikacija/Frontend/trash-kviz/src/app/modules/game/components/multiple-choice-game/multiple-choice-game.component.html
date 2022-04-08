@@ -1,12 +1,20 @@
 <div class="container">
-  <div>
+  <div class="question-container">
     <app-question-panel [question]="question"></app-question-panel>
   </div>
   <div class="answer-container">
     <button
       mat-raised-button
-      *ngFor="let i of answers"
-      (click)="answerSubmitted.emit({ text: i })"
+      *ngFor="let i of answers; let ind = index"
+      (click)="onClick({ text: i })"
+      [ngStyle]="{
+        'background-image': buttonColors[ind],
+        'background-size': '200% 100%',
+        'background-position': buttonColorPosition,
+        'transition': 'background-position .5s ease-in, outline .25s ease-in',
+        'outline':correctAnswer === ind ? '3px solid rgba(105, 240, 174, 255)' : 'none'
+      }"
+      [disabled]="buttonsDisabled"
     >
       {{ i }}
     </button>

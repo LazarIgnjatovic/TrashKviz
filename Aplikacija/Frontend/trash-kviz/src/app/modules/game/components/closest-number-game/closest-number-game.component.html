@@ -1,15 +1,17 @@
 <div class="container">
-  <div>
+  <div class="question-container">
     <app-question-panel [question]="question"></app-question-panel>
   </div>
   <div class="answer-container">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" color="accent">
       <mat-label>Odgovor</mat-label>
       <input
         matInput
+        autocomplete="off"
         type="number"
         [(ngModel)]="answer"
-        (keydown.enter)="answerSubmitted.emit({ text: answer.toString() })"
+        (keydown.enter)="answerSubmitted.emit({ text: answer!.toString() })"
+        [disabled]="inputDisabled"
       />
     </mat-form-field>
   </div>

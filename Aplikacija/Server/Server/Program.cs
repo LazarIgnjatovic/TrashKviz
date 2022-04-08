@@ -19,23 +19,23 @@ namespace Server
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, services) =>
-            {
-                HostConfig.CertPath = context.Configuration["CertPath"];
-                HostConfig.CertPassword = context.Configuration["certpassword"];              
-                HostConfig.HostDnsEntry = context.Configuration["HostDnsEntry"];
-            })
+            // .ConfigureServices((context, services) =>
+            // {
+            //     HostConfig.CertPath = context.Configuration["CertPath"];
+            //     HostConfig.CertPassword = context.Configuration["certpassword"];              
+            //     HostConfig.HostDnsEntry = context.Configuration["HostDnsEntry"];
+            // })
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.ConfigureKestrel(opcije =>
-                {
-                    var host = Dns.GetHostEntry(HostConfig.HostDnsEntry);
-                    opcije.Listen(host.AddressList[0], 5000);
-                    opcije.Listen(host.AddressList[0], 5001, listenOpcije =>
-                    {
-                        listenOpcije.UseHttps(HostConfig.CertPath, HostConfig.CertPassword);
-                    });
-                });
+                // webBuilder.ConfigureKestrel(opcije =>
+                // {
+                //     var host = Dns.GetHostEntry(HostConfig.HostDnsEntry);
+                //     opcije.Listen(host.AddressList[0], 5000);
+                //     opcije.Listen(host.AddressList[0], 5001, listenOpcije =>
+                //     {
+                //         listenOpcije.UseHttps(HostConfig.CertPath, HostConfig.CertPassword);
+                //     });
+                // });
                 webBuilder.UseStartup<Startup>();
             });
     }

@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, filter, from, map, Subscription } from 'rxjs';
 import { GameType } from '../../enums/game-type.enum';
@@ -10,8 +11,10 @@ import {
   ClockViewToggle,
   isClockViewToggle,
 } from '../../models/clock-view-toggle.model';
+import { isFirstTwoAnswers } from '../../models/first-two-answers.model';
 import { GameState } from '../../models/game-state.model';
 import { InfoState, isInfoState } from '../../models/info-state.model';
+import { isDisconnectToggle } from '../../models/disconnect-toggle.model';
 import { isTurnBased, TurnBased } from '../../models/turn-based-model';
 import { GameService } from '../../services/game-service/game.service';
 
@@ -19,6 +22,14 @@ import { GameService } from '../../services/game-service/game.service';
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
   styleUrls: ['./game-page.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        animate('10s'),
+        style({ transform: 'translate(0%)' }),
+      ]),
+    ]),
+  ],
 })
 export class GamePageComponent implements OnInit {
   constructor(private gameService: GameService) {}
@@ -49,9 +60,27 @@ export class GamePageComponent implements OnInit {
     );
   }
 
-  getPlayersAnsweredOutline(playerId: number) 
-  {
-    
+  getPlayersOutline(playerId: number) {
+    return this.gameService.getGameState().pipe(
+      map((gameState) => {
+        if (isTurnBased(gameState)) return -1;
+        if (isFirstTwoAnswers(gameState)) {
+          if (gameState.first === playerId) return 0;
+          else if (gameState.second === playerId) return 1;
+        }
+        return -1;
+      })
+    );
+  }
+
+  getOnDisconnect(playerId: number) {
+    return this.gameService.getGameState().pipe(
+      map((gameState) => {
+        if (isDisconnectToggle(gameState))
+          return !gameState.canAnswer[playerId];
+        return false;
+      })
+    );
   }
 
   getTurnBasedGame() {
@@ -73,6 +102,10 @@ export class GamePageComponent implements OnInit {
       ),
       map((gameState) => (gameState as AssociationState).turnTimerValue)
     );
+  }
+
+  getPlayerLeaderboards() {
+    return this.gameService.getPlayerLeaderboard();
   }
 
   getOnTurn() {

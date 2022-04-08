@@ -74,4 +74,5 @@ export class StepByStepGameComponent
       map(() => null)
     );
   }
+
 }

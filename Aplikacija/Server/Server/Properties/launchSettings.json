@@ -18,6 +18,7 @@
     "Server": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
+      "applicationUrl": "http://192.168.100.144:5000",
       "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

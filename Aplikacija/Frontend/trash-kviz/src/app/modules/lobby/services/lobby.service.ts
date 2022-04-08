@@ -51,6 +51,15 @@ export class LobbyService {
         });
       }
     );
+
+    this.signalRService.addOnServerMethodHandler(
+      { methodName: 'Reconnect', args: [] },
+      () => {
+        this.signalRService.endConnection().subscribe(() => {
+          this.router.navigate(['/game']);
+        });
+      }
+    );
   }
 
   private getRooms() {
@@ -66,12 +75,13 @@ export class LobbyService {
         methodName: 'FindRoom',
         args: [],
       })
-      .subscribe(() =>
+      .subscribe(() => {
+        this.overlayService.overlayConfig.backdropClass = 'dark-backdrop';
         this.overlayService.show(SpinnerComponent, {
           message: 'Traženje sobe',
           underSpinner: this.underSpinner,
-        })
-      );
+        });
+      });
   }
 
   createRoom() {

@@ -16,6 +16,7 @@
     color="accent"
     (click)="fieldClicked.emit(i)"
     [disabled]="disableAll || (disableClickable && !clicked[i])"
+    [ngStyle]="{ 'min-height': '15%' }"
   >
     {{ !clicked[i] ? columnName + (i + 1).toString() : hints[i] }}
   </button>
@@ -43,6 +44,8 @@
       (keydown.enter)="answerEntered.emit(columnAnswer)"
       [(ngModel)]="columnAnswer"
       (keypress)="onKeyPress($event)"
+      (focus)="resizeDetectService.setKeyboardOpen(true)"
+      (blur)="resizeDetectService.setKeyboardOpen(false)"
     />
   </mat-form-field>
 </ng-template>

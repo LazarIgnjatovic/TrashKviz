@@ -28,6 +28,7 @@ export class OverlayService {
   }
 
   show(componentToShow: ComponentType<any>, dataToInject: any = null) {
+    this.hide();
     this.overlayRef = this.overlay.create(this.overlayConfig);
 
     const overlayPortal = new ComponentPortal(

@@ -13,8 +13,9 @@ export class ClosestNumberGameComponent
   extends BaseGameComponent<Answer>
   implements OnInit
 {
+  inputDisabled: boolean = false;
   question: string = '';
-  answer!: number;
+  answer!: number | null;
   constructor() {
     super();
   }
@@ -22,9 +23,11 @@ export class ClosestNumberGameComponent
   ngOnInit(): void {
     this.gameStateSubscription = this.gameState
       .pipe(map((gameState) => gameState as ClosestNumberState))
-      .subscribe((gameState) =>
-        this.updateFields(gameState.question, gameState.answer)
-      );
+      .subscribe((gameState) => {
+        this.updateFields(gameState.question, gameState.answer);
+        this.inputDisabled = !gameState.isActive;
+        if (gameState.isActive) this.answer = null;
+      });
   }
 
   updateFields(question: string, answer: number) {

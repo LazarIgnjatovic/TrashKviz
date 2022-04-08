@@ -7,6 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { BehaviorSubject, filter, map, Observable, Subscription } from 'rxjs';
+import { WindowResizeDetectorService } from 'src/app/core/services/window-resize-detector/window-resize-detector.service';
 import { AssociationAnswer } from '../../models/association-answer.model';
 import { AssociationState } from '../../models/association-state.model';
 import { GameState } from '../../models/game-state.model';
@@ -26,7 +27,7 @@ export class AssociationGameComponent
   finalAnswerValue: string = '';
   associationAnswered: boolean = false;
   finalAnswerDisabled: boolean = false;
-  constructor() {
+  constructor(public resizeDetectService: WindowResizeDetectorService) {
     super();
   }
 
@@ -52,6 +53,16 @@ export class AssociationGameComponent
   getFinalAnswer() {
     return {
       text: this.finalAnswerValue,
+      isColumnAnswer: false,
+      isFinalAnswer: true,
+      column: 0,
+      field: 0,
+    };
+  }
+
+  getNullAnswer() {
+    return {
+      text: '',
       isColumnAnswer: false,
       isFinalAnswer: true,
       column: 0,

@@ -48,6 +48,7 @@ const providers = [
   imports: [modules],
   providers: [providers],
   exports: [modules],
+  declarations: [],
 })
 export class CoreModule {
   constructor(

@@ -17,6 +17,8 @@ import { InfoComponent } from './components/info/info.component';
 import { QuestionPanelComponent } from './components/question-panel/question-panel.component';
 import { MultipleChoiceGameComponent } from './components/multiple-choice-game/multiple-choice-game.component';
 import { ClosestNumberGameComponent } from './components/closest-number-game/closest-number-game.component';
+import { GameEndComponent } from './components/game-end/game-end.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   providers: [GameService],
@@ -31,6 +33,7 @@ import { ClosestNumberGameComponent } from './components/closest-number-game/clo
     QuestionPanelComponent,
     MultipleChoiceGameComponent,
     ClosestNumberGameComponent,
+    GameEndComponent,
   ],
   imports: [
     CommonModule,
